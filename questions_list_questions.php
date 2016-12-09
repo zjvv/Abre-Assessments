@@ -1,0 +1,234 @@
+<?php
+	
+	/*
+	* Copyright 2015 Hamilton City School District	
+	* 		
+	* This program is free software: you can redistribute it and/or modify
+    * it under the terms of the GNU General Public License as published by
+    * the Free Software Foundation, either version 3 of the License, or
+    * (at your option) any later version.
+	* 
+    * This program is distributed in the hope that it will be useful,
+    * but WITHOUT ANY WARRANTY; without even the implied warranty of
+    * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    * GNU General Public License for more details.
+	* 
+    * You should have received a copy of the GNU General Public License
+    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    */
+	
+	//Required configuration files
+	require_once(dirname(__FILE__) . '/../../core/abre_verification.php'); 
+	require_once(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
+	require_once('functions.php');
+	require_once('permissions.php');
+	
+	if($pagerestrictions=="")
+	{
+
+				if(isset($_GET["searchquery"]))
+				{ 
+					$question_searchquery=$_GET["searchquery"]; 
+					$question_searchquery=base64_decode($question_searchquery); 
+					$question_searchquery = str_replace(' ', '+', $question_searchquery); 
+				}	
+				if(isset($_GET["subject"]))
+				{ 
+					$question_subject=$_GET["subject"]; 
+					$question_subject=base64_decode($question_subject); 
+					$question_subject = str_replace(' ', '+', $question_subject); 
+				}
+				if(isset($_GET["grade"]))
+				{ 
+					$question_grade=$_GET["grade"];
+					$question_grade=base64_decode($question_grade); 
+					$question_grade = str_replace(' ', '+', $question_grade); 
+				}
+				if(isset($_GET["difficulty"]))
+				{
+					$question_difficulty=$_GET["difficulty"];
+					$question_difficulty=base64_decode($question_difficulty); 
+					$question_difficulty = str_replace(' ', '+', $question_difficulty); 
+				}
+				if(isset($_GET["type"]))
+				{ 
+					$question_type=$_GET["type"];
+					$question_type=base64_decode($question_type); 
+					$question_type = str_replace(' ', '+', $question_type); 
+				}
+				if(isset($_GET["blooms"]))
+				{ 
+					$question_blooms=$_GET["blooms"];
+					$question_blooms=base64_decode($question_blooms); 
+					$question_blooms = str_replace(' ', '+', $question_blooms); 
+				}
+				if(isset($_GET["dok"]))
+				{ 
+					$question_dok=$_GET["dok"];
+					$question_dok=base64_decode($question_dok); 
+					$question_dok = str_replace(' ', '+', $question_dok); 
+				}
+				if(isset($_GET["assessmentid"])){ $assessment_id=$_GET["assessmentid"]; }
+				
+				//Get token
+				$token=getCerticaToken();
+			
+				$ch = curl_init();
+				
+				if(isset($question_subject))
+				{
+					$filter="IA_Subject+eq+'$question_subject'";
+					if($question_grade!=""){ $filter=$filter."+and+IA_GradeLevel+eq+'$question_grade'"; }
+					if($question_difficulty!=""){ $filter=$filter."+and+IA_Difficulty+eq+'$question_difficulty'"; }
+					if($question_type!=""){ $filter=$filter."+and+IA_teitype+eq+'$question_type'"; }
+					if($question_blooms!=""){ $filter=$filter."+and+IA_bloomstaxonomy+eq+'$question_blooms'"; }
+					if($question_dok!=""){ $filter=$filter."+and+IA_DOK+eq+'$question_dok'"; }
+					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
+				}
+				
+				if(isset($question_searchquery))
+				{
+					$filter="ia_vendorid+eq+'$question_searchquery'";
+					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
+				}
+				
+				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: IC-TOKEN Credential=$token"));
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				$result = curl_exec($ch);
+				$json = json_decode($result,true);
+				$items = $json['items'];
+				foreach ($items as $value)
+				{
+					
+			    	$subject = $value['ia_subject'];
+			    	$grade = $value['ia_gradelevel'];
+			    	$blooms = $value['ia_bloomstaxonomy'];
+			    	$dok = $value['ia_dok'];
+			    	$difficulty = $value['ia_difficulty'];
+			    	$type = $value['ia_teitype'];
+			    	$standards = $value['standards'];
+			    	$question_id = $value['ia_itemid'];
+			    	$vendor_id = $value['ia_vendorid'];
+			    	
+			    	//Icon
+			 		if($subject=="Math"){ $icon="pie_chart"; }
+					if($subject=="Science"){ $icon="wb_sunny"; }
+					if($subject=="Language Arts"){ $icon="description"; }
+					if($subject=="History/Social Studies"){ $icon="public"; }   
+					
+					//Type
+					if($type=="MC"){ $type="Multiple Choice"; }
+					if($type=="CM"){ $type="Choice Multiple"; }
+					if($type=="GM"){ $type="Gap Match"; }
+					if($type=="GR"){ $type="Graphic Gap Match"; }
+					if($type=="HS"){ $type="Hot Spot"; }
+					if($type=="HT"){ $type="Hot Text"; }
+					if($type=="IC"){ $type="Inline Choice"; }
+					if($type=="OD"){ $type="Order"; }
+					if($type=="OR"){ $type="Open Response"; }
+					if($type=="TE"){ $type="Text Entry"; }
+					
+					//Check to see if question already added to assessment
+					$resultcheck = $db->query("SELECT *  FROM assessments_questions WHERE Assessment_ID='$assessment_id' and Bank_ID='$question_id'");
+					$assessmentcount=mysqli_num_rows($resultcheck);
+					$addbutton="false";
+					if($assessmentcount==0){ $addbutton="true"; }
+			    	
+					echo "<table style='width:100%;'>";
+					
+						echo "<tr class='attachwrapper'><td style='border:1px solid #e1e1e1; width:70px; background-color:".sitesettings("sitecolor")."''><i class='material-icons' style='padding:18px; margin:0; color:#fff; font-size: 24px; line-height:0;'>$icon</i></td><td style='background-color:#F5F5F5; border-left:1px solid #e1e1e1; border-top:1px solid #e1e1e1; border-bottom:1px solid #e1e1e1; padding:10px;'>";
+							echo "<p class='mdl-color-text--black' style='font-weight:500;'>$subject Question - $vendor_id</p>";
+							echo "<div class='chip'>$grade</div><div class='chip'>$type</div><div class='chip'>$difficulty</div><div class='chip'>$blooms</div>";
+							
+							
+							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-addbutton='$addbutton' class='previewquestion' style='color: ".sitesettings("sitecolor")."'><i class='material-icons'>visibility</i></a></td>";
+							
+							if($assessmentcount==0){
+								echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-link='/modules/assessments/question_add_process.php?assessmentid=$assessment_id&questionid=$question_id' style='color: ".sitesettings("sitecolor")."' class='addquestiontoassessment' id='questionplus-$question_id'><i class='material-icons'>add_circle</i></a></td>";
+							}
+							else
+							{
+								echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'></td>";
+							}
+						echo "</tr>";
+					echo "</table>";
+			    	
+				}
+				curl_close($ch);
+					
+			?>
+			
+			<script>
+				
+				$(function()
+				{
+			
+					//Add question to assessment
+					$( ".addquestiontoassessment" ).unbind().click(function()
+					{
+						
+						event.preventDefault();
+						$(this).hide();
+						var address= $(this).data('link');
+						$.ajax({
+							type: 'POST',
+							url: address,
+							data: '',
+						})
+						
+					});
+					
+					//Preview the assessment question
+					$( ".previewquestion" ).unbind().click(function() {
+						
+						event.preventDefault();
+						
+						$(".modal-content #questionholder").html("<div style='padding:20px;'>Loading Question...</div>");
+						
+						var AddButton = $(this).data('addbutton');
+						if(AddButton==false)
+						{
+							$(".addquestiontoassessmentpreview").css("display", "none");
+						}
+						else
+						{
+							$(".addquestiontoassessmentpreview").css("display", "block");
+						}
+						
+						var Question = $(this).data('question');
+						$(".modal-content #QuestionID").val(Question);
+						
+						var Subject = $(this).data('subject');
+						$(".modal-content #preview_subject").html(Subject);
+						
+						var Grade = $(this).data('grade');
+						$(".modal-content #preview_grade").html(Grade);
+						
+						var Blooms = $(this).data('blooms');
+						$(".modal-content #preview_blooms").html(Blooms);
+						
+						var Difficulty = $(this).data('difficulty');
+						$(".modal-content #preview_difficulty").html(Difficulty);
+						
+						$(".modal-content #questionholder").load( "modules/assessments/question_viewer.php?id="+Question, function(){
+						});
+						
+						$('#linktotopic').openModal({
+							in_duration: 0,
+							out_duration: 0,
+						});
+					});
+					
+				});
+				
+				
+			</script>
+			
+	<?php
+		
+		}
+		
+	?>
