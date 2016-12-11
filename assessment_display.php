@@ -92,7 +92,7 @@
 								echo "<div id='questionplayer-$Bank_ID' style='display:none'><div class='mdl-progress mdl-js-progress mdl-progress__indeterminate' style='width:100%'></div></div>";
 								echo "<hr>";
 								echo "<div class='toolbar' style='padding-top:20px; text-align:right;'>";
-									echo "<div class='removequestion'><a href='modules/assessments/question_remove_process.php?questionid=".$questionid."' class='mdl-color-text--grey-700' id='delete'><i class='material-icons'>delete</i></a></div>";
+									echo "<div class='removequestion'><a href='modules/".basename(__DIR__)."/question_remove_process.php?questionid=".$questionid."' class='mdl-color-text--grey-700' id='delete'><i class='material-icons'>delete</i></a></div>";
 									echo "<div class='mdl-tooltip' data-mdl-for='delete'>Delete</div>";
 								echo "</div>";
 								
@@ -135,7 +135,7 @@
 																	
 					//Show the notification
 					.done(function(response) {	
-						$("#content_holder").load( "modules/assessments/assessment.php?id="+<?php echo $Assessment_ID; ?>, function(){
+						$("#content_holder").load( "modules/<?php echo basename(__DIR__); ?>/assessment.php?id="+<?php echo $Assessment_ID; ?>, function(){
 							mdlregister();
 							
 							var notification = document.querySelector('.mdl-js-snackbar');
@@ -168,7 +168,7 @@
  				$('#questionplayer-'+Bank_ID).hide();
  				$('.toolbar').hide();
  				
- 				$.get( "modules/assessments/question_viewer.php", { id: Bank_ID } )
+ 				$.get( "modules/<?php echo basename(__DIR__); ?>/question_viewer.php", { id: Bank_ID } )
 			    .done(function( data ) {
 				    $('#questionplayer-'+Bank_ID).show();
 				    $('.toolbar').show();
@@ -186,7 +186,7 @@
 					$.ajax({
 			            data: data,
 			            type: 'POST',
-			            url: '/modules/assessments/questions_save_order.php'
+			            url: '/modules/<?php echo basename(__DIR__); ?>/questions_save_order.php'
 			        });
 				}
 			});

@@ -34,11 +34,11 @@
 				    $('#loader').show();
 				    $('#titletext').text('Assessments');
 				    document.title = 'My Assessments';
-					$('#content_holder').load('modules/assessments/assessments_display_all.php', function() { init_page(); });
-					$('#modal_holder').load('modules/assessments/modals.php');
+					$('#content_holder').load('modules/".basename(__DIR__)."/assessments_display_all.php', function() { init_page(); });
+					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
 		
 					$('#navigation_top').show();
-					$('#navigation_top').load('modules/assessments/menu_main.php', function() {	
+					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_main.php', function() {	
 						$('#navigation_top').show();
 						$('.tab_1').addClass('tabmenuover');
 					});	
@@ -50,14 +50,14 @@
 				    $('#loader').show();
 				    $('#titletext').text('Assessments');
 				    document.title = 'Assessment Editor';
-					$('#content_holder').load('modules/assessments/assessment.php?id='+name, function() { 
+					$('#content_holder').load('modules/".basename(__DIR__)."/assessment.php?id='+name, function() { 
 						init_page();		
 					});		
-					$('#modal_holder').load('modules/assessments/modals.php');
+					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
 					
 					//Load Navigation
 					$('#navigation_top').show();
-					$('#navigation_top').load('modules/assessments/menu_builder.php?id='+name, function() {	
+					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_builder.php?id='+name, function() {	
 						$('#navigation_top').show();
 						$('.tab_2').addClass('tabmenuover');
 					});	

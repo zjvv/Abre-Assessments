@@ -45,7 +45,7 @@
 		    	//$('select').prop('selectedIndex', 0);
 				//$('select').material_select(); 
 		    	//$('#topicFiles').hide();
-		    	//$("#content_holder").load( "modules/assessments/assessment.php?id="+<?php echo $Assessment_ID; ?>, function(){
+		    	//$("#content_holder").load( "modules/<?php echo basename(__DIR__); ?>/assessment.php?id="+<?php echo $Assessment_ID; ?>, function(){
 					//mdlregister();
 				//});
 				location.reload();

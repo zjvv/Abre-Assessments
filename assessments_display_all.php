@@ -75,7 +75,7 @@
 													echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Edit Questions</a></li>";
 													echo "<li class='mdl-menu__item exploreassessment'><a href='#responses/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Responses</a></li>";
 													echo "<li class='mdl-menu__item duplicateassessment' data-courseid='$Assessment_ID'>Duplicate</li>";
-													echo "<li class='mdl-menu__item deleteassessment'><a href='modules/assessments/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
+													echo "<li class='mdl-menu__item deleteassessment'><a href='modules/".basename(__DIR__)."/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
 												echo "</ul>";
 											echo "</div>";
 	

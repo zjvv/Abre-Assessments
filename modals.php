@@ -29,7 +29,7 @@
 
 	<!-- Create Assessment -->
 	<div id="createassessment" class="modal modal-fixed-footer modal-mobile-full">
-		<form class="col s12" id="form-addassessment" method="post" action="modules/assessments/assessment_process.php">
+		<form class="col s12" id="form-addassessment" method="post" action="modules/<?php echo basename(__DIR__); ?>/assessment_process.php">
 		<div class="modal-content">
 			<h4>Assessment</h4>
 			<a class="modal-close black-text" style='position:absolute; right:20px; top:25px;'><i class='material-icons'>clear</i></a>
@@ -260,7 +260,7 @@
 			//Show the notification
 			.done(function(response) {
 				//$("input").val('');
-				$("#content_holder").load( "modules/assessments/assessments_display_all.php", function(){		
+				$("#content_holder").load( "modules/<?php echo basename(__DIR__); ?>/assessments_display_all.php", function(){		
 						
 					mdlregister();
 							
@@ -283,7 +283,7 @@
 			//Add to the assessment
 			var AssessmentID = $('#AssessmentID').val();
 			var QuestionID = $('#QuestionID').val();
-			var address= "/modules/assessments/question_add_process.php?assessmentid="+AssessmentID+"&questionid="+QuestionID;
+			var address= "/modules/<?php echo basename(__DIR__); ?>/question_add_process.php?assessmentid="+AssessmentID+"&questionid="+QuestionID;
 			$.ajax({
 				type: 'POST',
 				url: address,
@@ -314,7 +314,7 @@
 
 			$("#topicFiles").hide();
 			$("#topicLoader").show();
-			$("#topicFiles").load('modules/assessments/questions_list_questions.php?assessmentid='+AssessmentID+'&subject='+question_subject+"&grade="+question_grade+"&difficulty="+question_difficulty+"&type="+question_itemtype+"&blooms="+question_blooms+"&dok="+question_dok, function() {
+			$("#topicFiles").load('modules/<?php echo basename(__DIR__); ?>/questions_list_questions.php?assessmentid='+AssessmentID+'&subject='+question_subject+"&grade="+question_grade+"&difficulty="+question_difficulty+"&type="+question_itemtype+"&blooms="+question_blooms+"&dok="+question_dok, function() {
 				$("#topicLoader").hide();
 				$("#topicFiles").show();
 			});
@@ -328,7 +328,7 @@
 	    	search_query = btoa(search_query);
 	    	$("#topicFiles").hide();
 			$("#topicLoader").show();
-			$("#topicFiles").load('modules/assessments/questions_list_questions.php?assessmentid='+AssessmentID+'&searchquery='+search_query, function() {
+			$("#topicFiles").load('modules/<?php echo basename(__DIR__); ?>/questions_list_questions.php?assessmentid='+AssessmentID+'&searchquery='+search_query, function() {
 				$("#topicLoader").hide();
 				$("#topicFiles").show();
 			});
