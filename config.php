@@ -36,22 +36,3 @@
 	$repo="abreio/Abre-Assessments";
 	$pageicon="assessment";
 	$pagepath="assessments";
-	require_once('functions.php');
-	require_once('permissions.php');
-	
-	if($pagerestrictions=="")
-	{
-	
-		//Get token
-		$token=getCerticaToken();
-		
-		?>
-		
-		<script src='https://cdn.certicasolutions.com/sdk/js/sdk.itemconnect.min.js?x-ic-credential=<?php echo $token; ?>'></script>
-		<script src='https://cdn.certicasolutions.com/player/js/player.itemconnect.min.js'></script>
-		<link rel="stylesheet" href='https://cdn.certicasolutions.com/player/css/player.itemconnect.min.css'>
-		<link rel='stylesheet' type='text/css' href='/modules/<?php echo basename(__DIR__); ?>/style.css'>
-		
-	<?php
-	}
-	?>
