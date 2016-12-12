@@ -32,7 +32,6 @@
 		<script src='https://cdn.certicasolutions.com/sdk/js/sdk.itemconnect.min.js?x-ic-credential=<?php echo $token; ?>'></script>
 		<script src='https://cdn.certicasolutions.com/player/js/player.itemconnect.min.js'></script>
 		<link rel="stylesheet" href='https://cdn.certicasolutions.com/player/css/player.itemconnect.min.css'>
-		<link rel='stylesheet' type='text/css' href='/modules/<?php echo basename(__DIR__); ?>/style.css'>		
 		<?php
 
 		$Assessment_ID=htmlspecialchars($_GET["id"], ENT_QUOTES);
