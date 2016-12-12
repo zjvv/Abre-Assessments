@@ -32,7 +32,7 @@
 	$pageorder=4;
 	$pagetitle="Assessments";
 	$description="An assessment creator and delivery system.";
-	$version="1.0.1";
+	$version="1.0.2";
 	$repo="abreio/Abre-Assessments";
 	$pageicon="assessment";
 	$pagepath="assessments";
