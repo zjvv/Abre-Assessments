@@ -36,3 +36,4 @@
 	$repo="abreio/Abre-Assessments";
 	$pageicon="assessment";
 	$pagepath="assessments";
+	require_once('permissions.php');
