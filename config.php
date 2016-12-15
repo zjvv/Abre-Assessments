@@ -23,9 +23,8 @@
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php'); 
 	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
 	
-	//Create assessment table
-	if(!$resultcurriculum = $db->query("SELECT * FROM assessments")){ }
-	$db->close();
+	//Check for installation
+	if(superadmin()){ require('installer.php'); }
 	
 	$pageview=1;
 	$drawerhidden=1;
