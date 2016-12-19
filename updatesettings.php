@@ -30,8 +30,21 @@
 		$certicabaseurl=$_POST["certicabaseurl"];
 		$certicaaccesskey=$_POST["certicaaccesskey"];
 		
-		//Update the database
-		mysqli_query($db, "UPDATE assessments_settings set Certica_URL='$certicabaseurl', Certica_AccessKey='$certicaaccesskey'") or die (mysqli_error($db));
+		//Check to see if there are saved settings
+		$sql = "SELECT * FROM assessments_settings";
+		$result = $db->query($sql);
+		$rowcount=mysqli_num_rows($result);
+		
+		if($rowcount!=0)
+		{
+			//Update the database
+			mysqli_query($db, "UPDATE assessments_settings set Certica_URL='$certicabaseurl', Certica_AccessKey='$certicaaccesskey'") or die (mysqli_error($db));
+		}
+		else
+		{
+			//Add to the database
+			mysqli_query($db, "INSERT INTO assessments_settings (ID, Certica_URL, Certica_AccessKey) VALUES (NULL, '$certicabaseurl', '$certicaaccesskey')") or die (mysqli_error($db));
+		}
 
 	}
 	

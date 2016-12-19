@@ -61,26 +61,6 @@
 						$questioncount++;
 						$questionid=htmlspecialchars($row2["ID"], ENT_QUOTES);
 						$Bank_ID=htmlspecialchars($row2["Bank_ID"], ENT_QUOTES);
-						
-						//Get Information about the question
-						/*
-						$token=getCerticaToken();
-						$ch = curl_init();
-						$filter="ia_itemid+eq+'96700'";
-						curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter");
-						curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: IC-TOKEN Credential=$token"));
-						curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-						curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0);
-						curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-						$result = curl_exec($ch);
-						$json = json_decode($result,true);
-						var_dump($json);
-						$items = $json['items'];
-						foreach ($items as $value)
-						{
-
-						}
-						*/
 
 						echo "<li style='position:relative' id='item-$questionid' class='topicholder'>";
 							echo "<div class='collapsible-header unit' data-bankid='$Bank_ID'>";
