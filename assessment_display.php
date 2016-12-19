@@ -27,6 +27,8 @@
 	
 	if($pagerestrictions=="")
 	{
+		
+		$token=getCerticaToken();
 	
 		?>
 		<script src='https://cdn.certicasolutions.com/sdk/js/sdk.itemconnect.min.js?x-ic-credential=<?php echo $token; ?>'></script>

@@ -27,6 +27,7 @@
 	
 	if($pagerestrictions=="")
 	{
+		$token=getCerticaToken();
 		
 		?>
 		<script src='https://cdn.certicasolutions.com/sdk/js/sdk.itemconnect.min.js?x-ic-credential=<?php echo $token; ?>'></script>
@@ -76,6 +77,18 @@
 					$question_dok=base64_decode($question_dok); 
 					$question_dok = str_replace(' ', '+', $question_dok); 
 				}
+				if(isset($_GET["language"]))
+				{ 
+					$question_language=$_GET["language"];
+					$question_language=base64_decode($question_language); 
+					$question_language = str_replace(' ', '+', $question_language);
+				}
+				if(isset($_GET["standard"]))
+				{ 
+					$question_standard=$_GET["standard"];
+					$question_standard=base64_decode($question_standard); 
+					$question_standard = str_replace(' ', '+', $question_standard);
+				}
 				if(isset($_GET["assessmentid"])){ $assessment_id=$_GET["assessmentid"]; }
 				
 				//Get token
@@ -91,6 +104,8 @@
 					if($question_type!=""){ $filter=$filter."+and+IA_teitype+eq+'$question_type'"; }
 					if($question_blooms!=""){ $filter=$filter."+and+IA_bloomstaxonomy+eq+'$question_blooms'"; }
 					if($question_dok!=""){ $filter=$filter."+and+IA_DOK+eq+'$question_dok'"; }
+					if($question_language!=""){ $filter=$filter."+and+IA_Lang+eq+'$question_language'"; }
+					if($question_standard!=""){ $filter=$filter."+and+STD_Code+eq+'$question_standard'"; }
 					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
 				}
 				

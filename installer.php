@@ -81,7 +81,7 @@
 		
 		//Check for Code field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Grade FROM assessments"))
+		if(!$db->query("SELECT Code FROM assessments"))
 		{
 			$sql = "ALTER TABLE `assessments` ADD `Code` int(11) NOT NULL;";
 			$db->multi_query($sql);

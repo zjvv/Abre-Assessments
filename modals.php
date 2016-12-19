@@ -96,7 +96,7 @@
 			</div>
 			
 			<div class="row" id="filter">
-				<div class="input-field col l4 s6">
+				<div class="input-field col l3 s6">
 					<select name='question_subject' id='question_subject' required> 
 						<option value='' selected='selected' disabled>Select a Subject</option>   
 						<option value='Language Arts'>Language Arts</option>
@@ -106,7 +106,12 @@
 				    </select>
 				    <label>Subject</label>
 				</div>
-				<div class="input-field col l4 s6">
+				<div class="input-field col l3 s6">
+					<div id="choosestandard">
+						<?php include "standard_choices.php"; ?>
+					</div>
+				</div>
+				<div class="input-field col l3 s6">
 					<select name='question_grade' id='question_grade' required>
 						<option value='' selected='selected'></option>   
 						<option value='Grade K'>K</option>
@@ -126,7 +131,7 @@
 				    </select>
 				    <label>Grade</label>
 				</div>
-				<div class="input-field col l4 s6">
+				<div class="input-field col l3 s6">
 					<select name='question_difficulty' id='question_difficulty' required>
 						<option value='' selected='selected'></option>
 						<option value='Low'>Low</option>
@@ -135,7 +140,7 @@
 				    </select>
 				    <label>Difficulty</label>
 				</div>
-				<div class="input-field col l4 s6">
+				<div class="input-field col l3 s6">
 					<select name='question_itemtype' id='question_itemtype' required>
 						<option value='' selected='selected'></option>
 						<option value='MC'>Multiple Choice</option>
@@ -151,7 +156,7 @@
 				    </select>
 				    <label>Question Type</label>
 				</div>
-				<div class="input-field col l4 s6">
+				<div class="input-field col l3 s6">
 					<select name='question_blooms' id='question_blooms' required>
 						<option value='' selected='selected'></option>
 						<option value='Remembering'>Remembering</option>
@@ -163,7 +168,7 @@
 				    </select>
 				    <label>Blooms</label>
 				</div>
-				<div class="input-field col l4 s6">
+				<div class="input-field col l3 s6">
 					<select name='question_dok' id='question_dok' required>
 						<option value='' selected='selected'></option>
 						<option value='I'>Recall</option>
@@ -172,6 +177,14 @@
 						<option value='IV'>Extended Thinking</option>
 				    </select>
 				    <label>Depth of Knowledge</label>
+				</div>
+				<div class="input-field col l3 s6">
+					<select name='question_language' id='question_language' required>
+						<option value='' selected='selected'></option>
+						<option value='English'>English</option>
+						<option value='Spanish'>Spanish</option>
+				    </select>
+				    <label>Language</label>
 				</div>
 			</div>
 			
@@ -184,7 +197,7 @@
 			
 			<div class="row">
 			<div class="input-field col s12">
-				<div id="topicLoader" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" style="width:100%"></div>
+				<div id="topicLoader"><div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" style="width:100%;"></div></div>
 				<div id="topicFiles"></div>
 			</div>
 			</div>
@@ -229,6 +242,9 @@
 	
 	$(function()
 	{
+		//Load MDL
+		mdlregister();
+		
 		//Tabs
     	$('ul.tabs').tabs();
 		
@@ -236,7 +252,7 @@
 		$("#topicLoader").hide();
 
 		//Material dropdown
-		$('select').material_select();
+		$('#question_subject, #question_grade, #question_difficulty, #question_itemtype, #question_blooms, #question_dok, #question_language').material_select();
 		
 		//Add/Edit a Assessment						
 		$('#form-addassessment').submit(function(event)
@@ -296,7 +312,7 @@
 		});
     	
     	//Question Search/Filter
-    	$('#question_subject, #question_grade, #question_difficulty, #question_itemtype, #question_blooms, #question_dok').change(function()
+    	$('#question_subject, #question_grade, #question_difficulty, #question_itemtype, #question_blooms, #question_dok, #question_language, #choosestandard').change(function()
     	{
 	    	var question_subject = $('#question_subject').val();
 	    	question_subject = btoa(question_subject);
@@ -310,14 +326,29 @@
 	    	question_blooms = btoa(question_blooms);
 	    	var question_dok = $('#question_dok').val();
 	    	question_dok = btoa(question_dok);
+	    	var question_language = $('#question_language').val();
+	    	question_language = btoa(question_language);
+	    	var question_standard = $('#question_standard').val();
+	    	question_standard = btoa(question_standard);
 	    	var AssessmentID = $('#AssessmentID').val();
 
 			$("#topicFiles").hide();
 			$("#topicLoader").show();
-			$("#topicFiles").load('modules/<?php echo basename(__DIR__); ?>/questions_list_questions.php?assessmentid='+AssessmentID+'&subject='+question_subject+"&grade="+question_grade+"&difficulty="+question_difficulty+"&type="+question_itemtype+"&blooms="+question_blooms+"&dok="+question_dok, function() {
+			$("#topicFiles").load('modules/<?php echo basename(__DIR__); ?>/questions_list_questions.php?assessmentid='+AssessmentID+'&subject='+question_subject+"&grade="+question_grade+"&difficulty="+question_difficulty+"&type="+question_itemtype+"&blooms="+question_blooms+"&dok="+question_dok+"&language="+question_language+"&standard="+question_standard, function() {
 				$("#topicLoader").hide();
 				$("#topicFiles").show();
 			});
+		});
+		
+    	//Question Search/Filter
+    	$('#question_subject').change(function()
+    	{
+	    	var question_subject = $('#question_subject').val();
+	    	question_subject = btoa(question_subject);
+	    	
+	    	//Update the available Standards
+	    	$("#choosestandard").load( "modules/<?php echo basename(__DIR__); ?>/standard_choices.php?subject="+question_subject );
+
 		});
 		
 		//Question Search
