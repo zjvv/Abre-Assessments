@@ -29,8 +29,14 @@
 		function getCerticaToken()
 		{
 			$ch = curl_init();
-			$resturl=sitesettings('certicabaseurl');
-			$restkey=sitesettings('certicaaccesskey');
+			$sql = "SELECT *  FROM assessments_settings";
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+			$result = $db->query($sql);
+			while($row = $result->fetch_assoc())
+			{	
+				$resturl=$row["Certica_URL"];
+				$restkey=$row["Certica_AccessKey"];
+			}
 			curl_setopt($ch, CURLOPT_URL, "$resturl/tokens?unlimited=true");
 			curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: IC-TOKEN Credential=$restkey"));
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

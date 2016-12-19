@@ -30,7 +30,7 @@
 	$drawerhidden=1;
 	$pageorder=4;
 	$pagetitle="Assessments";
-	$description="An assessment creator and delivery system.";
+	$description="A common assessment tool that helps teachers identify and track student understanding.";
 	$version="1.0.2";
 	$repo="abreio/Abre-Assessments";
 	$pageicon="assessment";

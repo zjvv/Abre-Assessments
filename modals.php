@@ -210,7 +210,7 @@
 	</div>
 	
 	<!-- Question Preview -->
-	<div id="linktotopic" class="modal modal-fixed-footer modal-mobile-full" style="width: 80%">
+	<div id="linktotopic" class="fullmodal modal modal-fixed-footer modal-mobile-full" style="width: 80%">
 		<form class="col s12" id="form-addlinktotopic" method="post" action="">
 		<div class="modal-content">
 			<h4>Question Preview</h4>

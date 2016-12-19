@@ -1,4 +1,4 @@
-<?php 
+<?php
 	
 	/*
 	* Copyright 2015 Hamilton City School District	
@@ -18,35 +18,21 @@
     */
 	
 	//Required configuration files
+	require(dirname(__FILE__) . '/../../configuration.php'); 
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
-	require(dirname(__FILE__) . '/../../configuration.php');
-	require_once('permissions.php');
+	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 	
-	if($pagerestrictions=="")
+	//Update system settings
+	if(superadmin())
 	{
-		if(isset($_GET["subject"])){ $subject=base64_decode(htmlspecialchars($_GET["subject"], ENT_QUOTES)); }else{ $subject=""; }
+		//Retrieve settings and group as json
+		$certicabaseurl=$_POST["certicabaseurl"];
+		$certicaaccesskey=$_POST["certicaaccesskey"];
 		
-		echo "<select name='question_standard' id='question_standard' required>";
-		echo "<option value='' selected='selected'></option>";
-		
-			$query = "SELECT * FROM assessments_standards where Subject='$subject' order by Standard";
-			$dbreturn = databasequery($query);
-			foreach ($dbreturn as $value)
-			{
-				$Standard=$value["Standard"];
-				echo "<option value='$Standard'>$Standard</option>";
-			}
-		
-		echo "</select><label>Standard</label>";
-		
+		//Update the database
+		mysqli_query($db, "UPDATE assessments_settings set Certica_URL='$certicabaseurl', Certica_AccessKey='$certicaaccesskey'") or die (mysqli_error($db));
+
 	}
-
-?>
-
-<script>
 	
-	//Material dropdown
-	$('#question_standard').material_select();
-		
-</script>
+?>

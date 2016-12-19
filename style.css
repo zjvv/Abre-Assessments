@@ -1,3 +1,4 @@
+/*
 [data-player-element=response-wrapper-cm] [type=checkbox]:checked, [data-player-element=response-wrapper-cm] [type=checkbox]:not(:checked)
 {
 	visibility: visible !important;
@@ -13,3 +14,4 @@ input[type="checkbox"]
 {
 	display: inline !important;
 }
+*/

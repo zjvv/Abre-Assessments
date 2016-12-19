@@ -23,6 +23,36 @@
 	
 	if(superadmin() && !file_exists("$portal_path_root/modules/Abre-Assessments/setup.txt"))
 	{
+		
+		//Check for assessments_settings table
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT * FROM assessments_settings"))
+		{
+			$sql = "CREATE TABLE `assessments_settings` (`ID` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+			$sql .= "ALTER TABLE `assessments_settings` ADD PRIMARY KEY (`ID`);";
+			$sql .= "ALTER TABLE `assessments_settings` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;";	
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Certica_URL field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Certica_URL FROM assessments_settings"))
+		{
+			$sql = "ALTER TABLE `assessments_settings` ADD `Certica_URL` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Certica_AccessKey field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Certica_AccessKey FROM assessments_settings"))
+		{
+			$sql = "ALTER TABLE `assessments_settings` ADD `Certica_AccessKey` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
 		//Check for assessments table
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
 		if(!$db->query("SELECT * FROM assessments"))
