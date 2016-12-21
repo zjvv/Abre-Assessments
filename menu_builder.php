@@ -33,8 +33,5 @@
 			<li class="tab col s3 tab_2">
 				<?php echo "<a href='#assessments' class='mdl-color-text--white'>Questions</a>"; ?>
 			</li>
-			<li class="tab col s3 tab_3">
-				<?php echo "<a href='#responses' class='mdl-color-text--white'>Responses</a>"; ?>
-			</li>
 		</ul>
 	</div>

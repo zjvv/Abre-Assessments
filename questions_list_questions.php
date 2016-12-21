@@ -122,6 +122,7 @@
 				$result = curl_exec($ch);
 				$json = json_decode($result,true);
 				$items = $json['items'];
+				$returncount=count($items);
 				foreach ($items as $value)
 				{
 					
@@ -180,6 +181,15 @@
 			    	
 				}
 				curl_close($ch);
+				
+				if($returncount==0)
+				{
+					echo "<h5 class='center-align'>No questions match this criteria.</h5>";
+				}
+				else
+				{
+					echo "<h5 class='center-align'>$returncount questions returned.</h5>";
+				}
 					
 			?>
 			

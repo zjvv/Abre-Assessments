@@ -73,8 +73,6 @@
 												echo "<ul class='mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect' for='demo-menu-bottom-left-$Assessment_ID'>";
 													echo "<li class='mdl-menu__item modal-createassessment' href='#createassessment' data-title='$Title' data-description='$Description' data-subject='$Subject' data-assessmentid='$Assessment_ID' data-grade='$Grade' style='font-weight:400'>Edit Assessment</a></li>";
 													echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Edit Questions</a></li>";
-													echo "<li class='mdl-menu__item exploreassessment'><a href='#responses/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Responses</a></li>";
-													echo "<li class='mdl-menu__item duplicateassessment' data-courseid='$Assessment_ID'>Duplicate</li>";
 													echo "<li class='mdl-menu__item deleteassessment'><a href='modules/".basename(__DIR__)."/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
 												echo "</ul>";
 											echo "</div>";
@@ -154,7 +152,8 @@
 			event.preventDefault();
 			var result = confirm("Delete this assessment?");
 			if (result) {
-				$(this).closest('.assessmentrow').hide();
+
+				//Make the post request
 				var address = $(this).find("a").attr("href");
 				$.ajax({
 					type: 'POST',
@@ -163,19 +162,20 @@
 				})
 																
 				//Show the notification
-				.done(function(response) {	
+				.done(function(response){	
 					
 					mdlregister();												
 					var notification = document.querySelector('.mdl-js-snackbar');
 					var data = { message: response };
-					notification.MaterialSnackbar.showSnackbar(data);		
+					notification.MaterialSnackbar.showSnackbar(data);
+					
+					$('#content_holder').load('modules/<?php echo basename(__DIR__); ?>/assessments_display_all.php', function() { init_page(); });
+						
 				})
 			}
 		});		
 				
-		$("#myTable").tablesorter({ 
-			//sortList: [[1,0],[3,0]]
-    	});
+		$("#myTable").tablesorter();
 					
 	});
 	

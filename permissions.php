@@ -25,9 +25,7 @@
 	
 	//Check for Admin Authentication
 	$pagerestrictions="staff, students";
-	$sql = "SELECT *  FROM users where email='crose@hcsdoh.org' or email='tsmith@hcsdoh.org' or email='zvanderveen@hcsdoh.org' or email='rpate@hcsdoh.org' or email='mholbrook@hcsdoh.org'";
-	$result = $db->query($sql);
-	while($row = $result->fetch_assoc())
+	if($_SESSION['useremail']=='crose@hcsdoh.org' or $_SESSION['useremail']=='tsmith@hcsdoh.org' or $_SESSION['useremail']=='zvanderveen@hcsdoh.org' or $_SESSION['useremail']=='rpate@hcsdoh.org' or $_SESSION['useremail']=='mholbrook@hcsdoh.org')
 	{
 		$drawerhidden=0;
 		$pagerestrictions="";
