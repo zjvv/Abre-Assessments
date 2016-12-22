@@ -191,7 +191,7 @@
 			<div class="row" id="search">
 				<div class="input-field col s12">
 					<input id="searchquery" type="text">
-					<label for="searchquery">Search</label>
+					<label for="searchquery" class="active">Search</label>
 				</div>
 			</div>
 			
@@ -310,6 +310,17 @@
 			$('#questionplus-'+QuestionID).hide();		
 			
 		});
+		
+    	//Question Search/Filter
+    	$('#question_subject').change(function()
+    	{
+	    	var question_subject = $('#question_subject').val();
+	    	question_subject = btoa(question_subject);
+	    	$('#question_standard').prop('selectedIndex', 0);
+	    	//Update the available Standards
+	    	$("#choosestandard").load( "modules/<?php echo basename(__DIR__); ?>/standard_choices.php?subject="+question_subject );
+
+		});
     	
     	//Question Search/Filter
     	$('#question_subject, #question_grade, #question_difficulty, #question_itemtype, #question_blooms, #question_dok, #question_language, #choosestandard').change(function()
@@ -329,7 +340,7 @@
 	    	var question_language = $('#question_language').val();
 	    	question_language = btoa(question_language);
 	    	var question_standard = $('#question_standard').val();
-	    	question_standard = btoa(question_standard);
+	    	question_standard = btoa(question_standard);   	
 	    	var AssessmentID = $('#AssessmentID').val();
 
 			$("#topicFiles").hide();
@@ -338,17 +349,6 @@
 				$("#topicLoader").hide();
 				$("#topicFiles").show();
 			});
-		});
-		
-    	//Question Search/Filter
-    	$('#question_subject').change(function()
-    	{
-	    	var question_subject = $('#question_subject').val();
-	    	question_subject = btoa(question_subject);
-	    	
-	    	//Update the available Standards
-	    	$("#choosestandard").load( "modules/<?php echo basename(__DIR__); ?>/standard_choices.php?subject="+question_subject );
-
 		});
 		
 		//Question Search
@@ -380,6 +380,44 @@
 		{
 			var Assessment_ID = $(this).data('assessmentid');
 		    $(".modal-content #AssessmentID").val(Assessment_ID);
+		});	
+		
+		//Change pages
+		$(document).unbind().on( "click", ".pagebutton", function(event)
+		{					
+			event.preventDefault();
+				
+			//Move to top of modal and get page number
+			$('.modal-content').scrollTop(0);
+			var Page = $(this).data('page');			
+				
+			//Reload div with new page update
+			$("#topicFiles").hide();
+			$("#topicLoader").show();
+
+	    	var question_subject = $('#question_subject').val();
+	    	question_subject = btoa(question_subject);
+	    	var question_grade = $('#question_grade').val();
+	    	question_grade = btoa(question_grade);
+	    	var question_difficulty = $('#question_difficulty').val();
+	    	question_difficulty = btoa(question_difficulty);
+	    	var question_itemtype = $('#question_itemtype').val();
+	    	question_itemtype = btoa(question_itemtype);
+	    	var question_blooms = $('#question_blooms').val();
+	    	question_blooms = btoa(question_blooms);
+	    	var question_dok = $('#question_dok').val();
+	    	question_dok = btoa(question_dok);
+	    	var question_language = $('#question_language').val();
+	    	question_language = btoa(question_language);
+	    	var question_standard = $('#question_standard').val();
+	    	question_standard = btoa(question_standard);
+	    	var AssessmentID = $('#AssessmentID').val();
+
+			$("#topicFiles").load('modules/<?php echo basename(__DIR__); ?>/questions_list_questions.php?assessmentid='+AssessmentID+'&subject='+question_subject+"&grade="+question_grade+"&difficulty="+question_difficulty+"&type="+question_itemtype+"&blooms="+question_blooms+"&dok="+question_dok+"&language="+question_language+"&standard="+question_standard+"&pagenumber="+Page, function() {
+				$("#topicLoader").hide();
+				$("#topicFiles").show();
+			});
+				
 		});	
 	   	
 	});	
