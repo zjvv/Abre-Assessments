@@ -34,7 +34,9 @@
 		<script src='https://cdn.certicasolutions.com/player/js/player.itemconnect.min.js'></script>
 		<link rel="stylesheet" href='https://cdn.certicasolutions.com/player/css/player.itemconnect.min.css'>	
 		<?php
-
+				//Page Number
+				if(isset($_GET["pagenumber"])){ $pagenumber=$_GET["pagenumber"]; }else{ $pagenumber=1; }
+				
 				if(isset($_GET["searchquery"]))
 				{ 
 					$question_searchquery=$_GET["searchquery"]; 
@@ -99,6 +101,7 @@
 				if(isset($question_subject))
 				{
 					$filter="IA_Subject+eq+'$question_subject'";
+					$skip=$pagenumber-1;
 					if($question_grade!=""){ $filter=$filter."+and+IA_GradeLevel+eq+'$question_grade'"; }
 					if($question_difficulty!=""){ $filter=$filter."+and+IA_Difficulty+eq+'$question_difficulty'"; }
 					if($question_type!=""){ $filter=$filter."+and+IA_teitype+eq+'$question_type'"; }
@@ -106,7 +109,7 @@
 					if($question_dok!=""){ $filter=$filter."+and+IA_DOK+eq+'$question_dok'"; }
 					if($question_language!=""){ $filter=$filter."+and+IA_Lang+eq+'$question_language'"; }
 					if($question_standard!=""){ $filter=$filter."+and+STD_Code+eq+'$question_standard'"; }
-					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
+					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$skip='."$skip".'&$filter='."$filter".'&$orderby='."IA_ItemId");
 				}
 				
 				if(isset($question_searchquery))
@@ -122,7 +125,21 @@
 				$result = curl_exec($ch);
 				$json = json_decode($result,true);
 				$items = $json['items'];
-				$returncount=count($items);
+				
+				//Show Results
+				$returncount = $json['totalItems'];
+				
+				//Determine number of pages
+				$numofpages = ceil($returncount/100);
+				if($returncount==0)
+				{
+					echo "<h5 class='center-align'>No questions match this criteria.</h5><br>";
+				}
+				else
+				{
+					if($numofpages>1){ echo "<h5 class='center-align'>Page $pagenumber of $returncount questions</h5><br>"; }
+				}
+				
 				foreach ($items as $value)
 				{
 					
@@ -182,13 +199,38 @@
 				}
 				curl_close($ch);
 				
-				if($returncount==0)
+				//Paging
+				if($returncount>100)
 				{
-					echo "<h5 class='center-align'>No questions match this criteria.</h5>";
-				}
-				else
-				{
-					echo "<h5 class='center-align'>$returncount questions returned.</h5>";
+					$previouspage=$pagenumber-1;
+					$nextpage=$pagenumber+1;
+					echo "<div class='row'><br>";
+					echo "<ul class='pagination center-align'>";
+						if($pagenumber!=1){ echo "<li class='pagebutton' data-page='$previouspage'><a href='#'><i class='material-icons'>chevron_left</i></a></li>"; }
+						
+						if($pagenumber>5)
+						{ 
+							if($numofpages>$pagenumber+5){ $pagingstart=$pagenumber-5; $pagingend=$pagenumber+5;  }else{ $pagingstart=$pagenumber-5; $pagingend=$numofpages; }
+						}
+						else
+						{
+							if($numofpages>=10){ $pagingstart=1; $pagingend=10; }else{ $pagingstart=1; $pagingend=$numofpages; }
+						}
+						
+					    for ($x = $pagingstart; $x <= $pagingend; $x++) {
+							if($pagenumber==$x)
+							{
+								echo "<li class='active pagebutton' style='background-color: ".sitesettings("sitecolor").";' data-page='$x'><a href='#'>$x</a></li>";
+							}
+							else
+							{
+								echo "<li class='waves-effect pagebutton' data-page='$x'><a href='#'>$x</a></li>";
+							}
+						}
+						
+					    if($pagenumber!=$numofpages){ echo "<li class='waves-effect pagebutton' data-page='$nextpage'><a href='#'><i class='material-icons'>chevron_right</i></a></li>"; }
+					echo "</ul>";
+					echo "</div>";
 				}
 					
 			?>
