@@ -23,7 +23,6 @@
 	
 	if(superadmin())
 	{
-
 ?>
 		<div class="fixed-action-btn">
 	    <a class="btn-floating btn-large" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
