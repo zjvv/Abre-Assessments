@@ -32,12 +32,6 @@
 				    document.title = 'My Assessments';
 					$('#content_holder').load('modules/".basename(__DIR__)."/assessments_display_all.php', function() { init_page(); });
 					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
-		
-					$('#navigation_top').show();
-					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_main.php', function() {	
-						$('#navigation_top').show();
-						$('.tab_1').addClass('tabmenuover');
-					});	
 			    },
 				'assessments/settings': function(name)
 				{
