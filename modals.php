@@ -383,7 +383,7 @@
 		});	
 		
 		//Change pages
-		$(document).unbind().on( "click", ".pagebutton", function(event)
+		$(document).on( "click", ".pagebutton", function(event)
 		{					
 			event.preventDefault();
 				
