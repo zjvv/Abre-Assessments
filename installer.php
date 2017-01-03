@@ -73,6 +73,24 @@
 		}
 		$db->close();
 		
+		//Check for Editors field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Editors FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Editors` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Locked field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Locked FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Locked` INT NOT NULL DEFAULT '0';";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
 		//Check for Title field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
 		if(!$db->query("SELECT Title FROM assessments"))

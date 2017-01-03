@@ -32,6 +32,8 @@
 		$assessment_grade=$_POST["assessment_grade"];
 		$assessment_grade = implode (", ", $assessment_grade);
 		$assessment_subject=$_POST["assessment_subject"];
+		$assessment_lock=$_POST["assessment_lock"];
+		$assessment_editors=$_POST["assessment_editors"];
 		$assessment_id=$_POST["assessment_id"];
 		
 		//Generate a unique, random class code
@@ -42,7 +44,7 @@
 		if($assessment_id=="")
 		{
 			$stmt = $db->stmt_init();
-			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Grade, Code) VALUES ('".$_SESSION['useremail']."', '$assessment_title', '$assessment_description', '$assessment_subject', '$assessment_grade', '$Code');";
+			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Grade, Code, Editors, Locked) VALUES ('".$_SESSION['useremail']."', '$assessment_title', '$assessment_description', '$assessment_subject', '$assessment_grade', '$Code', '$assessment_editors', '$assessment_lock');";
 			$stmt->prepare($sql);
 			$stmt->execute();
 			$stmt->close();
@@ -50,7 +52,7 @@
 		}
 		else
 		{
-			mysqli_query($db, "UPDATE assessments set Title='$assessment_title', Description='$assessment_description', Subject='$assessment_subject', Grade='$assessment_grade' where ID='$assessment_id'") or die (mysqli_error($db));
+			mysqli_query($db, "UPDATE assessments set Title='$assessment_title', Description='$assessment_description', Subject='$assessment_subject', Grade='$assessment_grade', Editors='$assessment_editors', Locked='$assessment_lock' where ID='$assessment_id'") or die (mysqli_error($db));
 		}
 	
 		//Give message

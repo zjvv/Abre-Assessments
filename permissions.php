@@ -25,7 +25,7 @@
 	
 	//Check for Admin Authentication
 	$pagerestrictions="staff, students";
-	if($_SESSION['useremail']=='crose@hcsdoh.org' or $_SESSION['useremail']=='tsmith@hcsdoh.org' or $_SESSION['useremail']=='zvanderveen@hcsdoh.org' or $_SESSION['useremail']=='rpate@hcsdoh.org' or $_SESSION['useremail']=='mholbrook@hcsdoh.org')
+	if($_SESSION['usertype']=='staff')
 	{
 		$drawerhidden=0;
 		$pagerestrictions="";

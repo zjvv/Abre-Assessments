@@ -65,10 +65,19 @@
 					<option value='English Language Arts'>English Language Arts</option>    
 					<option value='Mathematics'>Mathematics</option>    
 				    <option value='Science'>Science</option>       
-				    <option value='Social Studies'>Social Studies</option>   
-				    <option value='Technology'>Technology</option>       
+				    <option value='Social Studies'>Social Studies</option>
+				    <option value='Miscellaneous'>Miscellaneous</option>      
 			    </select>
 			</div>
+			</div>
+			
+			<div class="row">
+				<div class="input-field col s12"><input id="assessment_editors" name="assessment_editors" placeholder="Assessment Editors (Emails Separated by Commas)" type="text"></div>
+			</div>
+			
+			<div class="input-field col s12">
+				<input type="checkbox" class="filled-in" id="assessment_lock" name="assessment_lock" value="1" />
+				<label for="assessment_lock">Lock Assessment</label>
 			</div>
 				
 			<input type="hidden" name="assessment_id" id="assessment_id">
@@ -96,7 +105,7 @@
 			</div>
 			
 			<div class="row" id="filter">
-				<div class="input-field col l3 s6">
+				<div class="input-field col l3 m4 s6">
 					<select name='question_subject' id='question_subject' required> 
 						<option value='' selected='selected' disabled>Select a Subject</option>   
 						<option value='Language Arts'>Language Arts</option>
@@ -106,12 +115,12 @@
 				    </select>
 				    <label>Subject</label>
 				</div>
-				<div class="input-field col l3 s6">
+				<div class="input-field col l3 m4 s6">
 					<div id="choosestandard">
 						<?php include "standard_choices.php"; ?>
 					</div>
 				</div>
-				<div class="input-field col l3 s6">
+				<div class="input-field col l3 m4 s6">
 					<select name='question_grade' id='question_grade' required>
 						<option value='' selected='selected'></option>   
 						<option value='Grade K'>K</option>
@@ -131,7 +140,7 @@
 				    </select>
 				    <label>Grade</label>
 				</div>
-				<div class="input-field col l3 s6">
+				<div class="input-field col l3 m4 s6">
 					<select name='question_difficulty' id='question_difficulty' required>
 						<option value='' selected='selected'></option>
 						<option value='Low'>Low</option>
@@ -140,7 +149,7 @@
 				    </select>
 				    <label>Difficulty</label>
 				</div>
-				<div class="input-field col l3 s6">
+				<div class="input-field col l3 m4 s6">
 					<select name='question_itemtype' id='question_itemtype' required>
 						<option value='' selected='selected'></option>
 						<option value='MC'>Multiple Choice</option>
@@ -156,7 +165,7 @@
 				    </select>
 				    <label>Question Type</label>
 				</div>
-				<div class="input-field col l3 s6">
+				<div class="input-field col l3 m4 s6">
 					<select name='question_blooms' id='question_blooms' required>
 						<option value='' selected='selected'></option>
 						<option value='Remembering'>Remembering</option>
@@ -168,7 +177,7 @@
 				    </select>
 				    <label>Blooms</label>
 				</div>
-				<div class="input-field col l3 s6">
+				<div class="input-field col l3 m4 s6">
 					<select name='question_dok' id='question_dok' required>
 						<option value='' selected='selected'></option>
 						<option value='I'>Recall</option>
@@ -178,7 +187,7 @@
 				    </select>
 				    <label>Depth of Knowledge</label>
 				</div>
-				<div class="input-field col l3 s6">
+				<div class="input-field col l3 m4 s6">
 					<select name='question_language' id='question_language' required>
 						<option value='' selected='selected'></option>
 						<option value='English'>English</option>
@@ -254,7 +263,7 @@
 		//Material dropdown
 		$('#question_subject, #question_grade, #question_difficulty, #question_itemtype, #question_blooms, #question_dok, #question_language').material_select();
 		
-		//Add/Edit a Assessment						
+		//Add or Edit a Assessment						
 		$('#form-addassessment').submit(function(event)
 		{
 			event.preventDefault();

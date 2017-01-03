@@ -37,7 +37,7 @@
 		<?php
 
 		$Assessment_ID=htmlspecialchars($_GET["id"], ENT_QUOTES);
-		$sqllookup = "SELECT * FROM assessments where ID='$Assessment_ID'";
+		$sqllookup = "SELECT * FROM assessments where ID='$Assessment_ID' and (Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%')";
 		$result2 = $db->query($sqllookup);
 		$setting_preferences=mysqli_num_rows($result2);
 		while($row = $result2->fetch_assoc())
@@ -46,9 +46,12 @@
 			$Title=htmlspecialchars($row["Title"], ENT_QUOTES);
 			$Grade=htmlspecialchars($row["Grade"], ENT_QUOTES);
 			$Subject=htmlspecialchars($row["Subject"], ENT_QUOTES);
+			$Locked=htmlspecialchars($row["Locked"], ENT_QUOTES);
 
 			echo "<div class='page_container'>";
-				echo "<div class='row'><div class='center-align' style='padding:20px;'><h3 style='font-weight:600;'>$Title</h3><h6 style='color:#777;'>$Subject &#183; Grade Level: $Grade</h6></div></div>";
+				echo "<div class='row'><div class='center-align' style='padding:20px;'><h3 style='font-weight:600;'>$Title";
+					if($Locked==1){ echo " <i class='material-icons'>lock</i>"; }
+				echo "</h3><h6 style='color:#777;'>$Subject &#183; Grade Level: $Grade</h6></div></div>";
 			
 				echo "<ul class='collapsible popout questionsort' data-collapsible='accordion'>";
 			
@@ -66,8 +69,10 @@
 							echo "<div class='collapsible-header unit' data-bankid='$Bank_ID'>";
 					    		echo "<i class='material-icons' style='font-size: 36px; color:".sitesettings("sitecolor")."'>fiber_manual_record</i>";
 
-								echo "<span style='position:absolute; right:0; z-index:1000; cursor:move;' class='mdl-color-text--grey-700 handle'>";
-										echo "<i class='material-icons'>reorder</i>";	
+								echo "<span style='position:absolute; right:0; z-index:1000; cursor:move;' class='mdl-color-text--grey-700";
+									if($Locked!=1){ echo " handle"; }
+								echo "'>";
+										if($Locked!=1){ echo "<i class='material-icons'>reorder</i>"; }
 								echo "</span>";
 									
 								echo "<span class='title truncate' style='margin-right:40px;'><b>Question</b></span>";
@@ -90,13 +95,25 @@
 		
 				echo "</ul>";
 			
-			if($unitcount==0){ echo "<div class='center-align'>Click the '+' in the bottom right to add a question to this assessment."; }
+			if($unitcount==0){ 
+				if($Locked!=1)
+				{
+					echo "<div class='center-align'>Click the '+' in the bottom right to add a question to this assessment."; 
+				}
+				else
+				{
+					echo "<div class='center-align'>This assessment is locked. The owner must unlock before this assessment can be modified."; 
+				}
+			}
 			
 			echo "</div>";
 			
-			include "question_button.php";
+			if($Locked!=1){ include "question_button.php"; }
 			
 		}
+		
+		if($setting_preferences==0){ echo "<div class='center-align'>You do not have access to this assessment.";  }
+		
 		
 	}
 
