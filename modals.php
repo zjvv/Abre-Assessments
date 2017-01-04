@@ -77,8 +77,23 @@
 			
 			<div class="input-field col s12">
 				<input type="checkbox" class="filled-in" id="assessment_lock" name="assessment_lock" value="1" />
-				<label for="assessment_lock">Lock Assessment</label>
+				<label for="assessment_lock">Lock Assessment - This remove all editing access from this assessment.</label>
 			</div>
+			
+			<div class="input-field col s12">
+				<input type="checkbox" class="filled-in" id="assessment_share" name="assessment_share" value="1" />
+				<label for="assessment_share">Share Assessment - Allows other teachers to give this assessment.</label>
+			</div>
+			
+			<?php
+			if(superadmin())
+			{
+				echo "<div class='input-field col s12'>";
+					echo "<input type='checkbox' class='filled-in' id='assessment_verified' name='assessment_verified' value='1' />";
+					echo "<label for='assessment_verified'>District Assessment - Marks the assessment as a district created assessment.</label>";
+				echo "</div>";
+			}
+			?>
 				
 			<input type="hidden" name="assessment_id" id="assessment_id">
     	</div>
@@ -105,7 +120,7 @@
 			</div>
 			
 			<div class="row" id="filter">
-				<div class="input-field col l3 m4 s6">
+				<div class="input-field col l3 m6">
 					<select name='question_subject' id='question_subject' required> 
 						<option value='' selected='selected' disabled>Select a Subject</option>   
 						<option value='Language Arts'>Language Arts</option>
@@ -115,12 +130,12 @@
 				    </select>
 				    <label>Subject</label>
 				</div>
-				<div class="input-field col l3 m4 s6">
+				<div class="input-field col l3 m6">
 					<div id="choosestandard">
 						<?php include "standard_choices.php"; ?>
 					</div>
 				</div>
-				<div class="input-field col l3 m4 s6">
+				<div class="input-field col l3 m6">
 					<select name='question_grade' id='question_grade' required>
 						<option value='' selected='selected'></option>   
 						<option value='Grade K'>K</option>
@@ -140,7 +155,7 @@
 				    </select>
 				    <label>Grade</label>
 				</div>
-				<div class="input-field col l3 m4 s6">
+				<div class="input-field col l3 m6">
 					<select name='question_difficulty' id='question_difficulty' required>
 						<option value='' selected='selected'></option>
 						<option value='Low'>Low</option>
@@ -149,7 +164,7 @@
 				    </select>
 				    <label>Difficulty</label>
 				</div>
-				<div class="input-field col l3 m4 s6">
+				<div class="input-field col l3 m6">
 					<select name='question_itemtype' id='question_itemtype' required>
 						<option value='' selected='selected'></option>
 						<option value='MC'>Multiple Choice</option>
@@ -165,7 +180,7 @@
 				    </select>
 				    <label>Question Type</label>
 				</div>
-				<div class="input-field col l3 m4 s6">
+				<div class="input-field col l3 m6">
 					<select name='question_blooms' id='question_blooms' required>
 						<option value='' selected='selected'></option>
 						<option value='Remembering'>Remembering</option>
@@ -177,7 +192,7 @@
 				    </select>
 				    <label>Blooms</label>
 				</div>
-				<div class="input-field col l3 m4 s6">
+				<div class="input-field col l3 m6">
 					<select name='question_dok' id='question_dok' required>
 						<option value='' selected='selected'></option>
 						<option value='I'>Recall</option>
@@ -187,7 +202,7 @@
 				    </select>
 				    <label>Depth of Knowledge</label>
 				</div>
-				<div class="input-field col l3 m4 s6">
+				<div class="input-field col l3 m6">
 					<select name='question_language' id='question_language' required>
 						<option value='' selected='selected'></option>
 						<option value='English'>English</option>

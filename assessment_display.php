@@ -37,16 +37,23 @@
 		<?php
 
 		$Assessment_ID=htmlspecialchars($_GET["id"], ENT_QUOTES);
-		$sqllookup = "SELECT * FROM assessments where ID='$Assessment_ID' and (Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%')";
+		$sqllookup = "SELECT * FROM assessments where ID='$Assessment_ID' and (Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%' or Shared=1)";
 		$result2 = $db->query($sqllookup);
 		$setting_preferences=mysqli_num_rows($result2);
 		while($row = $result2->fetch_assoc())
 		{
 			
 			$Title=htmlspecialchars($row["Title"], ENT_QUOTES);
+			$Owner=htmlspecialchars($row["Owner"], ENT_QUOTES);
+			$Editors=htmlspecialchars($row["Editors"], ENT_QUOTES);
 			$Grade=htmlspecialchars($row["Grade"], ENT_QUOTES);
 			$Subject=htmlspecialchars($row["Subject"], ENT_QUOTES);
 			$Locked=htmlspecialchars($row["Locked"], ENT_QUOTES);
+			
+			//Check to see if allowed to edit
+			$access=0;
+			if($Owner==$_SESSION['useremail']){ $access=1; }
+			if(strpos($Editors, $_SESSION['useremail']) !== false){ $access=1; }
 
 			echo "<div class='page_container'>";
 				echo "<div class='row'><div class='center-align' style='padding:20px;'><h3 style='font-weight:600;'>$Title";
@@ -70,12 +77,12 @@
 					    		echo "<i class='material-icons' style='font-size: 36px; color:".sitesettings("sitecolor")."'>fiber_manual_record</i>";
 
 								echo "<span style='position:absolute; right:0; z-index:1000; cursor:move;' class='mdl-color-text--grey-700";
-									if($Locked!=1){ echo " handle"; }
+									if($Locked!=1 && $access==1){ echo " handle"; }
 								echo "'>";
-										if($Locked!=1){ echo "<i class='material-icons'>reorder</i>"; }
+										if($Locked!=1 && $access==1){ echo "<i class='material-icons'>reorder</i>"; }
 								echo "</span>";
 									
-								echo "<span class='title truncate' style='margin-right:40px;'><b>Question</b></span>";
+								echo "<span class='title truncate' style='margin-right:40px;'><b>Question <span class='index'>$questioncount</span></b></span>";
 							echo "</div>";
 							
 							echo "<div class='collapsible-body mdl-color--white' style='padding:25px'>";
@@ -84,8 +91,11 @@
 								echo "<div id='questionplayer-$Bank_ID' style='display:none'><div class='mdl-progress mdl-js-progress mdl-progress__indeterminate' style='width:100%'></div></div>";
 								echo "<hr>";
 								echo "<div class='toolbar' style='padding-top:20px; text-align:right;'>";
-									echo "<div class='removequestion'><a href='modules/".basename(__DIR__)."/question_remove_process.php?questionid=".$questionid."' class='mdl-color-text--grey-700' id='delete'><i class='material-icons'>delete</i></a></div>";
-									echo "<div class='mdl-tooltip' data-mdl-for='delete'>Delete</div>";
+									if($Locked!=1 && $access==1)
+									{
+										echo "<div class='removequestion'><a href='modules/".basename(__DIR__)."/question_remove_process.php?questionid=".$questionid."' class='mdl-color-text--grey-700' id='delete'><i class='material-icons'>delete</i></a></div>";
+										echo "<div class='mdl-tooltip' data-mdl-for='delete'>Delete</div>";
+									}
 								echo "</div>";
 								
 							echo "</div>";
@@ -96,7 +106,7 @@
 				echo "</ul>";
 			
 			if($unitcount==0){ 
-				if($Locked!=1)
+				if($Locked!=1 && $access==1)
 				{
 					echo "<div class='center-align'>Click the '+' in the bottom right to add a question to this assessment."; 
 				}
@@ -108,11 +118,11 @@
 			
 			echo "</div>";
 			
-			if($Locked!=1){ include "question_button.php"; }
+			if($Locked!=1 && $access==1){ include "question_button.php"; }
 			
 		}
 		
-		if($setting_preferences==0){ echo "<div class='center-align'>You do not have access to this assessment.";  }
+		if($setting_preferences==0){ echo "<div class='row center-align'><div class='col s12'><h6>You do not have access to this assessment.</h6></div></div>";  }
 		
 		
 	}
@@ -182,16 +192,35 @@
  			});
 			
 			//Sortable settings
+			var fixHelperModified = function(e, tr) {
+			    var $originals = tr.children();
+			    var $helper = tr.clone();
+			    $helper.children().each(function(index) {
+			        $(this).width($originals.eq(index).width())
+			    });
+			    return $helper;
+			},
+			updateIndex = function(e, ui) {
+			    $('.index', ui.item.parent()).each(function (i) {
+			        $(this).html(i + 1);
+			    });
+			};
+			
 			$( ".questionsort" ).sortable({
 				axis: 'y',
 				handle: '.handle',
+				helper: fixHelperModified,
+				stop: updateIndex,
 				update: function(event, ui){
+					
+					//Sent Form Data
 					var data = $(this).sortable('serialize');
 					$.ajax({
 			            data: data,
 			            type: 'POST',
 			            url: '/modules/<?php echo basename(__DIR__); ?>/questions_save_order.php'
 			        });
+			        
 				}
 			});
 			

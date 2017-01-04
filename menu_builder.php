@@ -29,9 +29,9 @@
 
     <div class="col s12">
 		<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
-			<li class="tab col s3 tab_1"><a href="#assessments" class='mdl-color-text--white'>My Assessments</a></li>
+			<li class="tab col s3 tab_1"><a href="#assessments" class='mdl-color-text--white'>Assessments</a></li>
 			<li class="tab col s3 tab_2">
-				<?php echo "<a href='#assessments' class='mdl-color-text--white'>Questions</a>"; ?>
+				<?php echo "<a href='#assessments/$id' class='mdl-color-text--white'>Questions</a>"; ?>
 			</li>
 		</ul>
 	</div>

@@ -35,7 +35,9 @@
 			foreach ($dbreturn as $value)
 			{
 				$Standard=$value["Standard"];
-				echo "<option value='$Standard'>$Standard</option>";
+				$Standard_Text = str_replace("CCSS.Math.Content.","",$Standard);
+				$Standard_Text = str_replace("CCSS.ELA-Literacy.","",$Standard_Text);
+				echo "<option value='$Standard'>$Standard_Text</option>";
 			}
 		
 		echo "</select><label>Standard</label>";

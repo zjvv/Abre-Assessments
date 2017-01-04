@@ -27,7 +27,7 @@
 	if($pagerestrictions=="")
 	{
 		
-		$sql = "SELECT * FROM assessments where Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%' order by Title";
+		$sql = "SELECT * FROM assessments where Shared='1' order by Title";
 		$result = $db->query($sql);
 		$rowcount=mysqli_num_rows($result);
 		if($rowcount!=0)
@@ -40,6 +40,7 @@
 						<table id='myTable' class='tablesorter'>
 							<thead>
 								<tr class='pointer'>
+									<th style='width:50px'></th>
 									<th>Title</th>
 									<th class='hide-on-med-and-down'>Subject</th>
 									<th class='hide-on-med-and-down'>Grade Level</th>
@@ -49,7 +50,7 @@
 							<tbody>
 								
 								<?php
-								$sql = "SELECT * FROM assessments where Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%' order by Title";
+								$sql = "SELECT * FROM assessments where Shared='1' order by Title";
 								$result = $db->query($sql);
 								while($row = $result->fetch_assoc())
 								{
@@ -65,6 +66,13 @@
 									$Editors=htmlspecialchars($row["Editors"], ENT_QUOTES);
 								
 									echo "<tr class='assessmentrow'>";
+										echo "<td>";
+											if($Verified==1)
+											{
+												echo "<i class='material-icons pointer' id='verified_$Assessment_ID' style='color:".sitesettings("sitecolor")."'>verified_user</i>";
+												echo "<div class='mdl-tooltip mdl-tooltip--bottom mdl-tooltip--large' data-mdl-for='verified_$Assessment_ID'>District Created Assessment</div>";
+											}
+										echo "</td>";
 										echo "<td>$Title</td>";
 										echo "<td class='hide-on-med-and-down'>$Subject</td>";
 										echo "<td class='hide-on-med-and-down'>$Grade</td>";
@@ -73,12 +81,7 @@
 											echo "<div class='morebutton' style='position:absolute; margin-top:-15px;'>";
 												echo "<button id='demo-menu-bottom-left-$Assessment_ID' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600'><i class='material-icons'>more_vert</i></button>";
 												echo "<ul class='mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect' for='demo-menu-bottom-left-$Assessment_ID'>";
-													echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Questions</a></li>";
-													if($Owner==$_SESSION['useremail'])
-													{
-														echo "<li class='mdl-menu__item modal-createassessment' href='#createassessment' data-title='$Title' data-description='$Description' data-subject='$Subject' data-assessmentid='$Assessment_ID' data-grade='$Grade' data-editors='$Editors' data-locked='$Locked' data-shared='$Shared' data-verified='$Verified' style='font-weight:400'>Settings</a></li>";
-														echo "<li class='mdl-menu__item deleteassessment'><a href='modules/".basename(__DIR__)."/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
-													}
+													echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Preview</a></li>";
 												echo "</ul>";
 											echo "</div>";
 	
@@ -96,10 +99,8 @@
 		}
 		else
 		{
-			echo "<div class='row center-align'><div class='col s12'><h6>You haven't created any assessments</h6></div><div class='col s12'>Click the '+' in the bottom right to create a new assessment.</div></div>";
+			echo "<div class='row center-align'><div class='col s12'><h6>There are currently no shared assessments</h6></div></div>";
 		}
-		
-		include "assessment_button.php";
 		
 	}
 
@@ -126,15 +127,6 @@
 			var Assessment_Editors = $(this).data('editors');
 			$(".modal-content #assessment_editors").val(Assessment_Editors);
 			var Assessment_Grade = $(this).data('grade');
-			var Assessment_Verified = $(this).data('verified');
-			if(Assessment_Verified=='1')
-			{
-				$(".modal-content #assessment_verified").prop('checked',true);
-			}
-			else
-			{
-				$(".modal-content #assessment_verified").prop('checked',false);
-			}
 			var Assessment_shared = $(this).data('shared');
 			if(Assessment_shared=='1')
 			{

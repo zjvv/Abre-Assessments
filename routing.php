@@ -32,6 +32,30 @@
 				    document.title = 'My Assessments';
 					$('#content_holder').load('modules/".basename(__DIR__)."/assessments_display_all.php', function() { init_page(); });
 					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
+					
+					//Load Navigation
+					$('#navigation_top').show();
+					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_main.php', function() {	
+						$('#navigation_top').show();
+						$('.tab_1').addClass('tabmenuover');
+					});
+			    },
+				'assessments/shared': function(name)
+				{
+				    $('#navigation_top').hide();
+				    $('#content_holder').hide();
+				    $('#loader').show();
+				    $('#titletext').text('Assessments');
+				    document.title = 'Shared Assessments';
+					$('#content_holder').load('modules/".basename(__DIR__)."/shared_display_all.php', function() { init_page(); });
+					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
+					
+					//Load Navigation
+					$('#navigation_top').show();
+					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_main.php', function() {	
+						$('#navigation_top').show();
+						$('.tab_2').addClass('tabmenuover');
+					});
 			    },
 				'assessments/settings': function(name)
 				{

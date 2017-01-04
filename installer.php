@@ -91,6 +91,24 @@
 		}
 		$db->close();
 		
+		//Check for Share field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Shared FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Shared` INT NOT NULL DEFAULT '0';";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Verified field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Verified FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Verified` INT NOT NULL DEFAULT '0';";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
 		//Check for Title field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
 		if(!$db->query("SELECT Title FROM assessments"))
