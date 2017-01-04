@@ -192,6 +192,35 @@
 		}
 		$db->close();
 		
+		//Check for assessments_standards table
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT * FROM assessments_standards"))
+		{
+			$sql = "CREATE TABLE `assessments_standards` (`ID` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+			$sql .= "ALTER TABLE `assessments_standards` ADD PRIMARY KEY (`ID`);";
+			$sql .= "ALTER TABLE `assessments_standards` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;";	
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Subject field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Subject FROM assessments_standards"))
+		{
+			$sql = "ALTER TABLE `assessments_standards` ADD `Subject` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Standard field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Standard FROM assessments_standards"))
+		{
+			$sql = "ALTER TABLE `assessments_standards` ADD `Standard` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
 		//Write the Setup File
 		$myfile = fopen("$portal_path_root/modules/Abre-Assessments/setup.txt", "w");
 		fwrite($myfile, '');
