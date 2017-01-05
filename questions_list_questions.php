@@ -184,7 +184,7 @@
 							echo "<div class='chip'>$grade</div><div class='chip'>$type</div><div class='chip'>$difficulty</div><div class='chip'>$blooms</div>";
 							
 							
-							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-addbutton='$addbutton' class='previewquestion' style='color: ".sitesettings("sitecolor")."'><i class='material-icons'>visibility</i></a></td>";
+							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-vendor='$vendor_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-type='$type' data-addbutton='$addbutton' class='previewquestion' style='color: ".sitesettings("sitecolor")."'><i class='material-icons'>visibility</i></a></td>";
 							
 							if($assessmentcount==0){
 								echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-link='/modules/".basename(__DIR__)."/question_add_process.php?assessmentid=$assessment_id&questionid=$question_id' style='color: ".sitesettings("sitecolor")."' class='addquestiontoassessment' id='questionplus-$question_id'><i class='material-icons'>add_circle</i></a></td>";
@@ -274,6 +274,12 @@
 						
 						var Question = $(this).data('question');
 						$(".modal-content #QuestionID").val(Question);
+						
+						var Vendor = $(this).data('vendor');
+						$(".modal-content #preview_questionid").html(Vendor);
+						
+						var Type = $(this).data('type');
+						$(".modal-content #preview_questiontype").html(Type);
 						
 						var Subject = $(this).data('subject');
 						$(".modal-content #preview_subject").html(Subject);
