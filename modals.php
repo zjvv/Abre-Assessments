@@ -241,10 +241,12 @@
 			<a class="modal-close black-text" style='position:absolute; right:20px; top:25px;'><i class='material-icons'>clear</i></a>
 
 				<div class='row'>
-					<div class='col l3 s6'><span class='grey-text'>Subject</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_subject'></div></div>
-					<div class='col l3 s6'><span class='grey-text'>Grade</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_grade'></div></div>
-					<div class='col l3 s6'><span class='grey-text'>Difficulty</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_difficulty'></div></div>
-					<div class='col l3 s6'><span class='grey-text'>Blooms</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_blooms'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>ID</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_questionid'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Subject</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_subject'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Type</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_questiontype'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Grade</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_grade'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Difficulty</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_difficulty'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Blooms</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_blooms'></div></div>
 				</div>
 				<hr>
 				<div id='questionholder'></div>
