@@ -88,7 +88,8 @@
 							echo "<div class='collapsible-body mdl-color--white' style='padding:25px'>";
 							
 								//Display the question
-								echo "<div id='questionplayer-$Bank_ID' style='display:none'><div class='mdl-progress mdl-js-progress mdl-progress__indeterminate' style='width:100%'></div></div>";
+								echo "<div id='questionplayerloader-$Bank_ID' style='display:none;'><div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate' style='width:100%'></div></div>";
+								echo "<div id='questionplayer-$Bank_ID'></div>";
 								echo "<hr>";
 								echo "<div class='toolbar' style='padding-top:20px; text-align:right;'>";
 									if($Locked!=1 && $access==1)
@@ -179,11 +180,14 @@
 			$(".collapsible-header").unbind().click(function(event)
 			{
 				var Bank_ID= $(this).data('bankid');
+				var timeout = setTimeout(function(){ $('#questionplayerloader-'+Bank_ID).show(); }, 1000);
  				$('#questionplayer-'+Bank_ID).hide();
  				$('.toolbar').hide();
  				
  				$.get( "modules/<?php echo basename(__DIR__); ?>/question_viewer.php", { id: Bank_ID } )
 			    .done(function( data ) {
+				    clearTimeout(timeout);
+				    $('#questionplayerloader-'+Bank_ID).hide();
 				    $('#questionplayer-'+Bank_ID).show();
 				    $('.toolbar').show();
 			    	$("#questionplayer-"+Bank_ID).html( data );
