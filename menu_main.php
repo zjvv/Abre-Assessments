@@ -26,7 +26,19 @@
 
     <div class="col s12">
 		<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
-			<li class="tab col s3 tab_1"><a href="#assessments" class='mdl-color-text--white'>My Assessments</a></li>
-			<li class="tab col s3 tab_2"><a href="#assessments/shared" class='mdl-color-text--white'>Shared</a></li>
+			<li class="tab col s3 tab_1 supportmenu pointer" data="#assessments"><a href="#assessments" class='mdl-color-text--white'>My Assessments</a></li>
+			<li class="tab col s3 tab_2 supportmenu pointer" data="#assessments/shared"><a href="#assessments/shared" class='mdl-color-text--white'>Shared</a></li>
 		</ul>
 	</div>
+	
+<script>
+	
+	$(function()
+	{	
+		$( ".supportmenu" ).unbind().click(function()
+		{
+			window.open($(this).attr("data"), '_self');
+		});	
+	});
+	
+</script>
