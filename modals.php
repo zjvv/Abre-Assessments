@@ -77,7 +77,7 @@
 			
 			<div class="input-field col s12">
 				<input type="checkbox" class="filled-in" id="assessment_lock" name="assessment_lock" value="1" />
-				<label for="assessment_lock">Lock Assessment - This remove all editing access from this assessment.</label>
+				<label for="assessment_lock">Lock Assessment - This removes all editing access from this assessment.</label>
 			</div>
 			
 			<div class="input-field col s12">
