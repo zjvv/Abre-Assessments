@@ -167,7 +167,7 @@
 		
 		//Check for Assessment_ID field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Assessment_ID FROM assessments"))
+		if(!$db->query("SELECT Assessment_ID FROM assessments_questions"))
 		{
 			$sql = "ALTER TABLE `assessments_questions` ADD `Assessment_ID` text NOT NULL;";
 			$db->multi_query($sql);
@@ -176,7 +176,7 @@
 		
 		//Check for Question_Order field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Question_Order FROM assessments"))
+		if(!$db->query("SELECT Question_Order FROM assessments_questions"))
 		{
 			$sql = "ALTER TABLE `assessments_questions` ADD `Question_Order` text NOT NULL;";
 			$db->multi_query($sql);
@@ -185,9 +185,18 @@
 		
 		//Check for Bank_ID field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Bank_ID FROM assessments"))
+		if(!$db->query("SELECT Bank_ID FROM assessments_questions"))
 		{
 			$sql = "ALTER TABLE `assessments_questions` ADD `Bank_ID` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Points field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Points FROM assessments_questions"))
+		{
+			$sql = "ALTER TABLE `assessments_questions` ADD `Points` text NOT NULL;";
 			$db->multi_query($sql);
 		}
 		$db->close();
