@@ -58,7 +58,7 @@
 			echo "<div class='page_container'>";
 				echo "<div class='row'><div class='center-align' style='padding:20px;'><h3 style='font-weight:600;'>$Title";
 					if($Locked==1){ echo " <i class='material-icons'>lock</i>"; }
-				echo "</h3><h6 style='color:#777;'>$Subject &#183; Grade Level: $Grade</h6></div></div>";
+				echo "</h3><h6 style='color:#777;'>$Subject &#183; Grade Level: $Grade &#183; Total Points: <span id='totalpoints'>0</span></div></div>";
 			
 				echo "<ul class='collapsible popout questionsort' data-collapsible='accordion'>";
 			
@@ -81,7 +81,7 @@
 								echo "<span style='position:absolute; right:0; z-index:1000; cursor:move;' class='mdl-color-text--grey-700";
 									if($Locked!=1 && $access==1){ echo " handle"; }
 								echo "'>";
-										if($Locked!=1 && $access==1){ echo "<i class='material-icons' style='color:".sitesettings("sitecolor")."'>reorder</i>"; }
+										if($Locked!=1 && $access==1){ echo "<i class='material-icons'>reorder</i>"; }
 								echo "</span>";
 									
 								echo "<span class='title truncate' style='margin-right:40px;'><b>Question <span class='index'>$questioncount</span></b></span>";
@@ -102,11 +102,11 @@
 									        echo "</div>";
 									        
 									        echo "<div style='float:left; width:60px; margin:22px 0 0 5px;'>";
-									        	echo "<b style='color:".sitesettings("sitecolor")."'>points</b>";
+									        	echo "<span class='mdl-color-text--grey-700'>points</span>";
 									        echo "</div>";
 									        
 											echo "<div style='float:left; width:25px; margin:22px 0 0 10px;'>";
-												echo "<a href='modules/".basename(__DIR__)."/question_remove_process.php?questionid=".$questionid."' class='removequestion' id='delete' style='color:".sitesettings("sitecolor")."'><i class='material-icons'>delete</i></a>";
+												echo "<a href='modules/".basename(__DIR__)."/question_remove_process.php?questionid=".$questionid."' class='removequestion' id='delete'><i class='material-icons mdl-color-text--grey-700'>delete</i></a>";
 												echo "<div class='mdl-tooltip' data-mdl-for='delete'>Delete Question</div>";
 											echo "</div>";
 										echo "</div>";
@@ -148,6 +148,21 @@
 		
 		$(function()
 		{
+			
+			//Calculate Total Points
+			function totalPoints()
+			{
+				var totalpoints = 0;
+				var points = 0;
+				$('.questionpoints').each(function()
+				{
+					points = $(this).val();
+					if(isNaN(parseFloat(points))){ points=0; }
+					totalpoints += parseFloat(points);
+				});
+				$('#totalpoints').text(totalpoints);
+			}
+			totalPoints();
 			
 			//Remove topic from curriculum
 			$( ".removequestion" ).click(function() {
@@ -235,9 +250,15 @@
 			
 			//Update points
 			$( ".questionpoints" ).keyup(function() {
+				
+				//Save Points
 				var questionid = $(this).attr('id');
 				var questionvalue = $(this).val();
 				$.post( "/modules/<?php echo basename(__DIR__); ?>/question_savepoints.php", { questionid: questionid, questionvalue: questionvalue })
+				
+				//Update Total Points
+				totalPoints();
+				
 			});
 			
 		});
