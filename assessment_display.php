@@ -192,14 +192,6 @@
  			});
 			
 			//Sortable settings
-			var fixHelperModified = function(e, tr) {
-			    var $originals = tr.children();
-			    var $helper = tr.clone();
-			    $helper.children().each(function(index) {
-			        $(this).width($originals.eq(index).width())
-			    });
-			    return $helper;
-			},
 			updateIndex = function(e, ui) {
 			    $('.index', ui.item.parent()).each(function (i) {
 			        $(this).html(i + 1);
@@ -209,7 +201,7 @@
 			$( ".questionsort" ).sortable({
 				axis: 'y',
 				handle: '.handle',
-				helper: fixHelperModified,
+				helper: 'clone',
 				stop: updateIndex,
 				update: function(event, ui){
 					
