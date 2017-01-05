@@ -71,6 +71,8 @@
 						$questioncount++;
 						$questionid=htmlspecialchars($row2["ID"], ENT_QUOTES);
 						$Bank_ID=htmlspecialchars($row2["Bank_ID"], ENT_QUOTES);
+						$Points=htmlspecialchars($row2["Points"], ENT_QUOTES);
+						if($Points==""){ $Points=0; }
 
 						echo "<li style='position:relative' id='item-$questionid' class='topicholder'>";
 							echo "<div class='collapsible-header unit' data-bankid='$Bank_ID'>";
@@ -79,7 +81,7 @@
 								echo "<span style='position:absolute; right:0; z-index:1000; cursor:move;' class='mdl-color-text--grey-700";
 									if($Locked!=1 && $access==1){ echo " handle"; }
 								echo "'>";
-										if($Locked!=1 && $access==1){ echo "<i class='material-icons'>reorder</i>"; }
+										if($Locked!=1 && $access==1){ echo "<i class='material-icons' style='color:".sitesettings("sitecolor")."'>reorder</i>"; }
 								echo "</span>";
 									
 								echo "<span class='title truncate' style='margin-right:40px;'><b>Question <span class='index'>$questioncount</span></b></span>";
@@ -91,11 +93,23 @@
 								echo "<div id='questionplayerloader-$Bank_ID' style='display:none;'><div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate' style='width:100%'></div></div>";
 								echo "<div id='questionplayer-$Bank_ID'></div>";
 								echo "<hr>";
-								echo "<div class='toolbar' style='padding-top:20px; text-align:right;'>";
+								echo "<div class='toolbar' style='height:60px;'>";
 									if($Locked!=1 && $access==1)
 									{
-										echo "<div class='removequestion'><a href='modules/".basename(__DIR__)."/question_remove_process.php?questionid=".$questionid."' class='mdl-color-text--grey-700' id='delete'><i class='material-icons'>delete</i></a></div>";
-										echo "<div class='mdl-tooltip' data-mdl-for='delete'>Delete</div>";
+										echo "<div style='float:right;'>";
+											echo "<div class='input-field' style='float:left; width:45px;'>";
+									        	echo "<input class='questionpoints' id='$questionid' type='number' style='text-align:center;' value='$Points'>";
+									        echo "</div>";
+									        
+									        echo "<div style='float:left; width:60px; margin:22px 0 0 5px;'>";
+									        	echo "<b style='color:".sitesettings("sitecolor")."'>points</b>";
+									        echo "</div>";
+									        
+											echo "<div style='float:left; width:25px; margin:22px 0 0 10px;'>";
+												echo "<a href='modules/".basename(__DIR__)."/question_remove_process.php?questionid=".$questionid."' class='removequestion' id='delete' style='color:".sitesettings("sitecolor")."'><i class='material-icons'>delete</i></a>";
+												echo "<div class='mdl-tooltip' data-mdl-for='delete'>Delete Question</div>";
+											echo "</div>";
+										echo "</div>";
 									}
 								echo "</div>";
 								
@@ -135,13 +149,13 @@
 		$(function()
 		{
 			
-			//Remove Topic from Curriculum
+			//Remove topic from curriculum
 			$( ".removequestion" ).click(function() {
 				event.preventDefault();
 				var result = confirm("Remove this question?");
 				if (result) {
 					$(this).closest(".topicholder").hide();
-					var address = $(this).find("a").attr("href");
+					var address = $(this).attr("href");
 					$.ajax({
 						type: 'POST',
 						url: address,
@@ -163,7 +177,7 @@
 				}
 			});
 
-			//Call Accordion
+			//Call accordion
 			$('.collapsible').collapsible({ });			
 
 			//Close Menu when collapsible closed
@@ -195,13 +209,12 @@
 			  	
  			});
 			
-			//Sortable settings
+			//Question sorting
 			updateIndex = function(e, ui) {
 			    $('.index', ui.item.parent()).each(function (i) {
 			        $(this).html(i + 1);
 			    });
-			};
-			
+			};			
 			$( ".questionsort" ).sortable({
 				axis: 'y',
 				handle: '.handle',
@@ -218,6 +231,13 @@
 			        });
 			        
 				}
+			});
+			
+			//Update points
+			$( ".questionpoints" ).keyup(function() {
+				var questionid = $(this).attr('id');
+				var questionvalue = $(this).val();
+				$.post( "/modules/<?php echo basename(__DIR__); ?>/question_savepoints.php", { questionid: questionid, questionvalue: questionvalue })
 			});
 			
 		});
