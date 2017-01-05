@@ -27,16 +27,15 @@
 	{
 	
 		//Add the course
-		$assessment_title=mysqli_real_escape_string($db, $_POST["assessment_title"]);
-		$assessment_description=mysqli_real_escape_string($db, $_POST["assessment_description"]);
-		$assessment_grade=$_POST["assessment_grade"];
-		$assessment_grade = implode (", ", $assessment_grade);
-		$assessment_subject=$_POST["assessment_subject"];
-		$assessment_lock=$_POST["assessment_lock"];
-		$assessment_share=$_POST["assessment_share"];
-		$assessment_verified=$_POST["assessment_verified"];
-		$assessment_editors=$_POST["assessment_editors"];
-		$assessment_id=$_POST["assessment_id"];
+		if(isset($_POST["assessment_title"])){ $assessment_title=mysqli_real_escape_string($db, $_POST["assessment_title"]); }
+		if(isset($_POST["assessment_description"])){ $assessment_description=mysqli_real_escape_string($db, $_POST["assessment_description"]); }
+		if(isset($_POST["assessment_title"])){ $assessment_grade=$_POST["assessment_grade"]; $assessment_grade = implode (", ", $assessment_grade); }
+		if(isset($_POST["assessment_subject"])){ $assessment_subject=$_POST["assessment_subject"]; }
+		if(isset($_POST["assessment_lock"])){ $assessment_lock=$_POST["assessment_lock"]; }else{ $assessment_lock=0; }
+		if(isset($_POST["assessment_share"])){ $assessment_share=$_POST["assessment_share"]; }else{ $assessment_share=0; }
+		if(isset($_POST["assessment_verified"])){ $assessment_verified=$_POST["assessment_verified"]; }else{ $assessment_verified=0; }
+		if(isset($_POST["assessment_editors"])){ $assessment_editors=$_POST["assessment_editors"]; }
+		if(isset($_POST["assessment_id"])){ $assessment_id=$_POST["assessment_id"]; }
 		
 		//Generate a unique, random class code
 		$digits = 5;
