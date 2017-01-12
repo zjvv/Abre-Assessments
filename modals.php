@@ -108,7 +108,7 @@
 	<div id="assessmentquestion" class="fullmodal modal modal-fixed-footer modal-mobile-full">
 		<form class="col s12" id="form-addquestion" method="post" action="">
 		<div class="modal-content">
-			<h4>Question</h4>
+			<h4>Question Bank</h4>
 			<a class="modal-close black-text" style='position:absolute; right:20px; top:25px;'><i class='material-icons'>clear</i></a>
 			
 			<!--Tabs-->

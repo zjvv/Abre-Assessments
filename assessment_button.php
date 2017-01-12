@@ -20,33 +20,39 @@
 	//Required configuration files
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
+	require_once('permissions.php');
 	
-	if(superadmin())
+	if($pagerestrictions=="")
 	{
-?>
-		<div class="fixed-action-btn">
-	    <a class="btn-floating btn-large" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
-	      <i class="material-icons">add</i>
-	    </a>
-	    <ul>
-	      <li><a class="modal-createassessment btn-floating btn-large" style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="createassessmenttooltip" href='#createassessment'><i class="material-icons">edit</i></a></li>
-	      <div class="mdl-tooltip mdl-tooltip--left" for="createassessmenttooltip">Create Assessment</div>
-	      <li><a class="btn-floating btn-large" style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="assessmentsettingstooltip" href='#assessments/settings'><i class="material-icons">settings</i></a></li>
-	      <div class="mdl-tooltip mdl-tooltip--left" for="assessmentsettingstooltip">Settings</div>
-	    </ul>
-	  	</div>
-<?php
+	
+		if(superadmin())
+		{
+	?>
+			<div class="fixed-action-btn">
+		    <a class="btn-floating btn-large" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
+		      <i class="material-icons">add</i>
+		    </a>
+		    <ul>
+		      <li><a class="modal-createassessment btn-floating btn-large" style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="createassessmenttooltip" href='#createassessment'><i class="material-icons">edit</i></a></li>
+		      <div class="mdl-tooltip mdl-tooltip--left" for="createassessmenttooltip">Create Assessment</div>
+		      <li><a class="btn-floating btn-large" style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="assessmentsettingstooltip" href='#assessments/settings'><i class="material-icons">settings</i></a></li>
+		      <div class="mdl-tooltip mdl-tooltip--left" for="assessmentsettingstooltip">Settings</div>
+		    </ul>
+		  	</div>
+	<?php
+		}
+		else
+		{
+	?>
+			<div class='fixed-action-btn buttonpin'>
+				<a class='modal-createassessment btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="createassessmenttooltip" data-grade='blank' data-subject='blank' data-position='left' data-title='' data-grade='blank' data-subject='blank' href='#createassessment'><i class='large material-icons'>edit</i></a>
+				<div class="mdl-tooltip mdl-tooltip--left" for="createassessmenttooltip">Create Assessment</div>
+			</div>
+	<?php
+		}
+		
 	}
-	else
-	{
-?>
-		<div class='fixed-action-btn buttonpin'>
-			<a class='modal-createassessment btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="createassessmenttooltip" data-grade='blank' data-subject='blank' data-position='left' data-title='' data-grade='blank' data-subject='blank' href='#createassessment'><i class='large material-icons'>edit</i></a>
-			<div class="mdl-tooltip mdl-tooltip--left" for="createassessmenttooltip">Create Assessment</div>
-		</div>
-<?php
-	}
-?>
+	?>
 
 <script>
 	

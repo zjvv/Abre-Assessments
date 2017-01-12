@@ -77,6 +77,7 @@
 													if($Owner==$_SESSION['useremail'])
 													{
 														echo "<li class='mdl-menu__item modal-createassessment' href='#createassessment' data-title='$Title' data-description='$Description' data-subject='$Subject' data-assessmentid='$Assessment_ID' data-grade='$Grade' data-editors='$Editors' data-locked='$Locked' data-shared='$Shared' data-verified='$Verified' style='font-weight:400'>Settings</a></li>";
+														echo "<li class='mdl-menu__item duplicateassessment' data-assessmentid='$Assessment_ID'>Duplicate</a></li>";
 														echo "<li class='mdl-menu__item deleteassessment'><a href='modules/".basename(__DIR__)."/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
 													}
 												echo "</ul>";

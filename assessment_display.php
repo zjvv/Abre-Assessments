@@ -98,7 +98,7 @@
 									{
 										echo "<div style='float:right;'>";
 											echo "<div class='input-field' style='float:left; width:45px;'>";
-									        	echo "<input class='questionpoints' id='$questionid' type='number' style='text-align:center;' value='$Points'>";
+									        	echo "<input class='questionpoints' id='$questionid' type='number' min='0' style='text-align:center;' value='$Points'>";
 									        echo "</div>";
 									        
 									        echo "<div style='float:left; width:60px; margin:22px 0 0 5px;'>";
@@ -249,7 +249,7 @@
 			});
 			
 			//Update points
-			$( ".questionpoints" ).keyup(function() {
+			$( ".questionpoints" ).change(function() {
 				
 				//Save Points
 				var questionid = $(this).attr('id');
