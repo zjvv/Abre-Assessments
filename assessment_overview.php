@@ -1,4 +1,4 @@
-<?php
+<?php 
 	
 	/*
 	* Copyright 2015 Hamilton City School District	
@@ -19,30 +19,14 @@
 	
 	//Required configuration files
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
-	require_once(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+	require(dirname(__FILE__) . '/../../configuration.php');
 	require_once('permissions.php');
 	
 	if($pagerestrictions=="")
 	{
-
-		//Add the topic
-		$questionid=$_GET["questionid"];
-		$assessmentid=$_GET["assessmentid"];
-		$questionvendorid=$_GET["vendorid"];
-		$questiontype=$_GET["type"];
-		$questiondifficulty=$_GET["difficulty"];
-		$questionstandard=$_GET["standard"];
-		$stmt = $db->stmt_init();
-		$sql = "INSERT INTO assessments_questions (Assessment_ID, Bank_ID, Vendor_ID, Type, Difficulty, Standard) VALUES ('$assessmentid', '$questionid', '$questionvendorid', '$questiontype', '$questiondifficulty', '$questionstandard');";
-		$stmt->prepare($sql);
-		$stmt->execute();
-		$stmt->close();
-		$db->close();
 	
-		$person = array("questionid"=>$questionid,"message"=>"The link has been added.");
-		header("Content-Type: application/json");
-		echo json_encode($person);
+		echo "<div id='displayguide'>"; include "assessment_overview_display.php"; echo "</div>";
 		
 	}
-	
+
 ?>

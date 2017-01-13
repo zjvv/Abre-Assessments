@@ -150,6 +150,7 @@
 			    	$difficulty = $value['ia_difficulty'];
 			    	$type = $value['ia_teitype'];
 			    	$standards = $value['standards'];
+			    	if(isset($value['standards'][0]['std_code'])){ $standardcode=$value['standards'][0]['std_code']; }else{ $standardcode=""; }
 			    	$question_id = $value['ia_itemid'];
 			    	$vendor_id = $value['ia_vendorid'];
 			    	
@@ -187,7 +188,7 @@
 							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-vendor='$vendor_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-type='$type' data-addbutton='$addbutton' class='previewquestion' style='color: ".sitesettings("sitecolor")."'><i class='material-icons'>visibility</i></a></td>";
 							
 							if($assessmentcount==0){
-								echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-link='/modules/".basename(__DIR__)."/question_add_process.php?assessmentid=$assessment_id&questionid=$question_id' style='color: ".sitesettings("sitecolor")."' class='addquestiontoassessment' id='questionplus-$question_id'><i class='material-icons'>add_circle</i></a></td>";
+								echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-link='/modules/".basename(__DIR__)."/question_add_process.php?assessmentid=$assessment_id&questionid=$question_id&vendorid=$vendor_id&type=$type&difficulty=$difficulty&standard=$standardcode' style='color: ".sitesettings("sitecolor")."' class='addquestiontoassessment' id='questionplus-$question_id'><i class='material-icons'>add_circle</i></a></td>";
 							}
 							else
 							{

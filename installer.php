@@ -201,6 +201,42 @@
 		}
 		$db->close();
 		
+		//Check for Vendor_ID field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Vendor_ID FROM assessments_questions"))
+		{
+			$sql = "ALTER TABLE `assessments_questions` ADD `Vendor_ID` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Type field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Type FROM assessments_questions"))
+		{
+			$sql = "ALTER TABLE `assessments_questions` ADD `Type` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Difficulty field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Difficulty FROM assessments_questions"))
+		{
+			$sql = "ALTER TABLE `assessments_questions` ADD `Difficulty` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Standard field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Standard FROM assessments_questions"))
+		{
+			$sql = "ALTER TABLE `assessments_questions` ADD `Standard` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
 		//Check for assessments_standards table
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
 		if(!$db->query("SELECT * FROM assessments_standards"))

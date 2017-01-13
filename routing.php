@@ -74,7 +74,8 @@
 				    $('#titletext').text('Assessments');
 				    document.title = 'Assessment Editor';
 					$('#content_holder').load('modules/".basename(__DIR__)."/assessment.php?id='+name, function() { 
-						init_page();		
+						init_page();	
+						back_button('#assessments');		
 					});		
 					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
 					
@@ -82,8 +83,28 @@
 					$('#navigation_top').show();
 					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_builder.php?id='+name, function() {	
 						$('#navigation_top').show();
-						$('.tab_2').addClass('tabmenuover');
+						$('.tab_1').addClass('tabmenuover');
 					});	
+			    },
+			    'assessments/overview/?:name': function(name)
+			    {
+				    $('#navigation_top').hide();
+				    $('#content_holder').hide();
+				    $('#loader').show();
+				    $('#titletext').text('Assessments');
+				    document.title = 'Assessment Overview';
+					$('#content_holder').load('modules/".basename(__DIR__)."/assessment_overview.php?id='+name, function() { 
+						init_page();
+						back_button('#assessments');
+					});
+					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
+					
+					//Load Navigation
+					$('#navigation_top').show();
+					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_builder.php?id='+name, function() {	
+						$('#navigation_top').show();
+						$('.tab_2').addClass('tabmenuover');
+					});
 			    },";
 		}	  
 ?>
