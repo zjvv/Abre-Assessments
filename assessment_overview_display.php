@@ -53,7 +53,7 @@
 									echo "<div class='page'>";
 									echo "<div class='row'><div class='col s12'>";
 									echo "<table id='myTable' class='tablesorter'>";
-									echo "<thead><tr class='pointer'><th>Question</th><th>Standard</th><th>ID</th><th>Type</th><th class='center-align'>Difficulty</th><th class='center-align'>Points</th><th></th></tr></thead>";
+									echo "<thead><tr class='pointer'><th>Question</th><th>ID</th><th>Standard</th><th>Type</th><th class='center-align'>Difficulty</th><th class='center-align'>Points</th><th></th></tr></thead>";
 									echo "<tbody>";
 								}
 								
@@ -86,8 +86,8 @@
 								
 								echo "<tr>";
 									echo "<td>$questioncount</td>";
-									echo "<td>$Standard_Text</td>";
 									echo "<td>$Vendor_ID</td>";
+									echo "<td>$Standard_Text</td>";
 									echo "<td>$type</td>";
 									echo "<td bgcolor='$questioncolor' class='center-align'>$difficulty</td>";
 									echo "<td class='center-align'>$Points</td>";
@@ -125,6 +125,7 @@
 			event.preventDefault();		
 			$(".addquestiontoassessmentpreview").css("display", "none");		
 			var Question = $(this).data('question');
+			$('#previewmeta').hide();
 			
 			$(".modal-content #questionholder").load( "modules/<?php echo basename(__DIR__); ?>/question_viewer.php?id="+Question, function(){
 			});

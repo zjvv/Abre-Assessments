@@ -115,6 +115,7 @@
 				if(isset($question_searchquery))
 				{
 					$filter="ia_vendorid+eq+'$question_searchquery'";
+					//$filter="STD_Code+eq+'CCSS.Math.Content.1.G.A.2'+and+IA_VendorId+eq+'i-193741'";
 					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
 				}
 				
@@ -260,6 +261,7 @@
 					$( ".previewquestion" ).unbind().click(function() {
 						
 						event.preventDefault();
+						$('#previewmeta').show();
 						
 						$(".modal-content #questionholder").html("<div style='padding:20px;'>Loading Question...</div>");
 						

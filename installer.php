@@ -178,7 +178,7 @@
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
 		if(!$db->query("SELECT Question_Order FROM assessments_questions"))
 		{
-			$sql = "ALTER TABLE `assessments_questions` ADD `Question_Order` text NOT NULL;";
+			$sql = "ALTER TABLE `assessments_questions` ADD `Question_Order` int(11) NOT NULL;";
 			$db->multi_query($sql);
 		}
 		$db->close();
