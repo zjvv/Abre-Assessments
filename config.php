@@ -38,32 +38,3 @@
 	require_once('permissions.php');
 	
 	?>
-	
-<script>
-	
-	$(function() 
-	{
-
-		//Duplicate course
-		$(document).on("click", ".duplicateassessment", function ()
-		{
-			var AssessmentIDDuplicate = $(this).data('assessmentid');
-			$.ajax({
-				type: 'POST',
-				url: 'modules/<?php echo basename(__DIR__); ?>/assessment_duplicate.php',
-				data: { assessmentIDduplicateid : AssessmentIDDuplicate }
-			})
-			.done(function(response) {
-				$("#content_holder").load( "modules/<?php echo basename(__DIR__); ?>/assessments_display_all.php", function(){
-					mdlregister();
-					var notification = document.querySelector('.mdl-js-snackbar');
-					var data = { message: response };
-					notification.MaterialSnackbar.showSnackbar(data);	
-				});
-			})
-		});
-			
-	});	
-	
-		
-</script>
