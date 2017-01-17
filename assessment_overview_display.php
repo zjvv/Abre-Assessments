@@ -76,10 +76,10 @@
 				}
 				
 				//Show Overview
-				echo "<div class='page_container'><div class='row'>";
+				echo "<div class='page_container'><div class='row' style='margin:0 -12px 20px -12px;'>";
 						
 					//Overview cards
-					echo "<div class='col m4 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; margin-bottom:10px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
+					echo "<div class='col m4 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
 						if($numoflow==$totallowlevel)
 						{
 							echo "<span class='center-align truncate'><i class='material-icons' style='font-size:70px; line-height:80px;'>check_circle</i></span>";
@@ -91,7 +91,7 @@
 							echo "<span class='center-align truncate'>of $totallowlevel Low Questions</span>";
 						}
 					echo "</div></div>";
-					echo "<div class='col m4 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; margin-bottom:10px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
+					echo "<div class='col m4 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
 						if($numofmedium==$totalmediumlevel)
 						{
 							echo "<span class='center-align truncate'><i class='material-icons' style='font-size:70px; line-height:80px;'>check_circle</i></span>";
@@ -103,7 +103,7 @@
 							echo "<span class='center-align truncate'>of $totalmediumlevel Medium Questions</span>";
 						}
 					echo "</div></div>";
-					echo "<div class='col m4 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; margin-bottom:10px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
+					echo "<div class='col m4 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
 						if($numofhigh==$totalhighlevel)
 						{
 							echo "<span class='center-align truncate'><i class='material-icons' style='font-size:70px; line-height:80px;'>check_circle</i></span>";
