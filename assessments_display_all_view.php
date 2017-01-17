@@ -57,6 +57,7 @@
 									$Title=htmlspecialchars($row["Title"], ENT_QUOTES);
 									$Description=htmlspecialchars($row["Description"], ENT_QUOTES);
 									$Subject=htmlspecialchars($row["Subject"], ENT_QUOTES);
+									$Level=htmlspecialchars($row["Level"], ENT_QUOTES);
 									$Grade=htmlspecialchars($row["Grade"], ENT_QUOTES);
 									$Locked=htmlspecialchars($row["Locked"], ENT_QUOTES);
 									$Shared=htmlspecialchars($row["Shared"], ENT_QUOTES);
@@ -76,7 +77,7 @@
 													echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Questions</a></li>";
 													if($Owner==$_SESSION['useremail'])
 													{
-														echo "<li class='mdl-menu__item modal-createassessment' href='#createassessment' data-title='$Title' data-description='$Description' data-subject='$Subject' data-assessmentid='$Assessment_ID' data-grade='$Grade' data-editors='$Editors' data-locked='$Locked' data-shared='$Shared' data-verified='$Verified' style='font-weight:400'>Settings</a></li>";
+														echo "<li class='mdl-menu__item modal-createassessment' href='#createassessment' data-title='$Title' data-description='$Description' data-subject='$Subject' data-level='$Level' data-assessmentid='$Assessment_ID' data-grade='$Grade' data-editors='$Editors' data-locked='$Locked' data-shared='$Shared' data-verified='$Verified' style='font-weight:400'>Settings</a></li>";
 														echo "<li class='mdl-menu__item duplicateassessment' data-assessmentid='$Assessment_ID'>Duplicate</a></li>";
 														echo "<li class='mdl-menu__item deleteassessment'><a href='modules/".basename(__DIR__)."/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
 													}
@@ -179,6 +180,15 @@
 			else
 			{
 				$("#assessment_subject option[value='']").prop('selected',true);
+			}
+			var Assessment_Level = $(this).data('level');
+			if(Assessment_Level!="blank")
+			{
+				$("#assessment_level option[value='"+Assessment_Level+"']").prop('selected',true);
+			}
+			else
+			{
+				$("#assessment_level option[value='']").prop('selected',true);
 			}
 		});	
 		

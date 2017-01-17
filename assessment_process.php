@@ -31,6 +31,7 @@
 		if(isset($_POST["assessment_description"])){ $assessment_description=mysqli_real_escape_string($db, $_POST["assessment_description"]); }
 		if(isset($_POST["assessment_title"])){ $assessment_grade=$_POST["assessment_grade"]; $assessment_grade = implode (", ", $assessment_grade); }
 		if(isset($_POST["assessment_subject"])){ $assessment_subject=$_POST["assessment_subject"]; }
+		if(isset($_POST["assessment_level"])){ $assessment_level=$_POST["assessment_level"]; }
 		if(isset($_POST["assessment_lock"])){ $assessment_lock=$_POST["assessment_lock"]; }else{ $assessment_lock=0; }
 		if(isset($_POST["assessment_share"])){ $assessment_share=$_POST["assessment_share"]; }else{ $assessment_share=0; }
 		if(isset($_POST["assessment_verified"])){ $assessment_verified=$_POST["assessment_verified"]; }else{ $assessment_verified=0; }
@@ -45,7 +46,7 @@
 		if($assessment_id=="")
 		{
 			$stmt = $db->stmt_init();
-			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Grade, Code, Editors, Locked, Shared, Verified) VALUES ('".$_SESSION['useremail']."', '$assessment_title', '$assessment_description', '$assessment_subject', '$assessment_grade', '$Code', '$assessment_editors', '$assessment_lock', '$assessment_share', '$assessment_verified');";
+			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Level, Grade, Code, Editors, Locked, Shared, Verified) VALUES ('".$_SESSION['useremail']."', '$assessment_title', '$assessment_description', '$assessment_subject', '$assessment_level', '$assessment_grade', '$Code', '$assessment_editors', '$assessment_lock', '$assessment_share', '$assessment_verified');";
 			$stmt->prepare($sql);
 			$stmt->execute();
 			$stmt->close();
@@ -53,7 +54,7 @@
 		}
 		else
 		{
-			mysqli_query($db, "UPDATE assessments set Title='$assessment_title', Description='$assessment_description', Subject='$assessment_subject', Grade='$assessment_grade', Editors='$assessment_editors', Locked='$assessment_lock', Shared='$assessment_share', Verified='$assessment_verified' where ID='$assessment_id'") or die (mysqli_error($db));
+			mysqli_query($db, "UPDATE assessments set Title='$assessment_title', Description='$assessment_description', Subject='$assessment_subject', Level='$assessment_level', Grade='$assessment_grade', Editors='$assessment_editors', Locked='$assessment_lock', Shared='$assessment_share', Verified='$assessment_verified' where ID='$assessment_id'") or die (mysqli_error($db));
 		}
 	
 		//Give message

@@ -66,7 +66,7 @@
 				    document.title = 'My Assessments';
 					$('#content_holder').load('modules/".basename(__DIR__)."/settings.php', function() { init_page(); });
 			    },
-			    'assessments/?:name': function(name)
+			    'assessments/preview/?:name': function(name)
 			    {
 				    $('#navigation_top').hide();
 				    $('#content_holder').hide();
@@ -86,7 +86,7 @@
 						$('.tab_1').addClass('tabmenuover');
 					});	
 			    },
-			    'assessments/overview/?:name': function(name)
+			    'assessments/?:name': function(name)
 			    {
 				    $('#navigation_top').hide();
 				    $('#content_holder').hide();

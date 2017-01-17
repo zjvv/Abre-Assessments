@@ -164,7 +164,7 @@
 			}
 			totalPoints();
 			
-			//Remove topic from curriculum
+			//Remove topic from assessment
 			$( ".removequestion" ).click(function() {
 				event.preventDefault();
 				var result = confirm("Remove this question?");

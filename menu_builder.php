@@ -29,11 +29,11 @@
 
     <div class="col s12">
 		<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
-			<li class="tab col s3 tab_1 supportmenu pointer" <?php echo "data='#assessments/$id'"; ?>>
-				<?php echo "<a href='#assessments/$id' class='mdl-color-text--white'>Questions</a>"; ?>
+			<li class="tab col s3 tab_2 supportmenu pointer" <?php echo "data='#assessments/$id'"; ?>>
+				<?php echo "<a href='#assessments/$id' class='mdl-color-text--white'>Overview</a>"; ?>
 			</li>
-			<li class="tab col s3 tab_2 supportmenu pointer" <?php echo "data='#assessments/overview/$id'"; ?>>
-				<?php echo "<a href='#assessments/overview/$id' class='mdl-color-text--white'>Overview</a>"; ?>
+			<li class="tab col s3 tab_1 supportmenu pointer" <?php echo "data='#assessments/preview/$id'"; ?>>
+				<?php echo "<a href='#assessments/preview/$id' class='mdl-color-text--white'>Preview</a>"; ?>
 			</li>
 		</ul>
 	</div>

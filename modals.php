@@ -40,7 +40,7 @@
 				<div class="input-field col s12"><textarea id="assessment_description" name="assessment_description" class="materialize-textarea" placeholder="Description of the Assessment" required></textarea></div>
 			</div>
 			<div class="row">
-			<div class="input-field col s6">
+			<div class="input-field col s4">
 				<p class='grey-text'>Grade Level</p>
 				<select name='assessment_grade[]' id='assessment_grade' class="browser-default" style='height: 100px;' required='required' multiple>
 					<option value='K'>K</option>
@@ -58,7 +58,7 @@
 				    <option value='12'>12</option>
 			    </select>
 			</div>
-			<div class="input-field col s6">
+			<div class="input-field col s4">
 				<p class='grey-text'>Subject</p>
 				<select name='assessment_subject' id='assessment_subject' class="browser-default" required>
 					<option value=''></option>   
@@ -67,6 +67,15 @@
 				    <option value='Science'>Science</option>       
 				    <option value='Social Studies'>Social Studies</option>
 				    <option value='Miscellaneous'>Miscellaneous</option>      
+			    </select>
+			</div>
+			<div class="input-field col s4">
+				<p class='grey-text'>Level</p>
+				<select name='assessment_level' id='assessment_level' class="browser-default" required>
+					<option value=''></option>   
+					<option value='Core'>Core</option>    
+					<option value='College Preparatory'>College Preparatory</option>    
+				    <option value='Honors'>Honors</option>         
 			    </select>
 			</div>
 			</div>

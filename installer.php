@@ -136,6 +136,15 @@
 		}
 		$db->close();
 		
+		//Check for Level field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Level FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Level` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
 		//Check for Grade field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
 		if(!$db->query("SELECT Grade FROM assessments"))
