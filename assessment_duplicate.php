@@ -40,9 +40,11 @@
 			$Assessment_Description=$row2["Description"];
 			$Assessment_Subject=$row2["Subject"];
 			$Assessment_Grade=$row2["Grade"];
+			$Assessment_Level=$row2["Level"];
+			$Assessment_Verified=$row2["Verified"];
 			
 			$stmt = $db->stmt_init();
-			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Grade) VALUES ('$Assessment_Owner', '$Assessment_Title', '$Assessment_Description', '$Assessment_Subject', '$Assessment_Grade');";
+			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Grade, Level, Verified) VALUES ('$Assessment_Owner', '$Assessment_Title', '$Assessment_Description', '$Assessment_Subject', '$Assessment_Grade' , '$Assessment_Level', '$Assessment_Verified');";
 			$stmt->prepare($sql);
 			$stmt->execute();
 			$new_assessmentID = $stmt->insert_id;
@@ -55,10 +57,14 @@
 			{
 				$Question_Order=$rowres["Question_Order"];
 				$Question_Bank_ID=$rowres["Bank_ID"];
-				$Question_Points=$rowres["Points"];			
+				$Question_Points=$rowres["Points"];	
+				$Question_Vendor_ID=$rowres["Vendor_ID"];	
+				$Question_Type=$rowres["Type"];		
+				$Question_Difficulty=$rowres["Difficulty"];		
+				$Question_Standard=$rowres["Standard"];		
 				
 				$stmt = $db->stmt_init();
-				$sql2 = "INSERT INTO assessments_questions (Assessment_ID, Question_Order, Bank_ID, Points) VALUES ('$new_assessmentID', '$Question_Order', '$Question_Bank_ID', '$Question_Points');";
+				$sql2 = "INSERT INTO assessments_questions (Assessment_ID, Question_Order, Bank_ID, Points, Vendor_ID, Type, Difficulty, Standard) VALUES ('$new_assessmentID', '$Question_Order', '$Question_Bank_ID', '$Question_Points', '$Question_Vendor_ID', '$Question_Type', '$Question_Difficulty', '$Question_Standard');";
 				$stmt->prepare($sql2);
 				$stmt->execute();
 				$stmt->close();

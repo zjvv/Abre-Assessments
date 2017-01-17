@@ -40,9 +40,11 @@
 						<table id='myTable' class='tablesorter'>
 							<thead>
 								<tr class='pointer'>
+									<th style='width:50px'></th>
 									<th>Title</th>
 									<th class='hide-on-med-and-down'>Subject</th>
-									<th class='hide-on-med-and-down'>Grade Level</th>
+									<th class='hide-on-med-and-down'>Level</th>
+									<th class='hide-on-med-and-down'>Grade</th>
 									<th style='width:30px'></th>
 								</tr>
 							</thead>
@@ -66,8 +68,18 @@
 									$Editors=htmlspecialchars($row["Editors"], ENT_QUOTES);
 								
 									echo "<tr class='assessmentrow'>";
+										if($Verified==1)
+										{
+											echo "<td><i class='material-icons pointer' id='verified_$Assessment_ID' style='color:".sitesettings("sitecolor")."'>verified_user</i></td>";
+											echo "<div class='mdl-tooltip mdl-tooltip--bottom mdl-tooltip--large' data-mdl-for='verified_$Assessment_ID'>District Created Assessment</div>";
+										}
+										else
+										{
+											echo "<td></td>";
+										}
 										echo "<td>$Title</td>";
 										echo "<td class='hide-on-med-and-down'>$Subject</td>";
+										echo "<td class='hide-on-med-and-down'>$Level</td>";
 										echo "<td class='hide-on-med-and-down'>$Grade</td>";
 										echo "<td width=30px>";							
 	
