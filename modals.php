@@ -36,62 +36,65 @@
 			<div class="row">
 				<div class="input-field col s12"><input id="assessment_title" name="assessment_title" placeholder="Title of the Assessment" type="text" required></div>
 			</div>
-			<div class="row">
-				<div class="input-field col s12"><textarea id="assessment_description" name="assessment_description" class="materialize-textarea" placeholder="Description of the Assessment" required></textarea></div>
-			</div>
-			<div class="row">
-			<div class="input-field col s4">
-				<p class='grey-text'>Grade Level</p>
-				<select name='assessment_grade[]' id='assessment_grade' class="browser-default" style='height: 100px;' required='required' multiple>
-					<option value='K'>K</option>
-				    <option value='1'>1</option>       
-				    <option value='2'>2</option>       
-				    <option value='3'>3</option>       
-				    <option value='4'>4</option> 
-					<option value='5'>5</option>       
-				    <option value='6'>6</option>       
-				    <option value='7'>7</option>       
-				    <option value='8'>8</option>    
-				    <option value='9'>9</option>   
-				    <option value='10'>10</option>
-				    <option value='11'>11</option>
-				    <option value='12'>12</option>
-			    </select>
-			</div>
-			<div class="input-field col s4">
-				<p class='grey-text'>Subject</p>
-				<select name='assessment_subject' id='assessment_subject' class="browser-default" required>
-					<option value=''></option>   
-					<option value='English Language Arts'>English Language Arts</option>    
-					<option value='Mathematics'>Mathematics</option>    
-				    <option value='Science'>Science</option>       
-				    <option value='Social Studies'>Social Studies</option>
-				    <option value='Miscellaneous'>Miscellaneous</option>      
-			    </select>
-			</div>
-			<div class="input-field col s4">
-				<p class='grey-text'>Level</p>
-				<select name='assessment_level' id='assessment_level' class="browser-default" required>
-					<option value=''></option>   
-					<option value='Core'>Core</option>    
-					<option value='College Preparatory'>College Preparatory</option>    
-				    <option value='Honors'>Honors</option>         
-			    </select>
-			</div>
-			</div>
 			
-			<div class="row">
-				<div class="input-field col s12"><input id="assessment_editors" name="assessment_editors" placeholder="Assessment Editors (Emails Separated by Commas)" type="text"></div>
-			</div>
-			
-			<div class="input-field col s12">
-				<input type="checkbox" class="filled-in" id="assessment_lock" name="assessment_lock" value="1" />
-				<label for="assessment_lock">Lock Assessment - This removes all editing access from this assessment.</label>
-			</div>
-			
-			<div class="input-field col s12">
-				<input type="checkbox" class="filled-in" id="assessment_share" name="assessment_share" value="1" />
-				<label for="assessment_share">Share Assessment - Allows other teachers to give this assessment.</label>
+			<div class="advancedsettings">
+				<div class="row">
+					<div class="input-field col s12"><textarea id="assessment_description" name="assessment_description" class="materialize-textarea" placeholder="Description of the Assessment" required></textarea></div>
+				</div>
+				<div class="row">
+				<div class="input-field col s4">
+					<p class='grey-text'>Grade Level</p>
+					<select name='assessment_grade[]' id='assessment_grade' class="browser-default" style='height: 100px;' required='required' multiple>
+						<option value='K'>K</option>
+					    <option value='1'>1</option>       
+					    <option value='2'>2</option>       
+					    <option value='3'>3</option>       
+					    <option value='4'>4</option> 
+						<option value='5'>5</option>       
+					    <option value='6'>6</option>       
+					    <option value='7'>7</option>       
+					    <option value='8'>8</option>    
+					    <option value='9'>9</option>   
+					    <option value='10'>10</option>
+					    <option value='11'>11</option>
+					    <option value='12'>12</option>
+				    </select>
+				</div>
+				<div class="input-field col s4">
+					<p class='grey-text'>Subject</p>
+					<select name='assessment_subject' id='assessment_subject' class="browser-default" required>
+						<option value=''></option>   
+						<option value='English Language Arts'>English Language Arts</option>    
+						<option value='Mathematics'>Mathematics</option>    
+					    <option value='Science'>Science</option>       
+					    <option value='Social Studies'>Social Studies</option>
+					    <option value='Miscellaneous'>Miscellaneous</option>      
+				    </select>
+				</div>
+				<div class="input-field col s4">
+					<p class='grey-text'>Level</p>
+					<select name='assessment_level' id='assessment_level' class="browser-default" required>
+						<option value=''></option>   
+						<option value='Core'>Core</option>    
+						<option value='College Preparatory'>College Preparatory</option>    
+					    <option value='Honors'>Honors</option>         
+				    </select>
+				</div>
+				</div>
+				
+				<div class="row">
+					<div class="input-field col s12"><input id="assessment_editors" name="assessment_editors" placeholder="Assessment Editors (Emails Separated by Commas)" type="text"></div>
+				</div>
+				
+				<div class="input-field col s12">
+					<input type="checkbox" class="filled-in" id="assessment_lock" name="assessment_lock" value="1" />
+					<label for="assessment_lock">Lock Assessment - This removes all editing access from this assessment.</label>
+				</div>
+				
+				<div class="input-field col s12">
+					<input type="checkbox" class="filled-in" id="assessment_share" name="assessment_share" value="1" />
+					<label for="assessment_share">Public Assessment - Allows other teachers to use this assessment.</label>
+				</div>
 			</div>
 			
 			<?php
@@ -102,8 +105,13 @@
 					echo "<label for='assessment_verified'>District Assessment - Marks the assessment as a district created assessment.</label>";
 				echo "</div>";
 			}
+			else
+			{
+				echo "<input type='hidden' id='assessment_verified' name='assessment_verified' value='0' />";
+			}
 			?>
 				
+			<input type="hidden" name="assessment_sessionid" id="assessment_sessionid">
 			<input type="hidden" name="assessment_id" id="assessment_id">
     	</div>
 	    <div class="modal-footer">
@@ -261,6 +269,10 @@
 				<div id='questionholder'></div>
 				<input type="hidden" name="AssessmentID" id="AssessmentID">
 				<input type="hidden" name="QuestionID" id="QuestionID">
+				<input type="hidden" name="VendorID" id="VendorID">
+				<input type="hidden" name="Type" id="Type">
+				<input type="hidden" name="Difficulty" id="Difficulty">
+				<input type="hidden" name="StandardCode" id="StandardCode">
     	</div>
 	    <div class="modal-footer">
 		    <a class="modal-close waves-effect btn-flat white-text" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>Close</a>
@@ -334,12 +346,16 @@
 			//Add to the assessment
 			var AssessmentID = $('#AssessmentID').val();
 			var QuestionID = $('#QuestionID').val();
-			var address= "/modules/<?php echo basename(__DIR__); ?>/question_add_process.php?assessmentid="+AssessmentID+"&questionid="+QuestionID;
+			var VendorID = $('#VendorID').val();
+			var Type = $('#Type').val();
+			var Difficulty = $('#Difficulty').val();
+			var StandardCode = $('#StandardCode').val();
+			var address= "/modules/<?php echo basename(__DIR__); ?>/question_add_process.php?assessmentid="+AssessmentID+"&questionid="+QuestionID+"&vendorid="+VendorID+"&type="+Type+"&difficulty="+Difficulty+"&standard="+StandardCode;
 			$.ajax({
 				type: 'POST',
 				url: address,
 				data: '',
-			})	
+			})
 			
 			//Hide Add buttons
 			$('#questionplus-'+QuestionID).hide();		

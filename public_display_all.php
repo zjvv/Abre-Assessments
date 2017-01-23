@@ -81,7 +81,7 @@
 											echo "<div class='morebutton' style='position:absolute; margin-top:-15px;'>";
 												echo "<button id='demo-menu-bottom-left-$Assessment_ID' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600'><i class='material-icons'>more_vert</i></button>";
 												echo "<ul class='mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect' for='demo-menu-bottom-left-$Assessment_ID'>";
-													echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Preview</a></li>";
+													echo "<li class='mdl-menu__item duplicateassessment' data-assessmentid='$Assessment_ID'><a href='#' class='mdl-color-text--black' style='font-weight:400'>Make a Copy</a></li>";
 												echo "</ul>";
 											echo "</div>";
 	
@@ -99,7 +99,7 @@
 		}
 		else
 		{
-			echo "<div class='row center-align'><div class='col s12'><h6>There are currently no shared assessments</h6></div></div>";
+			echo "<div class='row center-align'><div class='col s12'><h6>There are currently no publicly shared assessments</h6></div></div>";
 		}
 		
 	}
@@ -112,94 +112,20 @@
 	$(function()
 	{
 		
-		//Make Explore clickable
-		$(".exploreassessment").unbind().click(function() {
-			 window.open($(this).find("a").attr("href"), '_self');
-		});
-		
-		$(document).on("click", ".modal-createassessment", function () {
-			var Assessment_ID = $(this).data('assessmentid');
-			$(".modal-content #assessment_id").val(Assessment_ID);
-			var Assessment_Title = $(this).data('title');
-			$(".modal-content #assessment_title").val(Assessment_Title);
-			var Assessment_Description = $(this).data('description');
-			$(".modal-content #assessment_description").val(Assessment_Description);
-			var Assessment_Editors = $(this).data('editors');
-			$(".modal-content #assessment_editors").val(Assessment_Editors);
-			var Assessment_Grade = $(this).data('grade');
-			var Assessment_shared = $(this).data('shared');
-			if(Assessment_shared=='1')
-			{
-				$(".modal-content #assessment_share").prop('checked',true);
-			}
-			else
-			{
-				$(".modal-content #assessment_share").prop('checked',false);
-			}
-			var Assessment_Locked = $(this).data('locked');
-			if(Assessment_Locked=='1')
-			{
-				$(".modal-content #assessment_lock").prop('checked',true);
-			}
-			else
-			{
-				$(".modal-content #assessment_lock").prop('checked',false);
-			}
-			if(Assessment_Grade!="blank")
-			{
-				var Assessment_Grade_String=String(Assessment_Grade);
-				if( Assessment_Grade_String.indexOf(',') >= 0)
-				{
-					var dataarrayassessment=Assessment_Grade.split(", ");
-					$("#assessment_grade").val(dataarrayassessment);
-				}
-				else
-				{
-					$("#assessment_grade").val(Assessment_Grade_String);
-				}
-			}
-			else
-			{
-				$("#assessment_grade").val('');
-			}
-			var Assessment_Subject = $(this).data('subject');
-			if(Assessment_Subject!="blank")
-			{
-				$("#assessment_subject option[value='"+Assessment_Subject+"']").prop('selected',true);
-			}
-			else
-			{
-				$("#assessment_subject option[value='']").prop('selected',true);
-			}
-		});	
-		
-		//Delete assessment
-		$( ".deleteassessment" ).unbind().click(function() {
+		//Duplicate Assessment
+		$(".duplicateassessment").unbind().click(function(event)
+		{
 			event.preventDefault();
-			var result = confirm("Are you sure you want to delete this assessment?");
-			if (result) {
-
-				//Make the post request
-				var address = $(this).find("a").attr("href");
-				$.ajax({
-					type: 'POST',
-					url: address,
-					data: '',
-				})
-																
-				//Show the notification
-				.done(function(response){	
-					
-					mdlregister();												
-					var notification = document.querySelector('.mdl-js-snackbar');
-					var data = { message: response };
-					notification.MaterialSnackbar.showSnackbar(data);
-					
-					$('#content_holder').load('modules/<?php echo basename(__DIR__); ?>/assessments_display_all.php', function() { init_page(); });
-						
-				})
-			}
-		});	
+			var AssessmentIDDuplicate = $(this).data('assessmentid');
+			$.ajax({
+				type: 'POST',
+				url: 'modules/<?php echo basename(__DIR__); ?>/assessment_duplicate.php',
+				data: { assessmentIDduplicateid : AssessmentIDDuplicate }
+			})
+			.done(function(response) {
+				$(location).attr('href', '#assessments');
+			})
+		});
 				
 		$("#myTable").tablesorter();
 					

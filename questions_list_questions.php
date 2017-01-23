@@ -101,6 +101,7 @@
 				if(isset($question_subject))
 				{
 					$filter="IA_Subject+eq+'$question_subject'";
+					$filter=$filter."+and+(std_document+eq+'CC'+or+std_document+eq+'OH')";
 					$skip=$pagenumber-1;
 					if($question_grade!=""){ $filter=$filter."+and+IA_GradeLevel+eq+'$question_grade'"; }
 					if($question_difficulty!=""){ $filter=$filter."+and+IA_Difficulty+eq+'$question_difficulty'"; }
@@ -115,7 +116,7 @@
 				if(isset($question_searchquery))
 				{
 					$filter="ia_vendorid+eq+'$question_searchquery'";
-					//$filter="STD_Code+eq+'CCSS.Math.Content.1.G.A.2'+and+IA_VendorId+eq+'i-193741'";
+					$filter=$filter."+and+(std_document+eq+'CC'+or+std_document+eq+'OH')";
 					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
 				}
 				
@@ -186,7 +187,7 @@
 							echo "<div class='chip'>$grade</div><div class='chip'>$type</div><div class='chip'>$difficulty</div><div class='chip'>$blooms</div>";
 							
 							
-							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-vendor='$vendor_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-type='$type' data-addbutton='$addbutton' class='previewquestion' style='color: ".sitesettings("sitecolor")."'><i class='material-icons'>visibility</i></a></td>";
+							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-vendor='$vendor_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-type='$type' data-standard='$standardcode' data-addbutton='$addbutton' class='previewquestion' style='color: ".sitesettings("sitecolor")."'><i class='material-icons'>visibility</i></a></td>";
 							
 							if($assessmentcount==0){
 								echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-link='/modules/".basename(__DIR__)."/question_add_process.php?assessmentid=$assessment_id&questionid=$question_id&vendorid=$vendor_id&type=$type&difficulty=$difficulty&standard=$standardcode' style='color: ".sitesettings("sitecolor")."' class='addquestiontoassessment' id='questionplus-$question_id'><i class='material-icons'>add_circle</i></a></td>";
@@ -280,9 +281,11 @@
 						
 						var Vendor = $(this).data('vendor');
 						$(".modal-content #preview_questionid").html(Vendor);
+						$(".modal-content #VendorID").val(Vendor);
 						
 						var Type = $(this).data('type');
 						$(".modal-content #preview_questiontype").html(Type);
+						$(".modal-content #Type").val(Type);
 						
 						var Subject = $(this).data('subject');
 						$(".modal-content #preview_subject").html(Subject);
@@ -295,6 +298,10 @@
 						
 						var Difficulty = $(this).data('difficulty');
 						$(".modal-content #preview_difficulty").html(Difficulty);
+						$(".modal-content #Difficulty").val(Difficulty);
+						
+						var Standard = $(this).data('standard');
+						$(".modal-content #StandardCode").val(Standard);
 						
 						$(".modal-content #questionholder").load( "modules/<?php echo basename(__DIR__); ?>/question_viewer.php?id="+Question, function(){
 						});

@@ -27,7 +27,10 @@
 	if($pagerestrictions=="")
 	{
 		
-		$sql = "SELECT * FROM assessments where Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%' order by Title";
+		//Include clipboard javascript file
+		echo "<script src='$portal_root/modules/".basename(__DIR__)."/js/clipboard.min.js'></script>";
+		
+		$sql = "SELECT * FROM assessments where (Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%') order by Title";
 		$result = $db->query($sql);
 		$rowcount=mysqli_num_rows($result);
 		if($rowcount!=0)
@@ -51,7 +54,7 @@
 							<tbody>
 								
 								<?php
-								$sql = "SELECT * FROM assessments where Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%' order by Title";
+								$sql = "SELECT * FROM assessments where (Owner='".$_SESSION['useremail']."' or Editors LIKE '%".$_SESSION['useremail']."%') order by Title";
 								$result = $db->query($sql);
 								while($row = $result->fetch_assoc())
 								{
@@ -66,9 +69,14 @@
 									$Verified=htmlspecialchars($row["Verified"], ENT_QUOTES);
 									$Owner=htmlspecialchars($row["Owner"], ENT_QUOTES);
 									$Editors=htmlspecialchars($row["Editors"], ENT_QUOTES);
+									$Session_ID=htmlspecialchars($row["Session_ID"], ENT_QUOTES);
+									
+									if (strpos($Editors, $_SESSION['useremail']) !== false) { $SharedEditable=1; }else{ $SharedEditable=0; }
+									
+									$Student_Link="$portal_root/#assessments/session/$Assessment_ID/$Session_ID";
 								
 									echo "<tr class='assessmentrow'>";
-										if($Verified==1)
+										if($Verified!=0)
 										{
 											echo "<td><i class='material-icons pointer' id='verified_$Assessment_ID' style='color:".sitesettings("sitecolor")."'>verified_user</i></td>";
 											echo "<div class='mdl-tooltip mdl-tooltip--bottom mdl-tooltip--large' data-mdl-for='verified_$Assessment_ID'>District Created Assessment</div>";
@@ -86,12 +94,32 @@
 											echo "<div class='morebutton' style='position:absolute; margin-top:-15px;'>";
 												echo "<button id='demo-menu-bottom-left-$Assessment_ID' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600'><i class='material-icons'>more_vert</i></button>";
 												echo "<ul class='mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect' for='demo-menu-bottom-left-$Assessment_ID'>";
-													echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Questions</a></li>";
+													
+													if((superadmin() or $SharedEditable==1) or $Verified==0)
+													{
+														echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Questions</a></li>";
+													}
+													if($Verified==0 or superadmin())
+													{
+														echo "<li class='mdl-menu__item duplicateassessment' data-assessmentid='$Assessment_ID'>Make a Copy</a></li>";
+													}
+													if($Session_ID!="" && $Owner==$_SESSION['useremail'])
+													{
+														echo "<li class='mdl-menu__item mdl-menu__item--full-bleed-divider copystudentlink' data-clipboard-text='$Student_Link'><a href='#' class='mdl-color-text--black' style='font-weight:400'>Copy Student Link</a></li>";
+													}
 													if($Owner==$_SESSION['useremail'])
 													{
-														echo "<li class='mdl-menu__item modal-createassessment' href='#createassessment' data-title='$Title' data-description='$Description' data-subject='$Subject' data-level='$Level' data-assessmentid='$Assessment_ID' data-grade='$Grade' data-editors='$Editors' data-locked='$Locked' data-shared='$Shared' data-verified='$Verified' style='font-weight:400'>Settings</a></li>";
-														echo "<li class='mdl-menu__item duplicateassessment' data-assessmentid='$Assessment_ID'>Duplicate</a></li>";
-														echo "<li class='mdl-menu__item deleteassessment'><a href='modules/".basename(__DIR__)."/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
+														echo "<li class='mdl-menu__item modal-createassessment' href='#createassessment' data-title='$Title' data-description='$Description' data-subject='$Subject' data-level='$Level' data-assessmentid='$Assessment_ID' data-grade='$Grade' data-editors='$Editors' data-locked='$Locked' data-shared='$Shared' data-verified='$Verified' data-sessionid='$Session_ID' style='font-weight:400'>Settings</a></li>";
+														
+														//Check to make sure no assessment data exists if it's a district assesssment
+														$sqlquestion = "SELECT * FROM assessments_scores where Assessment_ID=$Assessment_ID";
+														$resultquestioncount = $db->query($sqlquestion);
+														$rowcountresultquestioncount=mysqli_num_rows($resultquestioncount);
+														if($Verified==0 or ($Verified!=0 && $rowcountresultquestioncount==0))
+														{
+															echo "<li class='mdl-menu__item deleteassessment'><a href='modules/".basename(__DIR__)."/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
+														}
+															
 													}
 												echo "</ul>";
 											echo "</div>";
@@ -125,6 +153,17 @@
 	$(function()
 	{
 		
+		//Start clipboard
+		new Clipboard('.copystudentlink');
+		
+		//Make Explore clickable
+		$(".copystudentlink").unbind().click(function(event) {
+			 event.preventDefault();
+			 var notification = document.querySelector('.mdl-js-snackbar');
+			 var data = { message: "Student Link Copied!" };
+			 notification.MaterialSnackbar.showSnackbar(data);
+		});
+		
 		//Make Explore clickable
 		$(".exploreassessment").unbind().click(function() {
 			 window.open($(this).find("a").attr("href"), '_self');
@@ -133,6 +172,8 @@
 		$(document).on("click", ".modal-createassessment", function () {
 			var Assessment_ID = $(this).data('assessmentid');
 			$(".modal-content #assessment_id").val(Assessment_ID);
+			var Session_ID = $(this).data('sessionid');
+			$(".modal-content #assessment_sessionid").val(Session_ID);
 			var Assessment_Title = $(this).data('title');
 			$(".modal-content #assessment_title").val(Assessment_Title);
 			var Assessment_Description = $(this).data('description');
@@ -144,10 +185,12 @@
 			if(Assessment_Verified=='1')
 			{
 				$(".modal-content #assessment_verified").prop('checked',true);
+				<?php if(!superadmin()){ ?> $(".advancedsettings").css("display", "none"); $(".modal-content #assessment_verified").val(Assessment_Verified); <?php } ?>
 			}
 			else
 			{
 				$(".modal-content #assessment_verified").prop('checked',false);
+				<?php if(!superadmin()){ ?> $(".advancedsettings").css("display", "block"); $(".modal-content #assessment_verified").val(Assessment_Verified); <?php } ?>
 			}
 			var Assessment_shared = $(this).data('shared');
 			if(Assessment_shared=='1')

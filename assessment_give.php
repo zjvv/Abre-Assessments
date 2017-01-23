@@ -36,21 +36,15 @@
 			$Assessment_ID=$row2["ID"];
 			$Assessment_Owner=$row2["Owner"];
 			$Assessment_Title=$row2["Title"];
-			$Assessment_Title="$Assessment_Title - Copy";
+			$Assessment_Title="$Assessment_Title";
 			$Assessment_Description=$row2["Description"];
 			$Assessment_Subject=$row2["Subject"];
 			$Assessment_Grade=$row2["Grade"];
 			$Assessment_Level=$row2["Level"];
 			$Assessment_Verified=$row2["Verified"];
 			
-			if(!superadmin()){ if($Assessment_Verified==1){ $Assessment_Verified=$Assessment_ID; }  }
-			
-			$timedate=time();
-			$string=$timedate.$_SESSION['useremail'];
-			$sessionid=sha1($string);
-			
 			$stmt = $db->stmt_init();
-			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Grade, Level, Verified, Session_ID) VALUES ('".$_SESSION['useremail']."', '$Assessment_Title', '$Assessment_Description', '$Assessment_Subject', '$Assessment_Grade' , '$Assessment_Level', '$Assessment_Verified', '$sessionid');";
+			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Grade, Level, Verified, Active) VALUES ('$Assessment_Owner', '$Assessment_Title', '$Assessment_Description', '$Assessment_Subject', '$Assessment_Grade' , '$Assessment_Level', '$Assessment_Verified', '1');";
 			$stmt->prepare($sql);
 			$stmt->execute();
 			$new_assessmentID = $stmt->insert_id;
@@ -78,9 +72,23 @@
 
 			
 		}
+		
+		//Create session key
+		$timedate=time();
+		$string=$timedate.$_SESSION['useremail'];
+		$sessionid=sha1($string);
+		
+		//Create the assessment session
+		$stmt = $db->stmt_init();
+		$sql = "INSERT INTO assessments_sessions (Owner, Assessment_ID, Session_ID) VALUES ('".$_SESSION['useremail']."', '$new_assessmentID', '$sessionid');";
+		$stmt->prepare($sql);
+		$stmt->execute();
+		$stmt->close();
+		
+		//Close database connection
 		$db->close();
 
 	}
 
-	echo "The assessment has been copied.";
+	echo "The assessment is now active.";
 ?>

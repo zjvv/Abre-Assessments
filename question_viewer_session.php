@@ -24,24 +24,21 @@
 	require_once('functions.php');
 	require_once('permissions.php');
 	
-	if($pagerestrictions=="")
-	{
-	
-		if(!isset($Bank_ID)){ $questionid=$_GET["id"]; }else{ $questionid=$Bank_ID; }
+	if(!isset($Bank_ID)){ $questionid=$_GET["id"]; }else{ $questionid=$Bank_ID; }
 		
-		//Get Token
-		$token=getCerticaToken();	
+	//Get Token
+	$token=getCerticaToken();	
 		
-		echo "<div class='row' style='padding:15px;'>";
-			echo "<div id='passage-content-$questionid'></div>";
-			echo "<div class='certicaquestion' id='content-element-$questionid'></div>";
-			echo "<div id='rubric-content-$questionid'></div>";
-		echo "</div>";
+	echo "<div class='row' style='padding:15px;'>";
+		echo "<div id='passage-content-$questionid'></div>";
+		echo "<div class='certicaquestion' id='content-element-$questionid'></div>";
+		echo "<div id='rubric-content-$questionid'></div>";
+	echo "</div>";
 		
-		echo "<div class='row' style='padding:0 15px 0 15px'><span id='btn-score-$questionid' class='modal-close waves-effect btn-flat white-text' style='background-color: "; echo sitesettings("sitecolor"); echo "'>Score Question</span></div>";
-		echo "<div class='row' style='padding:0 15px 0 15px'><div id='pnl-score-$questionid'></div></div>";
+	echo "<div class='row' style='padding:0 15px 0 15px'><span id='btn-score-$questionid' class='modal-close waves-effect btn-flat white-text' style='background-color: "; echo sitesettings("sitecolor"); echo "'>Save</span></div>";
+	echo "<div class='row' style='padding:0 15px 0 15px'><div id='pnl-score-$questionid'></div></div>";
 		
-		?>
+?>
 		
 		
 		<script>
@@ -61,7 +58,7 @@
 			                useMathML: true,
 			                enablePassages: true,
 			                passageContainer: '#passage-content-<?php echo $questionid ?>',
-			                enableRubric: true,
+			                enableRubric: false,
 			                rubricContainer: '#rubric-content-<?php echo $questionid ?>'
 			            });
 					}
@@ -71,22 +68,32 @@
 				function formatResponseData(response)
 				{	
 		            lastSubmitted = JSON.parse(response.scores[0].response);
-		            var score = response['scores'][0]['score'];
-		            if(score==="1")
+		            var value_score = response['scores'][0]['score'];
+		            var value_scoredOn = response['scores'][0]['scoredOn'];
+		            var value_itemId = response['scores'][0]['iA_ItemId'];
+		            var value_itemResponse = response['scores'][0]['response'];
+		            var value_scoreGUID = response['scores'][0]['scoreGUID'];
+		            
+		            //Show Feedback
+		            if(value_score==="1")
 		            { 
 			            score='Correct'; 
 			            $('#pnl-score-<?php echo $questionid ?>').html('<div class="card white-text" style="background-color:#4CAF50; padding:20px;">'+score+'</div>');
 			        }
-			        if(score==="0")
+			        if(value_score==="0")
 		            {
 				        score='Incorrect';
 				        $('#pnl-score-<?php echo $questionid ?>').html('<div class="card white-text" style="background-color:#F44336; padding:20px;">'+score+'</div>');
 				    }
-				    if(score==="")
+				    if(value_score==="")
 		            {
 				        score='Rubric Graded';
 				        $('#pnl-score-<?php echo $questionid ?>').html('<div class="card black-text" style="background-color:#FFEB3B; padding:20px;">'+score+'</div>');
 				    }
+		            
+		            //Save the result
+		            $.post("modules/<?php echo basename(__DIR__); ?>/session_scoring.php", { score: value_score, scoredOn: value_scoredOn, itemId: value_itemId, itemResponse: value_itemResponse, scoreGUID: value_scoreGUID  });
+		           
 		        }
 		        
 		        //Error Handle
@@ -134,9 +141,3 @@
 			});
 		
 		</script>
-		
-<?php
-		
-	}
-		
-?>

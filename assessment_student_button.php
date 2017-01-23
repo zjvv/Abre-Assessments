@@ -16,29 +16,40 @@
     * You should have received a copy of the GNU General Public License
     * along with this program.  If not, see <http://www.gnu.org/licenses/>.
     */
-
+	
 	//Required configuration files
-	require(dirname(__FILE__) . '/../../configuration.php'); 
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
+	require_once('permissions.php');
 	
 ?>
-
-    <div class="col s12">
-		<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
-			<li class="tab col s3 tab_1 supportmenu pointer" data="#assessments"><a href="#assessments" class='mdl-color-text--white'>My Assessments</a></li>
-			<li class="tab col s3 tab_3 supportmenu pointer" data="#assessments/public"><a href="#assessments/public" class='mdl-color-text--white'>Public</a></li>
-		</ul>
+	
+	<div class='fixed-action-btn buttonpin'>
+		<a class='btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="createassessmenttooltip" href='#' data-assessmentid='<?php echo $Assessment_ID; ?>'><i class='large material-icons'>check</i></a>
+		<div class="mdl-tooltip mdl-tooltip--left" for="createassessmenttooltip">Turn In</div>
 	</div>
 	
 <script>
 	
 	$(function()
-	{	
-		$( ".supportmenu" ).unbind().click(function()
+	{
+		
+ 			
+		//Load the question
+		$("#createassessmenttooltip").unbind().click(function(event)
 		{
-			window.open($(this).attr("data"), '_self');
-		});	
+			event.preventDefault();
+			var ID = $(this).data('assessmentid');
+			var result = confirm("Are you sure you want to turn in this assessment? You will not be able to make any further changes.");
+			if (result)
+			{
+				$.post( "/modules/<?php echo basename(__DIR__); ?>/assessment_student_end.php", { AssessmentID: ID })
+				.done(function( data ) {
+					location.reload();
+  				});
+			}
+ 		});
+			
 	});
 	
 </script>

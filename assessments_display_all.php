@@ -37,8 +37,9 @@
 	{
 
 		//Duplicate Assessment
-		$(".duplicateassessment").unbind().click(function()
+		$(".duplicateassessment").unbind().click(function(event)
 		{
+			event.preventDefault();
 			var AssessmentIDDuplicate = $(this).data('assessmentid');
 			$.ajax({
 				type: 'POST',
@@ -46,12 +47,27 @@
 				data: { assessmentIDduplicateid : AssessmentIDDuplicate }
 			})
 			.done(function(response) {
-				$("#displayguide").load( "modules/<?php echo basename(__DIR__); ?>/assessments_display_all_view.php", function(){
+				$("#content_holder").load( "modules/<?php echo basename(__DIR__); ?>/assessments_display_all.php", function(){
 					mdlregister();
 					var notification = document.querySelector('.mdl-js-snackbar');
 					var data = { message: response };
 					notification.MaterialSnackbar.showSnackbar(data);	
 				});
+			})
+		});
+		
+		//Give Assessment
+		$(".giveassessment").unbind().click(function(event)
+		{
+			event.preventDefault();
+			var AssessmentIDDuplicate = $(this).data('assessmentid');
+			$.ajax({
+				type: 'POST',
+				url: 'modules/<?php echo basename(__DIR__); ?>/assessment_give.php',
+				data: { assessmentIDduplicateid : AssessmentIDDuplicate }
+			})
+			.done(function(response) {
+				$(location).attr('href', '#assessments/sessions');
 			})
 		});
 			

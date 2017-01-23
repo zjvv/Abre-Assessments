@@ -2,7 +2,7 @@
 	
 	/*
 	* Copyright 2015 Hamilton City School District	
-	* 		
+	* 	
 	* This program is free software: you can redistribute it and/or modify
     * it under the terms of the GNU General Public License as published by
     * the Free Software Foundation, either version 3 of the License, or
@@ -16,29 +16,25 @@
     * You should have received a copy of the GNU General Public License
     * along with this program.  If not, see <http://www.gnu.org/licenses/>.
     */
-
+	
 	//Required configuration files
-	require(dirname(__FILE__) . '/../../configuration.php'); 
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
+	require_once(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+	
+	//Variables
+	$score=mysqli_real_escape_string($db, $_POST["score"]);
+	$scoredOn=mysqli_real_escape_string($db, $_POST["scoredOn"]);
+	$itemId=mysqli_real_escape_string($db, $_POST["itemId"]);
+	$itemResponse=mysqli_real_escape_string($db, $_POST["itemResponse"]);
+	$scoreGUID=mysqli_real_escape_string($db, $_POST["scoreGUID"]);
+		
+	//Add the score record
+	$stmt = $db->stmt_init();
+	$sql = "INSERT INTO assessments_scores (User, Score, ScoredOn, ItemID, Response, Score_GUID) VALUES ('".$_SESSION['useremail']."', '$score', '$scoredOn', '$itemId', '$itemResponse', '$scoreGUID');";
+	$stmt->prepare($sql);
+	$stmt->execute();
+	$stmt->close();
+	$db->close();
 	
 ?>
-
-    <div class="col s12">
-		<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
-			<li class="tab col s3 tab_1 supportmenu pointer" data="#assessments"><a href="#assessments" class='mdl-color-text--white'>My Assessments</a></li>
-			<li class="tab col s3 tab_3 supportmenu pointer" data="#assessments/public"><a href="#assessments/public" class='mdl-color-text--white'>Public</a></li>
-		</ul>
-	</div>
-	
-<script>
-	
-	$(function()
-	{	
-		$( ".supportmenu" ).unbind().click(function()
-		{
-			window.open($(this).attr("data"), '_self');
-		});	
-	});
-	
-</script>

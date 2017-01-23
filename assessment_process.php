@@ -36,17 +36,26 @@
 		if(isset($_POST["assessment_share"])){ $assessment_share=$_POST["assessment_share"]; }else{ $assessment_share=0; }
 		if(isset($_POST["assessment_verified"])){ $assessment_verified=$_POST["assessment_verified"]; }else{ $assessment_verified=0; }
 		if(isset($_POST["assessment_editors"])){ $assessment_editors=$_POST["assessment_editors"]; }
+		if(isset($_POST["assessment_sessionid"])){ $assessment_sessionid=$_POST["assessment_sessionid"]; }else{ $assessment_sessionid=""; }
 		if(isset($_POST["assessment_id"])){ $assessment_id=$_POST["assessment_id"]; }
 		
-		//Generate a unique, random class code
-		$digits = 5;
-		$Code=rand(pow(10, $digits-1), pow(10, $digits)-1);
+		//Create session key
+		if($assessment_sessionid=="")
+		{
+			$timedate=time();
+			$string=$timedate.$_SESSION['useremail'];
+			$sessionid=sha1($string);
+		}
+		else
+		{
+			$sessionid=$assessment_sessionid;
+		}
 		
 		//Add or update the assessment
 		if($assessment_id=="")
 		{
 			$stmt = $db->stmt_init();
-			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Level, Grade, Code, Editors, Locked, Shared, Verified) VALUES ('".$_SESSION['useremail']."', '$assessment_title', '$assessment_description', '$assessment_subject', '$assessment_level', '$assessment_grade', '$Code', '$assessment_editors', '$assessment_lock', '$assessment_share', '$assessment_verified');";
+			$sql = "INSERT INTO assessments (Owner, Title, Description, Subject, Level, Grade, Editors, Locked, Shared, Verified, Session_ID) VALUES ('".$_SESSION['useremail']."', '$assessment_title', '$assessment_description', '$assessment_subject', '$assessment_level', '$assessment_grade', '$assessment_editors', '$assessment_lock', '$assessment_share', '$assessment_verified', '$sessionid');";
 			$stmt->prepare($sql);
 			$stmt->execute();
 			$stmt->close();
@@ -54,7 +63,7 @@
 		}
 		else
 		{
-			mysqli_query($db, "UPDATE assessments set Title='$assessment_title', Description='$assessment_description', Subject='$assessment_subject', Level='$assessment_level', Grade='$assessment_grade', Editors='$assessment_editors', Locked='$assessment_lock', Shared='$assessment_share', Verified='$assessment_verified' where ID='$assessment_id'") or die (mysqli_error($db));
+			mysqli_query($db, "UPDATE assessments set Title='$assessment_title', Description='$assessment_description', Subject='$assessment_subject', Level='$assessment_level', Grade='$assessment_grade', Editors='$assessment_editors', Locked='$assessment_lock', Shared='$assessment_share', Verified='$assessment_verified', Session_ID='$sessionid' where ID='$assessment_id'") or die (mysqli_error($db));
 		}
 	
 		//Give message

@@ -40,21 +40,21 @@
 						$('.tab_1').addClass('tabmenuover');
 					});
 			    },
-				'assessments/shared': function(name)
+				'assessments/public': function(name)
 				{
 				    $('#navigation_top').hide();
 				    $('#content_holder').hide();
 				    $('#loader').show();
 				    $('#titletext').text('Assessments');
 				    document.title = 'Shared Assessments';
-					$('#content_holder').load('modules/".basename(__DIR__)."/shared_display_all.php', function() { init_page(); });
+					$('#content_holder').load('modules/".basename(__DIR__)."/public_display_all.php', function() { init_page(); });
 					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
 					
 					//Load Navigation
 					$('#navigation_top').show();
 					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_main.php', function() {	
 						$('#navigation_top').show();
-						$('.tab_2').addClass('tabmenuover');
+						$('.tab_3').addClass('tabmenuover');
 					});
 			    },
 				'assessments/settings': function(name)
@@ -72,7 +72,7 @@
 				    $('#content_holder').hide();
 				    $('#loader').show();
 				    $('#titletext').text('Assessments');
-				    document.title = 'Assessment Editor';
+				    document.title = 'Assessment Preview';
 					$('#content_holder').load('modules/".basename(__DIR__)."/assessment.php?id='+name, function() { 
 						init_page();	
 						back_button('#assessments');		
@@ -104,6 +104,18 @@
 					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_builder.php?id='+name, function() {	
 						$('#navigation_top').show();
 						$('.tab_2').addClass('tabmenuover');
+					});
+			    },
+			    'assessments/session/?:id/?:sessionid': function(id, sessionid)
+			    {
+				    $('#navigation_top').hide();
+				    $('#content_holder').hide();
+				    $('#loader').show();
+				    $('#titletext').text('Student Assessment');
+				    document.title = 'Student Assessment';
+					$('#content_holder').load('modules/".basename(__DIR__)."/assessment_student.php?id='+id+'&sessionid='+sessionid, function() { 
+						init_page();
+						back_button('#assessments');
 					});
 			    },";
 		}	  
