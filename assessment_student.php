@@ -60,6 +60,7 @@
 	//Find the first question
 	$query = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order LIMIT 1";
 	$dbreturn = databasequery($query);
+	$firstquestioncount=count($dbreturn);
 	foreach ($dbreturn as $value)
 	{
 		$FirstQuestion=htmlspecialchars($value["Bank_ID"], ENT_QUOTES);
@@ -77,77 +78,86 @@
 	else
 	{
 		
-		//Determine if Session exists
-		$sqllookup = "SELECT * FROM assessments where ID='$Assessment_ID' and Session_ID='$Session_ID'";
-		$result = $db->query($sqllookup);
-		$sessioncount=mysqli_num_rows($result);
-		while($row = $result->fetch_assoc())
+		if($firstquestioncount!=0)
 		{
-					
-				$Title=htmlspecialchars($row["Title"], ENT_QUOTES);
-
-				//Layout
-				echo "<div style='position: absolute; top:0; bottom:0; left:0; right:0; overflow-y: hidden;'>";
-							
-					//List Questions
-					echo "<div id='assessmentquestions' style='position: absolute; top:0; bottom:0; width:300px; overflow-y: scroll; background-color:"; echo sitesettings("sitecolor"); echo ";'>";	
-						$query = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
-						$dbreturn = databasequery($query);
-						$totalquestionsonsession=count($dbreturn);
-						$questioncount=0;
-						$questionarray=array();
-						foreach ($dbreturn as $value)
-						{
-							$questioncount++;
-							$ID=htmlspecialchars($value["ID"], ENT_QUOTES);
-							$Bank_ID=htmlspecialchars($value["Bank_ID"], ENT_QUOTES);
-							$Points=htmlspecialchars($value["Points"], ENT_QUOTES);
-							
-							array_push($questionarray, $Bank_ID);
-													
-							echo "<div class='question pointer' id='questionbutton-$questioncount' data-bankid='$Bank_ID' data-questionnumber='$questioncount' style='padding:2px 30px 2px 30px;'>";
-								echo "<div style='float:left; padding:12px 20px 0 0;' id='questionicon-$Bank_ID'>";
+		
+			//Determine if Session exists
+			$sqllookup = "SELECT * FROM assessments where ID='$Assessment_ID' and Session_ID='$Session_ID'";
+			$result = $db->query($sqllookup);
+			$sessioncount=mysqli_num_rows($result);
+			while($row = $result->fetch_assoc())
+			{
+						
+					$Title=htmlspecialchars($row["Title"], ENT_QUOTES);
+	
+					//Layout
+					echo "<div style='position: absolute; top:0; bottom:0; left:0; right:0; overflow-y: hidden;'>";
 								
-									//Check to see if already answered
-									$queryanswer = "SELECT * FROM assessments_scores where ItemID='$Bank_ID' and User='".$_SESSION['useremail']."' and Assessment_ID='$Assessment_ID'";
-									$dbreturnanswer = databasequery($queryanswer);
-									$answered=count($dbreturnanswer);
-									if($answered==0)
-									{
-										echo "<i class='material-icons' style='font-size:44px; color:#fff;'>radio_button_unchecked</i>";
-									}
-									else
-									{
-										echo "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>";
-									}
+						//List Questions
+						echo "<div id='assessmentquestions' style='position: absolute; top:0; bottom:0; width:300px; overflow-y: scroll; background-color:"; echo sitesettings("sitecolor"); echo ";'>";	
+							$query = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
+							$dbreturn = databasequery($query);
+							$totalquestionsonsession=count($dbreturn);
+							$questioncount=0;
+							$questionarray=array();
+							foreach ($dbreturn as $value)
+							{
+								$questioncount++;
+								$ID=htmlspecialchars($value["ID"], ENT_QUOTES);
+								$Bank_ID=htmlspecialchars($value["Bank_ID"], ENT_QUOTES);
+								$Points=htmlspecialchars($value["Points"], ENT_QUOTES);
+								
+								array_push($questionarray, $Bank_ID);
+														
+								echo "<div class='question pointer' id='questionbutton-$questioncount' data-bankid='$Bank_ID' data-questionnumber='$questioncount' style='padding:2px 30px 2px 30px;'>";
+									echo "<div style='float:left; padding:12px 20px 0 0;' id='questionicon-$Bank_ID'>";
 									
+										//Check to see if already answered
+										$queryanswer = "SELECT * FROM assessments_scores where ItemID='$Bank_ID' and User='".$_SESSION['useremail']."' and Assessment_ID='$Assessment_ID'";
+										$dbreturnanswer = databasequery($queryanswer);
+										$answered=count($dbreturnanswer);
+										if($answered==0)
+										{
+											echo "<i class='material-icons' style='font-size:44px; color:#fff;'>radio_button_unchecked</i>";
+										}
+										else
+										{
+											echo "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>";
+										}
+										
+									echo "</div>";
+									echo "<div style='width:220px; color:#fff;'><h6 class='truncate'>Question $questioncount</h6></div>";
 								echo "</div>";
-								echo "<div style='width:220px; color:#fff;'><h6 class='truncate'>Question $questioncount</h6></div>";
-							echo "</div>";
-						}
-					echo "</div>";
-				
-					//Dashboard Data
-					echo "<div id='overview' style='position:absolute; width: calc(100% - 305px); left:305px; top:0; bottom:0; right:0; overflow-y: scroll; padding:20px;'>";
-						//echo "<div class='row'>$Title</div>";
-						echo "<div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloader' style='width:100%;'></div>";
-						echo "<div class='dashboard'></div>";
+							}
+						echo "</div>";
+					
+						//Dashboard Data
+						echo "<div id='overview' style='position:absolute; width: calc(100% - 305px); left:305px; top:0; bottom:0; right:0; overflow-y: scroll; padding:20px;'>";
+							//echo "<div class='row'>$Title</div>";
+							echo "<div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloader' style='width:100%;'></div>";
+							echo "<div class='dashboard'></div>";
+						echo "</div>";
+						
+						$questionarrayjson=json_encode($questionarray);
+						echo "<div id='questionarray' data-questionarray='$questionarrayjson'></div>";
+										
 					echo "</div>";
 					
-					$questionarrayjson=json_encode($questionarray);
-					echo "<div id='questionarray' data-questionarray='$questionarrayjson'></div>";
-									
-				echo "</div>";
-				
+			}
 		}
 		
-		if($sessioncount==0)
+		if($sessioncount==0 && $firstquestioncount!=0)
 		{
 			echo "<div class='row center-align'><div class='col s12'><h6>Whoops...we couldn't find this assessment.</h6><i class='material-icons' style='font-size:180px; opacity:.3'>sentiment_very_dissatisfied</i></div></div>"; 
 		}
 		else
 		{
 			include "assessment_student_button.php";
+		}
+		
+		if($firstquestioncount==0)
+		{
+			echo "<div class='row center-align'><div class='col s12'><h6>Whoops...there are no questions on this assessment.</h6><i class='material-icons' style='font-size:180px; opacity:.3'>sentiment_very_dissatisfied</i></div></div>"; 
 		}
 		
 	}
