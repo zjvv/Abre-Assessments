@@ -24,7 +24,7 @@
 	
 ?>
 	
-	<div class='fixed-action-btn buttonpin'>
+	<div class='fixed-action-btn buttonpin assessmentsubmitbutton'>
 		<a class='btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="createassessmenttooltip" href='#' data-assessmentid='<?php echo $Assessment_ID; ?>'><i class='large material-icons'>check</i></a>
 		<div class="mdl-tooltip mdl-tooltip--left" for="createassessmenttooltip">Turn In</div>
 	</div>
@@ -40,14 +40,19 @@
 		{
 			event.preventDefault();
 			var ID = $(this).data('assessmentid');
-			var result = confirm("Are you sure you want to turn in this assessment? You will not be able to make any further changes.");
-			if (result)
-			{
+
+  			var notification = document.querySelector('.mdl-js-snackbar');
+			var data = { message: 'Are you sure you want to turn in this assessment?', actionHandler: function(event) {
+				
 				$.post( "/modules/<?php echo basename(__DIR__); ?>/assessment_student_end.php", { AssessmentID: ID })
 				.done(function( data ) {
 					location.reload();
   				});
-			}
+				
+			}, actionText: 'Turn In', timeout:10000 };
+			notification.MaterialSnackbar.showSnackbar(data);
+
+
  		});
 			
 	});

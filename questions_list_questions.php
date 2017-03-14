@@ -101,7 +101,6 @@
 				if(isset($question_subject))
 				{
 					$filter="IA_Subject+eq+'$question_subject'";
-					$filter=$filter."+and+(std_document+eq+'CC'+or+std_document+eq+'OH')";
 					$skip=$pagenumber-1;
 					if($question_grade!=""){ $filter=$filter."+and+IA_GradeLevel+eq+'$question_grade'"; }
 					if($question_difficulty!=""){ $filter=$filter."+and+IA_Difficulty+eq+'$question_difficulty'"; }
@@ -110,13 +109,13 @@
 					if($question_dok!=""){ $filter=$filter."+and+IA_DOK+eq+'$question_dok'"; }
 					if($question_language!=""){ $filter=$filter."+and+IA_Lang+eq+'$question_language'"; }
 					if($question_standard!=""){ $filter=$filter."+and+STD_Code+eq+'$question_standard'"; }
+					if($question_standard==""){ $filter=$filter."+and+(std_document+eq+'CC'+or+std_document+eq+'OH')"; }
 					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$skip='."$skip".'&$filter='."$filter".'&$orderby='."IA_ItemId");
 				}
 				
 				if(isset($question_searchquery))
 				{
-					$filter="ia_vendorid+eq+'$question_searchquery'";
-					$filter=$filter."+and+(std_document+eq+'CC'+or+std_document+eq+'OH')";
+					$filter="(pa_passagetitle+eq+'$question_searchquery'+or+ia_vendorid+eq+'$question_searchquery')+and+(std_document+eq+'CC'+or+std_document+eq+'OH')";
 					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
 				}
 				
@@ -184,7 +183,7 @@
 					
 						echo "<tr class='attachwrapper'><td style='border:1px solid #e1e1e1; width:70px; background-color:".sitesettings("sitecolor")."''><i class='material-icons' style='padding:18px; margin:0; color:#fff; font-size: 24px; line-height:0;'>$icon</i></td><td style='background-color:#F5F5F5; border-left:1px solid #e1e1e1; border-top:1px solid #e1e1e1; border-bottom:1px solid #e1e1e1; padding:10px;'>";
 							echo "<p class='mdl-color-text--black' style='font-weight:500;'>$subject Question - $vendor_id</p>";
-							echo "<div class='chip'>$grade</div><div class='chip'>$type</div><div class='chip'>$difficulty</div><div class='chip'>$blooms</div>";
+							echo "<div class='chip'>$grade</div><div class='chip'>$type</div><div class='chip'>$difficulty</div><div class='chip'>$blooms</div><div class='chip'>$standardcode</div>";
 							
 							
 							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-vendor='$vendor_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-type='$type' data-standard='$standardcode' data-addbutton='$addbutton' class='previewquestion' style='color: ".sitesettings("sitecolor")."'><i class='material-icons'>visibility</i></a></td>";

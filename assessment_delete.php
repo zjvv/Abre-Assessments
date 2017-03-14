@@ -46,6 +46,24 @@
 		$num_rows = $stmt->num_rows;
 		$stmt->close();
 		
+		//Delete status of assessment
+		$stmt = $db->stmt_init();
+		$sql = "Delete from assessments_status where Assessment_ID='$assessmentid'";
+		$stmt->prepare($sql);
+		$stmt->execute();
+		$stmt->store_result();
+		$num_rows = $stmt->num_rows;
+		$stmt->close();
+		
+		//Delete scores of assessment
+		$stmt = $db->stmt_init();
+		$sql = "Delete from assessments_scores where Assessment_ID='$assessmentid'";
+		$stmt->prepare($sql);
+		$stmt->execute();
+		$stmt->store_result();
+		$num_rows = $stmt->num_rows;
+		$stmt->close();
+		
 		$db->close();
 		echo "The assessment has been deleted.";
 	}

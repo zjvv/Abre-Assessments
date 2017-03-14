@@ -73,6 +73,51 @@
 		}
 		$db->close();
 		
+		//Check for Title field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Title FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Title` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Description field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Description FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Description` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Subject field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Subject FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Subject` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+
+		//Check for Grade field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Grade FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Grade` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Code field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Code FROM assessments"))
+		{
+			$sql = "ALTER TABLE `assessments` ADD `Code` int(11) NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
 		//Check for Editors field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
 		if(!$db->query("SELECT Editors FROM assessments"))
@@ -109,33 +154,6 @@
 		}
 		$db->close();
 		
-		//Check for Title field
-		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Title FROM assessments"))
-		{
-			$sql = "ALTER TABLE `assessments` ADD `Title` text NOT NULL;";
-			$db->multi_query($sql);
-		}
-		$db->close();
-		
-		//Check for Description field
-		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Description FROM assessments"))
-		{
-			$sql = "ALTER TABLE `assessments` ADD `Description` text NOT NULL;";
-			$db->multi_query($sql);
-		}
-		$db->close();
-		
-		//Check for Subject field
-		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Subject FROM assessments"))
-		{
-			$sql = "ALTER TABLE `assessments` ADD `Subject` text NOT NULL;";
-			$db->multi_query($sql);
-		}
-		$db->close();
-		
 		//Check for Level field
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
 		if(!$db->query("SELECT Level FROM assessments"))
@@ -145,20 +163,11 @@
 		}
 		$db->close();
 		
-		//Check for Grade field
+		//Check for SessionID
 		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Grade FROM assessments"))
+		if(!$db->query("SELECT Session_ID FROM assessments"))
 		{
-			$sql = "ALTER TABLE `assessments` ADD `Grade` text NOT NULL;";
-			$db->multi_query($sql);
-		}
-		$db->close();
-		
-		//Check for Code field
-		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-		if(!$db->query("SELECT Code FROM assessments"))
-		{
-			$sql = "ALTER TABLE `assessments` ADD `Code` int(11) NOT NULL;";
+			$sql = "ALTER TABLE `assessments` ADD `Session_ID` text NOT NULL;";
 			$db->multi_query($sql);
 		}
 		$db->close();
@@ -271,6 +280,80 @@
 		if(!$db->query("SELECT Standard FROM assessments_standards"))
 		{
 			$sql = "ALTER TABLE `assessments_standards` ADD `Standard` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for assessments_scores table
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT * FROM assessments_scores"))
+		{
+			$sql = "CREATE TABLE `assessments_scores` (`ID` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+			$sql .= "ALTER TABLE `assessments_scores` ADD PRIMARY KEY (`ID`);";
+			$sql .= "ALTER TABLE `assessments_scores` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;";	
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Assessment_ID field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Assessment_ID FROM assessments_scores"))
+		{
+			$sql = "ALTER TABLE `assessments_scores` ADD `Assessment_ID` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for User field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT User FROM assessments_scores"))
+		{
+			$sql = "ALTER TABLE `assessments_scores` ADD `User` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Score field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Score FROM assessments_scores"))
+		{
+			$sql = "ALTER TABLE `assessments_scores` ADD `Score` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for scoredOn field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT scoredOn FROM assessments_scores"))
+		{
+			$sql = "ALTER TABLE `assessments_scores` ADD `scoredOn` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for ItemID field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT ItemID FROM assessments_scores"))
+		{
+			$sql = "ALTER TABLE `assessments_scores` ADD `ItemID` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Response field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Response FROM assessments_scores"))
+		{
+			$sql = "ALTER TABLE `assessments_scores` ADD `Response` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Score_GUID field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Score_GUID FROM assessments_scores"))
+		{
+			$sql = "ALTER TABLE `assessments_scores` ADD `Score_GUID` text NOT NULL;";
 			$db->multi_query($sql);
 		}
 		$db->close();

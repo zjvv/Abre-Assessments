@@ -43,11 +43,8 @@
 						<table id='myTable' class='tablesorter'>
 							<thead>
 								<tr class='pointer'>
-									<th style='width:50px'></th>
 									<th>Title</th>
-									<th class='hide-on-med-and-down'>Subject</th>
 									<th class='hide-on-med-and-down'>Level</th>
-									<th class='hide-on-med-and-down'>Grade</th>
 									<th style='width:30px'></th>
 								</tr>
 							</thead>
@@ -73,39 +70,29 @@
 									
 									if (strpos($Editors, $_SESSION['useremail']) !== false) { $SharedEditable=1; }else{ $SharedEditable=0; }
 									
-									$Student_Link="$portal_root/#assessments/session/$Assessment_ID/$Session_ID";
+									$Student_Link="$portal_root/?url=assessments/session/$Assessment_ID/$Session_ID";
 								
 									echo "<tr class='assessmentrow'>";
-										if($Verified!=0)
-										{
-											echo "<td><i class='material-icons pointer' id='verified_$Assessment_ID' style='color:".sitesettings("sitecolor")."'>verified_user</i></td>";
-											echo "<div class='mdl-tooltip mdl-tooltip--bottom mdl-tooltip--large' data-mdl-for='verified_$Assessment_ID'>District Created Assessment</div>";
-										}
-										else
-										{
-											echo "<td></td>";
-										}
 										echo "<td>$Title</td>";
-										echo "<td class='hide-on-med-and-down'>$Subject</td>";
 										echo "<td class='hide-on-med-and-down'>$Level</td>";
-										echo "<td class='hide-on-med-and-down'>$Grade</td>";
 										echo "<td width=30px>";							
 	
 											echo "<div class='morebutton' style='position:absolute; margin-top:-15px;'>";
 												echo "<button id='demo-menu-bottom-left-$Assessment_ID' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600'><i class='material-icons'>more_vert</i></button>";
 												echo "<ul class='mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect' for='demo-menu-bottom-left-$Assessment_ID'>";
-													
+													if($Session_ID!="" && $Owner==$_SESSION['useremail'])
+													{
+														//mdl-menu__item--full-bleed-divider
+														echo "<li class='mdl-menu__item copystudentlink' data-clipboard-text='$Student_Link'><a href='#' class='mdl-color-text--black' style='font-weight:400'>Give</a></li>";
+														echo "<li class='mdl-menu__item mdl-menu__item--full-bleed-divider'><a href='#assessments/results/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Results</a></li>";
+													}
 													if((superadmin() or $SharedEditable==1) or $Verified==0)
 													{
-														echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Questions</a></li>";
+														echo "<li class='mdl-menu__item exploreassessment'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Edit</a></li>";
 													}
 													if($Verified==0 or superadmin())
 													{
 														echo "<li class='mdl-menu__item duplicateassessment' data-assessmentid='$Assessment_ID'>Make a Copy</a></li>";
-													}
-													if($Session_ID!="" && $Owner==$_SESSION['useremail'])
-													{
-														echo "<li class='mdl-menu__item mdl-menu__item--full-bleed-divider copystudentlink' data-clipboard-text='$Student_Link'><a href='#' class='mdl-color-text--black' style='font-weight:400'>Copy Student Link</a></li>";
 													}
 													if($Owner==$_SESSION['useremail'])
 													{
@@ -115,7 +102,7 @@
 														$sqlquestion = "SELECT * FROM assessments_scores where Assessment_ID=$Assessment_ID";
 														$resultquestioncount = $db->query($sqlquestion);
 														$rowcountresultquestioncount=mysqli_num_rows($resultquestioncount);
-														if($Verified==0 or ($Verified!=0 && $rowcountresultquestioncount==0))
+														if($Verified==0 or ($Verified!=0 && $rowcountresultquestioncount==0) or superadmin())
 														{
 															echo "<li class='mdl-menu__item deleteassessment'><a href='modules/".basename(__DIR__)."/assessment_delete.php?assessmentid=".$Assessment_ID."' class='mdl-color-text--black' style='font-weight:400'>Delete</a></li>";
 														}

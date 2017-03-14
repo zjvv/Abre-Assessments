@@ -1,4 +1,4 @@
-<?php 
+<?php
 	
 	/*
 	* Copyright 2015 Hamilton City School District	
@@ -18,13 +18,13 @@
     */
 	
 	//Required configuration files
-	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
-	require(dirname(__FILE__) . '/../../configuration.php');
-	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
-	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
-	require_once('functions.php');
+	require_once(dirname(__FILE__) . '/../../configuration.php'); 
+	require_once(dirname(__FILE__) . '/../../core/abre_verification.php'); 
+	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+	require(dirname(__FILE__) . '/../../core/abre_functions.php'); 
+	require_once('functions.php');	
 	require_once('permissions.php');
-	
+
 	$Assessment_ID=htmlspecialchars($_GET["id"], ENT_QUOTES);
 	$Session_ID=htmlspecialchars($_GET["sessionid"], ENT_QUOTES);
 		
@@ -42,12 +42,27 @@
 	$sessionstart=mysqli_num_rows($resultstartsession);
 	if($sessionstart!=1)
 	{
-		$currenttime=date('Y-m-d H:i:s');
-		$stmt = $db->stmt_init();
-		$sql = "INSERT INTO assessments_status (Assessment_ID, User, Start_Time) VALUES ('$Assessment_ID', '".$_SESSION['useremail']."', '$currenttime');";
-		$stmt->prepare($sql);
-		$stmt->execute();
-		$stmt->close();
+		//Check if Assessment actually exists
+		$sqlstartecheck = "SELECT * FROM assessments where ID='$Assessment_ID' and Session_ID='$Session_ID'";
+		$resultstartcheck = $db->query($sqlstartecheck);
+		$sessionstartcheck=mysqli_num_rows($resultstartcheck);
+		if($sessionstartcheck!=0)
+		{
+			$currenttime=date('Y-m-d H:i:s');
+			$stmt = $db->stmt_init();
+			$sql = "INSERT INTO assessments_status (Assessment_ID, User, Start_Time) VALUES ('$Assessment_ID', '".$_SESSION['useremail']."', '$currenttime');";
+			$stmt->prepare($sql);
+			$stmt->execute();
+			$stmt->close();
+		}
+	}
+	
+	//Find the first question
+	$query = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order LIMIT 1";
+	$dbreturn = databasequery($query);
+	foreach ($dbreturn as $value)
+	{
+		$FirstQuestion=htmlspecialchars($value["Bank_ID"], ENT_QUOTES);
 	}
 	
 	//Determine if assessment is turned in
@@ -56,12 +71,12 @@
 	$sessionstartturnin=mysqli_num_rows($resultstartsessionturnin);
 	if($sessionstartturnin!=0)
 	{
-		echo "<div class='row center-align'><div class='col s12'><h6>Assessment Complete</h6></div></div>"; 
+		echo "<div class='row center-align'><div class='col s12'><h6>Great job! You have finished the assessment.</h6><i class='material-icons' style='font-size:180px; opacity:.3'>sentiment_very_satisfied</i></div></div>"; 
 		
 	}
 	else
 	{
-
+		
 		//Determine if Session exists
 		$sqllookup = "SELECT * FROM assessments where ID='$Assessment_ID' and Session_ID='$Session_ID'";
 		$result = $db->query($sqllookup);
@@ -70,47 +85,65 @@
 		{
 					
 				$Title=htmlspecialchars($row["Title"], ENT_QUOTES);
-		
-				echo "<div class='page_container'>";
-					echo "<div class='row'><div class='center-align' style='padding:20px;'><h3 style='font-weight:600;'>$Title</h3></div></div>";
-					echo "<ul class='collapsible popout questionsort' data-collapsible='accordion'>";
-					
-						$sqllookup2 = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
-						$result3 = $db->query($sqllookup2);
-						$unitcount=mysqli_num_rows($result3);
+
+				//Layout
+				echo "<div style='position: absolute; top:0; bottom:0; left:0; right:0; overflow-y: hidden;'>";
+							
+					//List Questions
+					echo "<div id='assessmentquestions' style='position: absolute; top:0; bottom:0; width:300px; overflow-y: scroll; background-color:"; echo sitesettings("sitecolor"); echo ";'>";	
+						$query = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
+						$dbreturn = databasequery($query);
+						$totalquestionsonsession=count($dbreturn);
 						$questioncount=0;
-						while($row2 = $result3->fetch_assoc())
+						$questionarray=array();
+						foreach ($dbreturn as $value)
 						{
 							$questioncount++;
-							$questionid=htmlspecialchars($row2["ID"], ENT_QUOTES);
-							$Bank_ID=htmlspecialchars($row2["Bank_ID"], ENT_QUOTES);
-							$Points=htmlspecialchars($row2["Points"], ENT_QUOTES);
-							if($Points==""){ $Points=0; }
-		
-							echo "<li style='position:relative' id='item-$questionid' class='topicholder'>";
-								echo "<div class='collapsible-header unit' data-bankid='$Bank_ID'>";
-							    	echo "<i class='material-icons mdl-color-text--red' style='font-size: 36px;'>fiber_manual_record</i>";
-									echo "<span style='position:absolute; right:0; z-index:1000; cursor:move;' class='mdl-color-text--grey-700'></span>";	
-									echo "<span class='title truncate' style='margin-right:40px;'><b>Question $questioncount</b></span>";
-								echo "</div>";
+							$ID=htmlspecialchars($value["ID"], ENT_QUOTES);
+							$Bank_ID=htmlspecialchars($value["Bank_ID"], ENT_QUOTES);
+							$Points=htmlspecialchars($value["Points"], ENT_QUOTES);
+							
+							array_push($questionarray, $Bank_ID);
+													
+							echo "<div class='question pointer' id='questionbutton-$questioncount' data-bankid='$Bank_ID' data-questionnumber='$questioncount' style='padding:2px 30px 2px 30px;'>";
+								echo "<div style='float:left; padding:12px 20px 0 0;' id='questionicon-$Bank_ID'>";
+								
+									//Check to see if already answered
+									$queryanswer = "SELECT * FROM assessments_scores where ItemID='$Bank_ID' and User='".$_SESSION['useremail']."' and Assessment_ID='$Assessment_ID'";
+									$dbreturnanswer = databasequery($queryanswer);
+									$answered=count($dbreturnanswer);
+									if($answered==0)
+									{
+										echo "<i class='material-icons' style='font-size:44px; color:#fff;'>radio_button_unchecked</i>";
+									}
+									else
+									{
+										echo "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>";
+									}
 									
-								echo "<div class='collapsible-body mdl-color--white' style='padding:25px'>";
-									echo "<div id='questionplayerloader-$Bank_ID' style='display:none;'><div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate' style='width:100%'></div></div>";
-									echo "<div id='questionplayer-$Bank_ID'></div>";	
 								echo "</div>";
-							echo "</li>";
-						
+								echo "<div style='width:220px; color:#fff;'><h6 class='truncate'>Question $questioncount</h6></div>";
+							echo "</div>";
 						}
-		
-					echo "</ul>";
+					echo "</div>";
+				
+					//Dashboard Data
+					echo "<div id='overview' style='position:absolute; width: calc(100% - 305px); left:305px; top:0; bottom:0; right:0; overflow-y: scroll; padding:20px;'>";
+						//echo "<div class='row'>$Title</div>";
+						echo "<div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloader' style='width:100%;'></div>";
+						echo "<div class='dashboard'></div>";
+					echo "</div>";
+					
+					$questionarrayjson=json_encode($questionarray);
+					echo "<div id='questionarray' data-questionarray='$questionarrayjson'></div>";
+									
 				echo "</div>";
-	
-		
+				
 		}
 		
 		if($sessioncount==0)
 		{
-			echo "<div class='row center-align'><div class='col s12'><h6>Invalid Assessment</h6></div></div>"; 
+			echo "<div class='row center-align'><div class='col s12'><h6>Whoops...we couldn't find this assessment.</h6><i class='material-icons' style='font-size:180px; opacity:.3'>sentiment_very_dissatisfied</i></div></div>"; 
 		}
 		else
 		{
@@ -118,37 +151,129 @@
 		}
 		
 	}
-		
-
-?>
+				
+	?>
 	
 	<script>
 		
-		$(function()
-		{
-
-			//Call accordion
-			$('.collapsible').collapsible({ });			
- 			
-			//Load the question
-			$(".collapsible-header").unbind().click(function(event)
-			{
-				var Bank_ID= $(this).data('bankid');
-				var timeout = setTimeout(function(){ $('#questionplayerloader-'+Bank_ID).show(); }, 1000);
- 				$('#questionplayer-'+Bank_ID).hide();
- 				$('.toolbar').hide();
- 				
- 				$.get( "modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php", { id: Bank_ID } )
-			    .done(function( data ) {
-				    clearTimeout(timeout);
-				    $('#questionplayerloader-'+Bank_ID).hide();
-				    $('#questionplayer-'+Bank_ID).show();
-				    $('.toolbar').show();
-			    	$("#questionplayer-"+Bank_ID).html( data );
-			  	});
-			  	
- 			});
-			
-		});
+		$(function() {
 		
+			var QuestionComplete = 0;
+			$(".assessmentsubmitbutton").hide();
+			var QuestionArray = $('#questionarray').data('questionarray');
+			
+			<?php if($sessionstartturnin==0 && $sessioncount!=0){ ?>
+			
+				function CompleteCheck()
+				{
+					QuestionComplete = $('.questioncomplete').length;			
+					if(QuestionComplete===<?php echo $totalquestionsonsession; ?>)
+					{
+						$(".assessmentsubmitbutton").show();
+					}
+					else
+					{
+						$(".assessmentsubmitbutton").hide();
+					}				
+				}
+				
+				//Load the first question
+				$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+<?php echo $FirstQuestion; ?>+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber=1', function()
+				{ 
+					$(".landingloader").hide();
+					$(".question:first").css("background-color", "#000");
+					$(".question:first").css("color", "#fff");
+					CompleteCheck();
+				});
+				
+				//Load the question
+				$(document).on("mouseup", ".certicaquestion", function ()
+				{
+					var QuestionID = $(this).data('questionquestion');
+					var QuestionName = '#questionicon-'+QuestionID;
+					$(QuestionName).html( "<i class='material-icons' style='font-size:44px; color:#fff;'>radio_button_unchecked</i>" );
+					CompleteCheck();
+					$('.savebutton').show();
+				});
+				
+				//Hide save button
+				$(document).on("click", ".savebutton", function ()
+				{
+					var QuestionID = $(this).data('scorequestion');
+					var NextQuestion = $(this).data('nextquestion');
+					var Question_Number = $(this).data('questionnumber');
+					var QuestionName = '#questionicon-'+QuestionID;
+					$(QuestionName).html( "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>" );						
+					CompleteCheck();			
+					$(this).hide();
+					
+					var TotalQuestionCount=<?php echo $questioncount; ?>
+					
+					if(Question_Number<TotalQuestionCount)
+					{
+					
+						$(".dashboard").fadeTo(0,0);
+						$(".landingloader").show();
+						Question_Number_Value=Question_Number+1;
+						$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+NextQuestion+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number_Value, function()
+						{				
+							$(".landingloader").hide();
+							$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
+							$(".dashboard").fadeTo(0,1);
+							var questionbuttondiv = '#questionbutton-'+Question_Number_Value;
+							$(".question, #overviewpage").css("background-color", "");
+							$(".question, #overviewpage").css("color", "#fff");
+							$(questionbuttondiv).css("background-color", "#000");
+							$(questionbuttondiv).css("color", "#fff");
+						});
+						
+					}
+					
+				});
+							
+				//Load Question in Window
+				$(".question").unbind().click(function()
+				{		
+					$(".dashboard").fadeTo(0,0);
+					$(".landingloader").show();
+					$(".question, #overviewpage").css("background-color", "");
+					$(".question, #overviewpage").css("color", "#fff");
+					$(this).css("background-color", "#000");
+					$(this).css("color", "#fff");
+					var Bank_ID= $(this).data('bankid');
+					var Question_Number= $(this).data('questionnumber');
+					CompleteCheck();
+					
+					$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+Bank_ID+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number, function()
+					{				
+						$(".landingloader").hide();
+						$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
+						$(".dashboard").fadeTo(0,1);
+					});
+				});
+				
+			<?php } ?>
+		
+		});
 	</script>
+
+
+<script>
+	
+	//Check Window Width
+	if ($(window).width() < 600){ smallView(); }	
+	$(window).resize(function(){ if ($(window).width() < 600){ smallView(); } if ($(window).width() >= 600){ largeView(); } });
+	function smallView()
+	{
+		$("#assessmentquestions").css("display", "none");
+		$("#overview").css("width", "100%");
+		$("#overview").css("left", "0");
+	}	
+	function largeView()
+	{
+		$("#assessmentquestions").css("display", "block");
+		$("#overview").css("width", "calc(100% - 305px)");
+		$("#overview").css("left", "305px");
+	}
+		
+</script>

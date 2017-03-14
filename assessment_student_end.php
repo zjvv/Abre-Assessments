@@ -27,7 +27,7 @@
 	$AssessmentID=mysqli_real_escape_string($db, $_POST["AssessmentID"]);
 	$currenttime=date('Y-m-d H:i:s');
 		
-	mysqli_query($db, "UPDATE assessments_status set End_Time='$currenttime' where Assessment_ID='$AssessmentID'") or die (mysqli_error($db));
+	mysqli_query($db, "UPDATE assessments_status set End_Time='$currenttime' where Assessment_ID='$AssessmentID' and User='".$_SESSION['useremail']."'") or die (mysqli_error($db));
 	
 	//Give message
 	//echo "The assessment has been saved.";

@@ -27,6 +27,8 @@
 
 ?>
 
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+
 	<!-- Create Assessment -->
 	<div id="createassessment" class="modal modal-fixed-footer modal-mobile-full">
 		<form class="col s12" id="form-addassessment" method="post" action="modules/<?php echo basename(__DIR__); ?>/assessment_process.php">
@@ -34,67 +36,64 @@
 			<h4>Assessment</h4>
 			<a class="modal-close black-text" style='position:absolute; right:20px; top:25px;'><i class='material-icons'>clear</i></a>
 			<div class="row">
-				<div class="input-field col s12"><input id="assessment_title" name="assessment_title" placeholder="Title of the Assessment" type="text" required></div>
+				<div class="input-field col s12"><input id="assessment_title" name="assessment_title" placeholder="Title of the Assessment" type="text" autocomplete="off" required></div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12"><textarea id="assessment_description" name="assessment_description" class="materialize-textarea" placeholder="Description of the Assessment"></textarea></div>
+			</div>
+			<div class="row">
+			<div class="input-field col s4">
+				<p class='grey-text'>Grade Level</p>
+				<select name='assessment_grade[]' id='assessment_grade' class="browser-default" style='height: 100px;' required='required' multiple>
+					<option value='K'>K</option>
+				    <option value='1'>1</option>       
+				    <option value='2'>2</option>       
+				    <option value='3'>3</option>       
+				    <option value='4'>4</option> 
+					<option value='5'>5</option>       
+				    <option value='6'>6</option>       
+				    <option value='7'>7</option>       
+				    <option value='8'>8</option>    
+				    <option value='9'>9</option>   
+				    <option value='10'>10</option>
+				    <option value='11'>11</option>
+				    <option value='12'>12</option>
+			    </select>
+			</div>
+			<div class="input-field col s4">
+				<p class='grey-text'>Subject</p>
+				<select name='assessment_subject' id='assessment_subject' class="browser-default" required>
+					<option value=''></option>   
+					<option value='English Language Arts'>English Language Arts</option>    
+					<option value='Mathematics'>Mathematics</option>    
+				    <option value='Science'>Science</option>       
+				    <option value='Social Studies'>Social Studies</option>
+				    <option value='Miscellaneous'>Miscellaneous</option>      
+			    </select>
+			</div>
+			<div class="input-field col s4">
+				<p class='grey-text'>Level</p>
+				<select name='assessment_level' id='assessment_level' class="browser-default" required>
+					<option value=''></option>   
+					<option value='Core'>Core</option>    
+					<option value='College Preparatory'>College Preparatory</option>    
+				    <option value='Honors'>Honors</option>         
+			    </select>
+			</div>
 			</div>
 			
-			<div class="advancedsettings">
-				<div class="row">
-					<div class="input-field col s12"><textarea id="assessment_description" name="assessment_description" class="materialize-textarea" placeholder="Description of the Assessment" required></textarea></div>
-				</div>
-				<div class="row">
-				<div class="input-field col s4">
-					<p class='grey-text'>Grade Level</p>
-					<select name='assessment_grade[]' id='assessment_grade' class="browser-default" style='height: 100px;' required='required' multiple>
-						<option value='K'>K</option>
-					    <option value='1'>1</option>       
-					    <option value='2'>2</option>       
-					    <option value='3'>3</option>       
-					    <option value='4'>4</option> 
-						<option value='5'>5</option>       
-					    <option value='6'>6</option>       
-					    <option value='7'>7</option>       
-					    <option value='8'>8</option>    
-					    <option value='9'>9</option>   
-					    <option value='10'>10</option>
-					    <option value='11'>11</option>
-					    <option value='12'>12</option>
-				    </select>
-				</div>
-				<div class="input-field col s4">
-					<p class='grey-text'>Subject</p>
-					<select name='assessment_subject' id='assessment_subject' class="browser-default" required>
-						<option value=''></option>   
-						<option value='English Language Arts'>English Language Arts</option>    
-						<option value='Mathematics'>Mathematics</option>    
-					    <option value='Science'>Science</option>       
-					    <option value='Social Studies'>Social Studies</option>
-					    <option value='Miscellaneous'>Miscellaneous</option>      
-				    </select>
-				</div>
-				<div class="input-field col s4">
-					<p class='grey-text'>Level</p>
-					<select name='assessment_level' id='assessment_level' class="browser-default" required>
-						<option value=''></option>   
-						<option value='Core'>Core</option>    
-						<option value='College Preparatory'>College Preparatory</option>    
-					    <option value='Honors'>Honors</option>         
-				    </select>
-				</div>
-				</div>
-				
-				<div class="row">
-					<div class="input-field col s12"><input id="assessment_editors" name="assessment_editors" placeholder="Assessment Editors (Emails Separated by Commas)" type="text"></div>
-				</div>
-				
-				<div class="input-field col s12">
-					<input type="checkbox" class="filled-in" id="assessment_lock" name="assessment_lock" value="1" />
-					<label for="assessment_lock">Lock Assessment - This removes all editing access from this assessment.</label>
-				</div>
-				
-				<div class="input-field col s12">
-					<input type="checkbox" class="filled-in" id="assessment_share" name="assessment_share" value="1" />
-					<label for="assessment_share">Public Assessment - Allows other teachers to use this assessment.</label>
-				</div>
+			<div class="row">
+				<div class="input-field col s12"><input id="assessment_editors" name="assessment_editors" placeholder="Assessment Editors (Emails Separated by Commas)" type="text" autocomplete="off"></div>
+			</div>
+			
+			<div class="input-field col s12">
+				<input type="checkbox" class="filled-in" id="assessment_lock" name="assessment_lock" value="1" />
+				<label for="assessment_lock">Lock Assessment - This removes all editing access from this assessment.</label>
+			</div>
+			
+			<div class="input-field col s12">
+				<input type="checkbox" class="filled-in" id="assessment_share" name="assessment_share" value="1" />
+				<label for="assessment_share">Public Assessment - Allows other teachers to find and use this assessment.</label>
 			</div>
 			
 			<?php
@@ -105,13 +104,8 @@
 					echo "<label for='assessment_verified'>District Assessment - Marks the assessment as a district created assessment.</label>";
 				echo "</div>";
 			}
-			else
-			{
-				echo "<input type='hidden' id='assessment_verified' name='assessment_verified' value='0' />";
-			}
 			?>
 				
-			<input type="hidden" name="assessment_sessionid" id="assessment_sessionid">
 			<input type="hidden" name="assessment_id" id="assessment_id">
     	</div>
 	    <div class="modal-footer">
@@ -231,7 +225,7 @@
 			
 			<div class="row" id="search">
 				<div class="input-field col s12">
-					<input id="searchquery" type="text">
+					<input id="searchquery" type="text" autocomplete="off">
 					<label for="searchquery" class="active">Search</label>
 				</div>
 			</div>
@@ -281,6 +275,26 @@
 		</form>
 	</div>
 	
+	<!-- Give Assessment -->
+	<div id="giveassessment" class="modal">
+		<div class="modal-content">
+			<h4>Give Assessment</h4>
+			
+			<div class='input-field'>
+				<h6 style='margin-bottom:0;' name="GiveLinkTitle" id="GiveLinkTitle"></h6>
+				<input type="text" autocomplete="off" name="GiveLink" id="GiveLink">
+				<h6 id="gccontent_title">Share via Google Classroom</h6>
+				<div id="gccontent">
+					<div class="g-sharetoclassroom" data-size="32" data-url="..." data-title="..."></div>
+    			</div>
+			</div>
+			
+    	</div>
+	    <div class="modal-footer">
+		    <a class="modal-close waves-effect btn-flat white-text" style='margin-right:5px; background-color: <?php echo sitesettings("sitecolor"); ?>'>Close</a>
+		</div>
+	</div>
+	
 <?php
 	}	
 ?>
@@ -289,6 +303,7 @@
 	
 	$(function()
 	{
+		
 		//Load MDL
 		mdlregister();
 		
@@ -297,6 +312,15 @@
 		
 		//Hide modal loader
 		$("#topicLoader").hide();
+		
+		//Search Delay
+		var delay = (function(){
+		  var timer = 0;
+		  return function(callback, ms){
+		    clearTimeout (timer);
+		    timer = setTimeout(callback, ms);
+		  };
+		})();
 
 		//Material dropdown
 		$('#question_subject, #question_grade, #question_difficulty, #question_itemtype, #question_blooms, #question_dok, #question_language').material_select();
@@ -405,15 +429,20 @@
 		//Question Search
 		$("#searchquery").keyup(function()
 		{
-			var search_query = $('#searchquery').val();
-			var AssessmentID = $('#AssessmentID').val();
-	    	search_query = btoa(search_query);
-	    	$("#topicFiles").hide();
+			
+			$("#topicFiles").hide();
 			$("#topicLoader").show();
-			$("#topicFiles").load('modules/<?php echo basename(__DIR__); ?>/questions_list_questions.php?assessmentid='+AssessmentID+'&searchquery='+search_query, function() {
-				$("#topicLoader").hide();
-				$("#topicFiles").show();
-			});
+				
+			delay(function()
+	    	{
+				var search_query = $('#searchquery').val();
+				var AssessmentID = $('#AssessmentID').val();
+		    	search_query = btoa(search_query);
+				$("#topicFiles").load('modules/<?php echo basename(__DIR__); ?>/questions_list_questions.php?assessmentid='+AssessmentID+'&searchquery='+search_query, function() {
+					$("#topicLoader").hide();
+					$("#topicFiles").show();
+				});
+			}, 500 );
 		});
 		
 		//Change Tabs
@@ -469,7 +498,7 @@
 				$("#topicFiles").show();
 			});
 				
-		});	
+		});
 	   	
 	});	
 		

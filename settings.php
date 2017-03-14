@@ -27,8 +27,8 @@
 	if(superadmin())
 	{	
 		echo "<form id='form-assessments-settings' method='post' enctype='multipart/form-data' action='modules/".basename(__DIR__)."/updatesettings.php'>";
-			echo "<div class='page_container page_container_limit mdl-shadow--4dp'>";
-				echo "<div class='page'>";
+			echo "<div class='mdl-shadow--2dp' style='background-color:#fff; padding:20px 40px 40px 40px'>";
+			echo "<div class='row' style='padding:15px;'>";
 				
 				
 					$query = "SELECT * FROM assessments_settings";
