@@ -358,6 +358,53 @@
 		}
 		$db->close();
 		
+		//Check for assessments_status table
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT * FROM assessments_status"))
+		{
+			$sql = "CREATE TABLE `assessments_status` (`ID` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+			$sql .= "ALTER TABLE `assessments_status` ADD PRIMARY KEY (`ID`);";
+			$sql .= "ALTER TABLE `assessments_status` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;";	
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Assessment_ID field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Assessment_ID FROM assessments_status"))
+		{
+			$sql = "ALTER TABLE `assessments_status` ADD `Assessment_ID` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for User field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT User FROM assessments_status"))
+		{
+			$sql = "ALTER TABLE `assessments_status` ADD `User` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Start_Time field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Start_Time FROM assessments_status"))
+		{
+			$sql = "ALTER TABLE `assessments_status` ADD `Start_Time` datetime NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for End_Time field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT End_Time FROM assessments_status"))
+		{
+			$sql = "ALTER TABLE `assessments_status` ADD `End_Time` datetime NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
 		//Write the Setup File
 		$myfile = fopen("$portal_path_root/modules/Abre-Assessments/setup.txt", "w");
 		fwrite($myfile, '');
