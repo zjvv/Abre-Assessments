@@ -89,7 +89,10 @@
 						back_button('#assessments');
 					});
 					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
-			    },
+			    },";
+		}	 
+ 
+			echo "
 			    'assessments/session/?:id/?:sessionid': function(id, sessionid)
 			    {
 				    $('#navigation_top').hide();
@@ -104,5 +107,4 @@
 						$('.mdl-layout__header').hide();
 					});
 			    },";
-		}	  
 ?>

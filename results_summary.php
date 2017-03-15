@@ -29,12 +29,17 @@
 		
 		$Assessment_ID=htmlspecialchars($_GET["assessmentid"], ENT_QUOTES);
 		
+		//Check if user is the owner of the assessment
+		$query = "SELECT * FROM assessments where ID='$Assessment_ID' and Owner='".$_SESSION['useremail']."'";
+		$dbreturn = databasequery($query);
+		$owner=count($dbreturn);
+		
 		echo "<div class='row'>";
 			echo "<div class='col l6 s12'>";
 				echo "<select class='browser-default' id='filter1'>";
 					echo "<option value='course'>View by Course</option>";
 					echo "<option value='group'>View by Group</option>";
-					if(superadmin()){ echo "<option value='all'>View All Results</option>"; }
+					if($owner!=0){ echo "<option value='all'>View All Results</option>"; }
 				echo "</select>";
 			echo "</div>";
 			echo "<div class='col l6 s12'>";

@@ -22,9 +22,8 @@
 	require_once(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
 	require_once('functions.php');
-	require_once('permissions.php');
 	
-	if(!isset($Bank_ID)){ $questionid=$_GET["id"]; }else{ $questionid=$Bank_ID; }
+	$questionid=$_GET["id"];
 	$assessmentid=$_GET["assessmentid"];
 	$questionarray=$_GET["questionarray"];
 	$questionnumber=$_GET["questionnumber"];
@@ -34,7 +33,7 @@
 	$gotoquestion=$myArray[$questionnumber];
 		
 	//Get Token
-	$token=getCerticaToken();	
+	$token=getCerticaToken();
 		
 	echo "<div class='mdl-shadow--2dp' style='background-color:#fff; padding:20px 40px 40px 40px'>";
 		echo "<div class='row' style='padding:15px;'>";
@@ -117,7 +116,7 @@
 		        //Error Handle
 		        function handleError(ex)
 		        {
-		            
+					alert("Whoops...did not save. Try again.");
 		        }
 
 				//Score the Question

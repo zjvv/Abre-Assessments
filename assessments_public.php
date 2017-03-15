@@ -40,7 +40,7 @@
 				<thead>
 					<tr class='pointer'>
 						<th>Name</th>
-						<th class='hide-on-med-and-down'>Level</th>
+						<th class='hide-on-med-and-down'>Owner</th>
 						<th style='width:100px'></th>
 					</tr>
 				</thead>
@@ -67,10 +67,12 @@
 						if (strpos($Editors, $_SESSION['useremail']) !== false) { $SharedEditable=1; }else{ $SharedEditable=0; }
 									
 						$Student_Link="$portal_root/?url=assessments/session/$Assessment_ID/$Session_ID";
+						
+						$OwnerName=getNameGivenEmail($Owner);
 								
 						echo "<tr class='assessmentrow'>";
 							echo "<td>$Title</td>";
-							echo "<td class='hide-on-med-and-down'>$Level</td>";
+							echo "<td class='hide-on-med-and-down'>$OwnerName</td>";
 							echo "<td width=100px>";		
 								echo "<a class='waves-effect waves-light btn duplicateassessment' href='#' data-assessmentid='$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Copy</a>";	
 							echo "</td>";

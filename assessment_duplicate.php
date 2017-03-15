@@ -33,15 +33,15 @@
 		$result3 = $db->query($sqllookup2);
 		while($row2 = $result3->fetch_assoc())
 		{
-			$Assessment_ID=$row2["ID"];
-			$Assessment_Owner=$row2["Owner"];
-			$Assessment_Title=$row2["Title"];
+			$Assessment_ID=mysqli_real_escape_string($db, $row2["ID"]);
+			$Assessment_Owner=mysqli_real_escape_string($db, $row2["Owner"]);
+			$Assessment_Title=mysqli_real_escape_string($db, $row2["Title"]);
 			$Assessment_Title="$Assessment_Title - Copy";
-			$Assessment_Description=$row2["Description"];
-			$Assessment_Subject=$row2["Subject"];
-			$Assessment_Grade=$row2["Grade"];
-			$Assessment_Level=$row2["Level"];
-			$Assessment_Verified=$row2["Verified"];
+			$Assessment_Description=mysqli_real_escape_string($db, $row2["Description"]);
+			$Assessment_Subject=mysqli_real_escape_string($db, $row2["Subject"]);
+			$Assessment_Grade=mysqli_real_escape_string($db, $row2["Grade"]);
+			$Assessment_Level=mysqli_real_escape_string($db, $row2["Level"]);
+			$Assessment_Verified=mysqli_real_escape_string($db, $row2["Verified"]);
 			
 			if(!superadmin()){ if($Assessment_Verified==1){ $Assessment_Verified=$Assessment_ID; }  }
 			
@@ -61,13 +61,13 @@
 			$resultres = $db->query($sqllookupres);
 			while($rowres = $resultres->fetch_assoc())
 			{
-				$Question_Order=$rowres["Question_Order"];
-				$Question_Bank_ID=$rowres["Bank_ID"];
-				$Question_Points=$rowres["Points"];	
-				$Question_Vendor_ID=$rowres["Vendor_ID"];	
-				$Question_Type=$rowres["Type"];		
-				$Question_Difficulty=$rowres["Difficulty"];		
-				$Question_Standard=$rowres["Standard"];		
+				$Question_Order=mysqli_real_escape_string($db, $rowres["Question_Order"]);
+				$Question_Bank_ID=mysqli_real_escape_string($db, $rowres["Bank_ID"]);
+				$Question_Points=mysqli_real_escape_string($db, $rowres["Points"]);
+				$Question_Vendor_ID=mysqli_real_escape_string($db, $rowres["Vendor_ID"]);	
+				$Question_Type=mysqli_real_escape_string($db, $rowres["Type"]);
+				$Question_Difficulty=mysqli_real_escape_string($db, $rowres["Difficulty"]);		
+				$Question_Standard=mysqli_real_escape_string($db, $rowres["Standard"]);
 				
 				$stmt = $db->stmt_init();
 				$sql2 = "INSERT INTO assessments_questions (Assessment_ID, Question_Order, Bank_ID, Points, Vendor_ID, Type, Difficulty, Standard) VALUES ('$new_assessmentID', '$Question_Order', '$Question_Bank_ID', '$Question_Points', '$Question_Vendor_ID', '$Question_Type', '$Question_Difficulty', '$Question_Standard');";

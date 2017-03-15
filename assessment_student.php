@@ -31,8 +31,6 @@
 	$token=getCerticaToken();
 	
 	?>
-	<script src='https://cdn.certicasolutions.com/sdk/js/sdk.itemconnect.min.js?x-ic-credential=<?php echo $token; ?>'></script>
-	<script src='https://cdn.certicasolutions.com/player/js/player.itemconnect.min.js'></script>
 	<link rel="stylesheet" href='https://cdn.certicasolutions.com/player/css/player.itemconnect.min.css'>
 	<?php
 		
@@ -61,6 +59,7 @@
 	$query = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order LIMIT 1";
 	$dbreturn = databasequery($query);
 	$firstquestioncount=count($dbreturn);
+	$FirstQuestion=NULL;
 	foreach ($dbreturn as $value)
 	{
 		$FirstQuestion=htmlspecialchars($value["Bank_ID"], ENT_QUOTES);
@@ -72,7 +71,7 @@
 	$sessionstartturnin=mysqli_num_rows($resultstartsessionturnin);
 	if($sessionstartturnin!=0)
 	{
-		echo "<div class='row center-align'><div class='col s12'><h6>Great job! You have finished the assessment.</h6><i class='material-icons' style='font-size:180px; opacity:.3'>sentiment_very_satisfied</i></div></div>"; 
+		echo "<div class='row center-align'><div class='col s12'><h6>Great job! You have finished the assessment.</h6><i class='material-icons' style='font-size:180px; opacity:.3'>thumb_up</i></div></div>"; 
 		
 	}
 	else
@@ -161,108 +160,122 @@
 		}
 		
 	}
-				
+
+
+if($FirstQuestion!=NULL)
+{				
 	?>
 	
 	<script>
 		
 		$(function() {
 		
-			var QuestionComplete = 0;
-			$(".assessmentsubmitbutton").hide();
-			var QuestionArray = $('#questionarray').data('questionarray');
+			$.when(
+			    $.getScript( "https://cdn.certicasolutions.com/sdk/js/sdk.itemconnect.min.js?x-ic-credential=<?php echo $token; ?>" ),
+			    $.getScript( "https://cdn.certicasolutions.com/player/js/player.itemconnect.min.js" ),
+			    $.Deferred(function( deferred ){
+			        $( deferred.resolve );
+			    })
+			).done(function()
+			{
 			
-			<?php if($sessionstartturnin==0 && $sessioncount!=0){ ?>
-			
-				function CompleteCheck()
-				{
-					QuestionComplete = $('.questioncomplete').length;			
-					if(QuestionComplete===<?php echo $totalquestionsonsession; ?>)
-					{
-						$(".assessmentsubmitbutton").show();
-					}
-					else
-					{
-						$(".assessmentsubmitbutton").hide();
-					}				
-				}
-				
-				//Load the first question
-				$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+<?php echo $FirstQuestion; ?>+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber=1', function()
-				{ 
-					$(".landingloader").hide();
-					$(".question:first").css("background-color", "#000");
-					$(".question:first").css("color", "#fff");
-					CompleteCheck();
-				});
-				
-				//Load the question
-				$(document).on("mouseup", ".certicaquestion", function ()
-				{
-					var QuestionID = $(this).data('questionquestion');
-					var QuestionName = '#questionicon-'+QuestionID;
-					$(QuestionName).html( "<i class='material-icons' style='font-size:44px; color:#fff;'>radio_button_unchecked</i>" );
-					CompleteCheck();
-					$('.savebutton').show();
-				});
-				
-				//Hide save button
-				$(document).on("click", ".savebutton", function ()
-				{
-					var QuestionID = $(this).data('scorequestion');
-					var NextQuestion = $(this).data('nextquestion');
-					var Question_Number = $(this).data('questionnumber');
-					var QuestionName = '#questionicon-'+QuestionID;
-					$(QuestionName).html( "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>" );						
-					CompleteCheck();			
-					$(this).hide();
+					var QuestionComplete = 0;
+					$(".assessmentsubmitbutton").hide();
+					var QuestionArray = $('#questionarray').data('questionarray');
 					
-					var TotalQuestionCount=<?php echo $questioncount; ?>
+					<?php if($sessionstartturnin==0 && $sessioncount!=0){ ?>
 					
-					if(Question_Number<TotalQuestionCount)
-					{
-					
-						$(".dashboard").fadeTo(0,0);
-						$(".landingloader").show();
-						Question_Number_Value=Question_Number+1;
-						$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+NextQuestion+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number_Value, function()
-						{				
+						function CompleteCheck()
+						{
+							QuestionComplete = $('.questioncomplete').length;			
+							if(QuestionComplete===<?php echo $totalquestionsonsession; ?>)
+							{
+								$(".assessmentsubmitbutton").show();
+							}
+							else
+							{
+								$(".assessmentsubmitbutton").hide();
+							}				
+						}
+						
+						//Load the first question
+						$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+<?php echo $FirstQuestion; ?>+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber=1', function()
+						{ 
 							$(".landingloader").hide();
-							$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
-							$(".dashboard").fadeTo(0,1);
-							var questionbuttondiv = '#questionbutton-'+Question_Number_Value;
-							$(".question, #overviewpage").css("background-color", "");
-							$(".question, #overviewpage").css("color", "#fff");
-							$(questionbuttondiv).css("background-color", "#000");
-							$(questionbuttondiv).css("color", "#fff");
+							$(".question:first").css("background-color", "#000");
+							$(".question:first").css("color", "#fff");
+							CompleteCheck();
 						});
 						
-					}
-					
-				});
+						//Load the question
+						$(document).on("mouseup", ".certicaquestion", function ()
+						{
+							var QuestionID = $(this).data('questionquestion');
+							var QuestionName = '#questionicon-'+QuestionID;
+							$(QuestionName).html( "<i class='material-icons' style='font-size:44px; color:#fff;'>radio_button_unchecked</i>" );
+							CompleteCheck();
+							$('.savebutton').show();
+						});
+						
+						//Hide save button
+						$(document).on("click", ".savebutton", function ()
+						{
+							var QuestionID = $(this).data('scorequestion');
+							var NextQuestion = $(this).data('nextquestion');
+							var Question_Number = $(this).data('questionnumber');
+							var QuestionName = '#questionicon-'+QuestionID;
+							$(QuestionName).html( "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>" );						
+							CompleteCheck();			
+							$(this).hide();
 							
-				//Load Question in Window
-				$(".question").unbind().click(function()
-				{		
-					$(".dashboard").fadeTo(0,0);
-					$(".landingloader").show();
-					$(".question, #overviewpage").css("background-color", "");
-					$(".question, #overviewpage").css("color", "#fff");
-					$(this).css("background-color", "#000");
-					$(this).css("color", "#fff");
-					var Bank_ID= $(this).data('bankid');
-					var Question_Number= $(this).data('questionnumber');
-					CompleteCheck();
+							var TotalQuestionCount=<?php echo $questioncount; ?>
+							
+							if(Question_Number<TotalQuestionCount)
+							{
+							
+								$(".dashboard").fadeTo(0,0);
+								$(".landingloader").show();
+								Question_Number_Value=Question_Number+1;
+								$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+NextQuestion+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number_Value, function()
+								{				
+									$(".landingloader").hide();
+									$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
+									$(".dashboard").fadeTo(0,1);
+									var questionbuttondiv = '#questionbutton-'+Question_Number_Value;
+									$(".question, #overviewpage").css("background-color", "");
+									$(".question, #overviewpage").css("color", "#fff");
+									$(questionbuttondiv).css("background-color", "#000");
+									$(questionbuttondiv).css("color", "#fff");
+								});
+								
+							}
+							
+						});
+									
+						//Load Question in Window
+						$(".question").unbind().click(function()
+						{		
+							$(".dashboard").fadeTo(0,0);
+							$(".landingloader").show();
+							$(".question, #overviewpage").css("background-color", "");
+							$(".question, #overviewpage").css("color", "#fff");
+							$(this).css("background-color", "#000");
+							$(this).css("color", "#fff");
+							var Bank_ID= $(this).data('bankid');
+							var Question_Number= $(this).data('questionnumber');
+							CompleteCheck();
+							
+							$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+Bank_ID+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number, function()
+							{				
+								$(".landingloader").hide();
+								$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
+								$(".dashboard").fadeTo(0,1);
+							});
+						});
+						
+					<?php } ?>
 					
-					$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+Bank_ID+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number, function()
-					{				
-						$(".landingloader").hide();
-						$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
-						$(".dashboard").fadeTo(0,1);
-					});
-				});
-				
-			<?php } ?>
+			});
 		
 		});
 	</script>
@@ -287,3 +300,5 @@
 	}
 		
 </script>
+
+<?php } ?>

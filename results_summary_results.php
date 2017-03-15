@@ -100,7 +100,15 @@
 						while($row = $result->fetch_assoc())
 						{
 							$User=htmlspecialchars($row["Email"], ENT_QUOTES);
-							$ResultName=getNameGivenEmail($User);
+							if($User!=NULL)
+							{
+								$ResultName=getNameGivenEmail($User);
+							}
+							else
+							{
+								$StudentID=htmlspecialchars($row["Student_ID"], ENT_QUOTES);
+								$ResultName=getStudentNameGivenStudentID($StudentID);
+							}
 							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner);
 						}
 					}
@@ -113,8 +121,8 @@
 						while($row = $result->fetch_assoc())
 						{
 							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
+							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
-							$ResultName=getNameGivenEmail($User);
 							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner);
 						}
 					}

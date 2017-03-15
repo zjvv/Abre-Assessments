@@ -28,7 +28,7 @@
     	});
     	
     	//Copy the link
-    	$(document).on("click", ".modal-giveassessment", function ()
+    	$(document).off().on("click", ".modal-giveassessment", function ()
     	{
 	    	var GiveLink = $(this).data('givelink');
 			$(".modal-content #GiveLink").val(GiveLink);
