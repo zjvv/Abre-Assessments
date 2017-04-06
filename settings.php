@@ -61,6 +61,13 @@
 						echo "</div></div>";
 					echo "</div>";
 					
+					//Help Video
+					echo "<div class='row'>";
+						echo "<div class='col s12'><div class='col s12'>";
+							echo "Not connected to Certica? Check out the demo video <a href='https://vimeo.com/212144253' target='_blank' style='color: ".sitesettings("sitecolor")."'>here</a>.";	
+						echo "</div></div>";
+					echo "</div>";
+					
 				echo "</div>";
 			echo "</div>";
 		echo "</form>";
