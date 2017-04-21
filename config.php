@@ -31,10 +31,12 @@
 	$pageorder=4;
 	$pagetitle="Assessments";
 	$description="A tool that helps teachers identify and track student understanding.";
-	$version="1.2.6";
+	$version="1.2.7";
 	$repo="abreio/Abre-Assessments";
 	$pageicon="assessment";
 	$pagepath="assessments";
 	require_once('permissions.php');
+	
+	echo "<link rel='stylesheet' type='text/css' href='/modules/".basename(__DIR__)."/css/style_0.0.1.css'>";
 	
 	?>

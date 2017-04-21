@@ -39,15 +39,14 @@
 				echo "<select class='browser-default' id='filter1'>";
 					echo "<option value='course'>View by Course</option>";
 					echo "<option value='group'>View by Group</option>";
-					if($owner!=0){ echo "<option value='all'>View All Results</option>"; }
+					if($owner!=0 or superadmin()){ echo "<option value='all'>View All Results</option>"; }
 				echo "</select>";
 			echo "</div>";
 			echo "<div class='col l6 s12'>";
-				echo "<select class='browser-default' id='filter2'>";
-				echo "</select>";				
+				echo "<select class='browser-default' id='filter2'></select>";				
 			echo "</div>";
 		echo "</div>";
-		echo "<div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloadergrid' style='width:100%;'></div>";
+		echo "<div class='row'><div class='col s12'><div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloadergrid' style='width:100%;'></div></div></div>";
 		echo "<div class='resultsgrid'></div>";
 		
 	}
@@ -74,6 +73,7 @@
 					{
 						$(".landingloadergrid").hide();
 						$(".resultsgrid").show();
+						mdlregister();
 					});
 				}
 				else
@@ -82,6 +82,7 @@
 					{
 						$(".landingloadergrid").hide();
 						$(".resultsgrid").show();
+						mdlregister();
 					});
 				}
 			}
@@ -120,6 +121,7 @@
 				{
 					$(".landingloadergrid").hide();
 					$(".resultsgrid").show();
+					mdlregister();
 				});
 			}
 

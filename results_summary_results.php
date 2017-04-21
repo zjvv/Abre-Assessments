@@ -28,9 +28,13 @@
 	if($pagerestrictions=="")
 	{
 		
+		//Include Fixed Table JS
 		?><script src='modules/<?php echo basename(__DIR__); ?>/js/tableHeadFixer.js'></script><?php
 		
+		//Get Passed Variables
 		$Assessment_ID=htmlspecialchars($_GET["assessmentid"], ENT_QUOTES);
+		
+		//Look up StaffID and Semester
 		$StaffId=GetStaffID($_SESSION['useremail']);
 		$CurrentSememester=GetCurrentSemester();
 		
@@ -64,13 +68,14 @@
 			<div class='page'>
 			<div id='searchresults'>	
 			<div class='row'><div class='tableholder'>
-			<table id='myTable' class='tablesorter bordered'>
+			<table id='myTable' class='tablesorter bordered thintable'>
 			<thead>
 			<tr class='pointer'>
 			<th><div style='width:180px;'>Student</div></th>
-			<th><div style='width:180px;'>Status</div></th>
+			<th><div style='width:140px;'>Status</div></th>
 									
 			<?php
+				
 				$sqlheader = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID'";
 				$resultheader = $db->query($sqlheader);
 				$questioncount=0;
@@ -80,7 +85,7 @@
 					$Standard=htmlspecialchars($row["Standard"], ENT_QUOTES);
 					$Standard_Text = str_replace("CCSS.Math.Content.","",$Standard);
 					$Standard_Text = str_replace("CCSS.ELA-Literacy.","",$Standard_Text);
-					echo "<th style='min-width:120px;'><div class='center-align'>Question $questioncount<br>$Standard_Text</div></th>";
+					echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text</div></th>";
 				}
 			?>
 									

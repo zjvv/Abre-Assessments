@@ -38,7 +38,7 @@
 			echo "<div class='row' style='padding:15px;'>";
 			
 		?>
-			<table id='myTable' class='tablesorter'>
+			<table id='myTable' class='tablesorter bordered'>
 				<thead>
 					<tr class='pointer'>
 						<th>Name</th>

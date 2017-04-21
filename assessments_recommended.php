@@ -51,7 +51,7 @@
 			echo "<div class='mdl-shadow--2dp' style='background-color:#fff; padding:20px 40px 40px 40px'>";
 			echo "<div class='row' style='padding:15px;'>";
 		?>
-			<table id='myTable' class='tablesorter'>
+			<table id='myTable' class='tablesorter bordered'>
 				<thead>
 					<tr class='pointer'>
 						<th>Name</th>

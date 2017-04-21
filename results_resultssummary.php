@@ -33,7 +33,6 @@
 		$rowcount=mysqli_num_rows($result);
 		if($rowcount!=0)
 		{
-			
 			?>
 			<div class='page_container mdl-shadow--4dp'>
 			<div class='page'>

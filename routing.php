@@ -41,13 +41,6 @@
 				    $('#titletext').text('Assessment Results');
 				    document.title = 'Assessment Results';
 					$('#content_holder').load('modules/".basename(__DIR__)."/results_summary.php?assessmentid='+assessmentid, function() { init_page(); back_button('#assessments'); });
-					
-					//Load Navigation
-					$('#navigation_top').show();
-					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_results.php?id='+assessmentid, function() {	
-						$('#navigation_top').show();
-						$('.tab_1').addClass('tabmenuover');
-					});	
 			    },
 				'assessments/results/summary/?:assessmentid': function(assessmentid)
 				{
@@ -57,13 +50,6 @@
 				    $('#titletext').text('Assessments');
 				    document.title = 'Assessment Results';
 					$('#content_holder').load('modules/".basename(__DIR__)."/results_resultssummary.php?assessmentid='+assessmentid, function() { init_page(); back_button('#assessments'); });
-					
-					//Load Navigation
-					$('#navigation_top').show();
-					$('#navigation_top').load('modules/".basename(__DIR__)."/menu_results.php?id='+assessmentid, function() {	
-						$('#navigation_top').show();
-						$('.tab_2').addClass('tabmenuover');
-					});	
 			    },
 				'assessments/settings': function(name)
 				{

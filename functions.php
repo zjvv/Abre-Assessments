@@ -180,49 +180,67 @@
 				$Start_Time=date("F j, Y, g:i A", strtotime($Start_Time));
 				if($End_Time=="0000-00-00 00:00:00"){ $End_Time="In Progress"; }else{ $End_Time=date("F j, Y, g:i A", strtotime($End_Time)); }
 			}
+			
+			//Check what questions the student got correct
+			$sqlquestionsanswer = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User'";
+			$resultquestionsanswer = $db->query($sqlquestionsanswer);
+			$StudentScoresArray = array();
+			while($rowquestionsanswer = $resultquestionsanswer->fetch_assoc())
+			{
+				$StudentItemID = htmlspecialchars($rowquestionsanswer["ItemID"], ENT_QUOTES);
+				$StudentScore = htmlspecialchars($rowquestionsanswer["Score"], ENT_QUOTES);
+				$StudentScoresArray[$StudentItemID] = $StudentScore;
+			}
 								
 			echo "<tr class='assessmentrow'>";
-				echo "<td><b>$ResultName</b></td>";
+				echo "<td>";
+					echo "<b>$ResultName</b>";
+				echo "</td>";
 								
 				if($completestatus==1)
 				{
-					echo "<td><b>Start:</b> $Start_Time<br><b>End:</b> $End_Time</td>";
+					$TimeDifference = (strtotime($End_Time) - strtotime($Start_Time))/60;
+					if($TimeDifference==1){ $TimeDifferenceText="$TimeDifference Minute"; }else{ $TimeDifferenceText="$TimeDifference Minutes"; }
+					echo "<td>";
+						if($End_Time=="In Progress"){ echo "<div id='status_$User' class='pointer'>In Progress</div>"; }else{ echo "<div id='status_$User' class='pointer'>Complete<br> <span style='font-size:11px;'>$TimeDifferenceText</span></div>"; }
+						echo "<div class='mdl-tooltip mdl-tooltip--large' for='status_$User'><b>Start:</b> $Start_Time<br><b>End:</b> $End_Time</div>";
+					echo "</td>";
 				}
 				else
 				{
 					echo "<td>Not Completed</td>";	
 				}
-										
+								
 				//Loop through each question on assessment
 				$sqlquestions = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
 				$resultquestions = $db->query($sqlquestions);
 				$totalcorrect=0;
+				$studentcounter=0;
 				while($rowquestions = $resultquestions->fetch_assoc())
 				{
-											
-					$Bank_ID=htmlspecialchars($rowquestions["Bank_ID"], ENT_QUOTES);
-											
-					//Find if student was right or wrong
-					$sqlquestionsanswer = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and ItemID='$Bank_ID'";
-					$resultquestionsanswer = $db->query($sqlquestionsanswer);
-					$answerfound=0;
-					while($rowquestionsanswer = $resultquestionsanswer->fetch_assoc())
+					$Bank_ID=htmlspecialchars($rowquestions["Bank_ID"], ENT_QUOTES);		
+					
+					if (isset($StudentScoresArray[$Bank_ID]))
 					{
-						$answerfound=1;
-						$Score=htmlspecialchars($rowquestionsanswer["Score"], ENT_QUOTES);
+						$Score = $StudentScoresArray[$Bank_ID];
+						
 						if($Score==0)
 						{
-							$icon="<i class='material-icons' style='color:#F44336'>cancel</i>";
+							$icon="<i class='material-icons' style='color:#B71C1C'>cancel</i>";
+							echo "<td class='center-align' style='background-color:#F44336'>$icon</td>"; 
 						}
 						else
 						{
-							$icon="<i class='material-icons' style='color:#4CAF50'>check_circle</i>"; $totalcorrect++;
-						}
-						echo "<td class='center-align'>$icon</td>"; 
+							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; $totalcorrect++;
+							echo "<td class='center-align' style='background-color:#4CAF50'>$icon</td>";
+						}						
 					}
-						
-					if($answerfound==0){ echo "<td class='center-align'><i class='material-icons' style='color:#FFC107'>remove_circle</i></td>"; }
-
+					else
+					{
+						echo "<td class='center-align' style='background-color:#FFC107'><i class='material-icons' style='color:#FF6F00;'>remove_circle</i></td>";
+					}
+					$studentcounter++;
+					
 				}
 										
 				//Find the Total correct for student
@@ -236,6 +254,7 @@
 				{
 					echo "<td class='center-align'></td>";
 				}
+				
 				
 			echo "</tr>";
 		}
