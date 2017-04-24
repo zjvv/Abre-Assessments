@@ -28,6 +28,14 @@
 	if($pagerestrictions=="")
 	{
 		
+		$token=getCerticaToken();
+		
+		?>
+		<script src='https://cdn.certicasolutions.com/sdk/js/sdk.itemconnect.min.js?x-ic-credential=<?php echo $token; ?>'></script>
+		<script src='https://cdn.certicasolutions.com/player/js/player.itemconnect.min.js'></script>
+		<link rel="stylesheet" href='https://cdn.certicasolutions.com/player/css/player.itemconnect.min.css'>	
+		<?php
+		
 		//Include Fixed Table JS
 		?><script src='modules/<?php echo basename(__DIR__); ?>/js/tableHeadFixer.js'></script><?php
 		
@@ -65,32 +73,32 @@
 		{
 			?>
 			<div class='mdl-shadow--4dp'>
-			<div class='page'>
+			<div class='page' style='padding:30px;'>
 			<div id='searchresults'>	
 			<div class='row'><div class='tableholder'>
 			<table id='myTable' class='tablesorter bordered thintable'>
 			<thead>
 			<tr class='pointer'>
-			<th><div style='width:180px;'>Student</div></th>
-			<th><div style='width:140px;'>Status</div></th>
-									
-			<?php
-				
-				$sqlheader = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID'";
-				$resultheader = $db->query($sqlheader);
-				$questioncount=0;
-				while($row = $resultheader->fetch_assoc())
-				{
-					$questioncount++;
-					$Standard=htmlspecialchars($row["Standard"], ENT_QUOTES);
-					$Standard_Text = str_replace("CCSS.Math.Content.","",$Standard);
-					$Standard_Text = str_replace("CCSS.ELA-Literacy.","",$Standard_Text);
-					echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text</div></th>";
-				}
-			?>
-									
-			<th style='min-width:120px;'><div class='center-align'>Score</div></th>		
-			<th style='max-width:30px;'></th>					
+				<th><div style='width:180px;'>Student</div></th>
+				<th><div style='width:140px;'>Status</div></th>
+										
+				<?php
+					
+					$sqlheader = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID'";
+					$resultheader = $db->query($sqlheader);
+					$questioncount=0;
+					while($row = $resultheader->fetch_assoc())
+					{
+						$questioncount++;
+						$Standard=htmlspecialchars($row["Standard"], ENT_QUOTES);
+						$Standard_Text = str_replace("CCSS.Math.Content.","",$Standard);
+						$Standard_Text = str_replace("CCSS.ELA-Literacy.","",$Standard_Text);
+						echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text</div></th>";
+					}
+				?>
+										
+				<th style='min-width:120px;'><div class='center-align'>Score</div></th>		
+				<th style='max-width:30px;'></th>					
 			</tr>
 			</thead>
 			<tbody>
@@ -102,8 +110,12 @@
 					{
 						$sql = "SELECT * FROM students_groups_students LEFT JOIN Abre_AD ON students_groups_students.Student_ID=Abre_AD.StudentID where students_groups_students.Group_ID='$groupid'";
 						$result = $db->query($sql);
+						$totalstudents=mysqli_num_rows($result);
+						$studentcounter=0;
+						$totalresultsbystudentarray = array();
 						while($row = $result->fetch_assoc())
 						{
+							$studentcounter++;
 							$User=htmlspecialchars($row["Email"], ENT_QUOTES);
 							if($User!=NULL)
 							{
@@ -114,7 +126,17 @@
 								$StudentID=htmlspecialchars($row["Student_ID"], ENT_QUOTES);
 								$ResultName=getStudentNameGivenStudentID($StudentID);
 							}
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner);
+							
+							//Loop through each kid and create an array with user match with item they got correct
+							$sql = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and Score='1'";
+							$result2 = $db->query($sql);
+							while($row2 = $result2->fetch_assoc())
+							{
+								$ItemID=htmlspecialchars($row2["ItemID"], ENT_QUOTES);
+								array_push($totalresultsbystudentarray, $ItemID);
+							}
+							
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray);
 						}
 					}
 					
@@ -123,29 +145,57 @@
 					{
 						$sql = "SELECT * FROM Abre_StudentSchedules where CourseCode='$CourseCode' and SectionCode='$SectionCode' and StaffId='$StaffId' and (TermCode='$CurrentSememester' or TermCode='Year') group by StudentID order by LastName";
 						$result = $db->query($sql);
+						$totalstudents=mysqli_num_rows($result);
+						$studentcounter=0;
+						$totalresultsbystudentarray = array();
 						while($row = $result->fetch_assoc())
 						{
+							$studentcounter++;
 							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner);
+							
+							//Loop through each kid and create an array with user match with item they got correct
+							$sql = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and Score='1'";
+							$result2 = $db->query($sql);
+							while($row2 = $result2->fetch_assoc())
+							{
+								$ItemID=htmlspecialchars($row2["ItemID"], ENT_QUOTES);
+								array_push($totalresultsbystudentarray, $ItemID);
+							}
+							
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray);
 						}
 					}
 					
 					//View All
 					if(!isset($course) && !isset($groupid))
-					{						
+					{												
 						$sql = "SELECT * FROM assessments_status where Assessment_ID='$Assessment_ID' order by User";
 						$result = $db->query($sql);
+						$totalstudents=mysqli_num_rows($result);
+						$studentcounter=0;
+						$totalresultsbystudentarray = array();
 						while($row = $result->fetch_assoc())
 						{
+							$studentcounter++;
 							$User=htmlspecialchars($row["User"], ENT_QUOTES);
-							$ResultName=getNameGivenEmail($User);
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner);
+							$ResultName=getNameGivenEmail($User);		
+							
+							//Loop through each kid and create an array with user match with item they got correct
+							$sql = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and Score='1'";
+							$result2 = $db->query($sql);
+							while($row2 = $result2->fetch_assoc())
+							{
+								$ItemID=htmlspecialchars($row2["ItemID"], ENT_QUOTES);
+								array_push($totalresultsbystudentarray, $ItemID);
+							}
+									
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray);
 						}
+						
 					}
-								
-			echo "</tbody>";
+
 			echo "</table>";
 			echo "</div>";
 			echo "</div>";
@@ -166,7 +216,7 @@
 	//Responsive fixed table header
 	$(function()
 	{
-		$("#myTable").tableHeadFixer({ 'head' : true, 'left' : 1 });
+		$("#myTable").tableHeadFixer({ 'head' : true, 'left' : 1, 'foot' : true });
 		$("#myTable").tablesorter({ sortList: [[0,0]] });
 		
 		//Check Window Width
@@ -175,15 +225,13 @@
 		function tableContainer()
 		{
 			var height=$(".mdl-layout__content").height();
-			height=height-250;
+			height=height-210;
 			height=height+'px';
 			$(".tableholder").css("max-height", height);
 		}
-					
-	});
-	
+		
 		//Remove Student Result
-		$( ".removeresult" ).click(function()
+		$( ".removeresult" ).unbind().click(function()
 		{
 			event.preventDefault();
 			var result = confirm("Delete this student assessment?");
@@ -197,6 +245,28 @@
 				})	
 			}
 		});
+		
+		//Question Viewer
+		$(".questionviewerreponse").unbind().click(function()
+		{
+			event.preventDefault();
+			var Question = $(this).data('question');
+			var AssessmentID = $(this).data('assessmentid');
+			var User = $(this).data('user');
+			$("#questionholderresponse").hide();
+			
+			$(".modal-content #questionholderresponse").load( "modules/<?php echo basename(__DIR__); ?>/response_viewer.php?id="+Question+"&assessmentid="+AssessmentID+"&user="+User, function(){
+				$("#questionholderresponse").show();
+			});
+						
+			$('#questionresponse').openModal({
+				in_duration: 0,
+				out_duration: 0,
+			});
+		});
+		
+					
+	});
 	
 				
 </script>

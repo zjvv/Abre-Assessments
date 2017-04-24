@@ -164,9 +164,9 @@
 		}
 		
 		//Show Results of Assessment
-		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner)
+		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray)
 		{
-			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 			
 			//See if student has completed
 			$sqlcomplete = "SELECT * FROM assessments_status where Assessment_ID='$Assessment_ID' and User='$User'";
@@ -214,11 +214,14 @@
 				//Loop through each question on assessment
 				$sqlquestions = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
 				$resultquestions = $db->query($sqlquestions);
+				$allquestionitemsArray = array();
+				$totalquestions=mysqli_num_rows($resultquestions);
 				$totalcorrect=0;
-				$studentcounter=0;
+				$questioncounter=1;
 				while($rowquestions = $resultquestions->fetch_assoc())
 				{
-					$Bank_ID=htmlspecialchars($rowquestions["Bank_ID"], ENT_QUOTES);		
+					$Bank_ID=htmlspecialchars($rowquestions["Bank_ID"], ENT_QUOTES);	
+					$allquestionitemsArray[$questioncounter] = $Bank_ID;	
 					
 					if (isset($StudentScoresArray[$Bank_ID]))
 					{
@@ -227,22 +230,23 @@
 						if($Score==0)
 						{
 							$icon="<i class='material-icons' style='color:#B71C1C'>cancel</i>";
-							echo "<td class='center-align' style='background-color:#F44336'>$icon</td>"; 
+							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#F44336'>$icon</td>"; 
 						}
 						else
 						{
 							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; $totalcorrect++;
-							echo "<td class='center-align' style='background-color:#4CAF50'>$icon</td>";
-						}						
+							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#4CAF50'>$icon</td>";
+						}			
 					}
 					else
 					{
 						echo "<td class='center-align' style='background-color:#FFC107'><i class='material-icons' style='color:#FF6F00;'>remove_circle</i></td>";
 					}
-					$studentcounter++;
+					
+					$questioncounter++;
 					
 				}
-										
+							
 				//Find the Total correct for student
 				echo "<td class='center-align'>$totalcorrect/$questioncount</td>";
 				
@@ -253,10 +257,74 @@
 				else
 				{
 					echo "<td class='center-align'></td>";
+				}	
+			echo "</tr>";
+			
+			if($totalstudents==$studentcounter)
+			{
+				
+				//How many district students took assessment
+				$sqlquestions = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' group by User";
+				$resultquestions = $db->query($sqlquestions);
+				$totalassessedstudents=mysqli_num_rows($resultquestions);
+				
+				//Score Breakdown
+				$sqlquestions = "SELECT ItemID, Count(*) FROM `assessments_scores` WHERE `Assessment_ID` LIKE '$Assessment_ID' and Score=1 group by ItemID";
+				$resultquestions = $db->query($sqlquestions);
+				$questionscoreArray = array();
+				while($rowquestions = $resultquestions->fetch_assoc())
+				{
+					$ItemIDScore=htmlspecialchars($rowquestions["ItemID"], ENT_QUOTES);
+					$ItemIDCount=htmlspecialchars($rowquestions["Count(*)"], ENT_QUOTES);
+					$questionscoreArray[$ItemIDScore] = $ItemIDCount;
 				}
 				
+				echo "</tbody>";
+				echo "<tfoot>";
 				
-			echo "</tr>";
+					//Class Mastery
+					echo "<tr style='background-color:".sitesettings("sitecolor").";'>";
+					echo "<td colspan='2' style='color:#fff;' class='center-align'><b>Class Mastery</b></td>";
+					
+
+					foreach ($allquestionitemsArray as $value)
+					{
+						$counts = array_count_values($correctarray);
+						if (isset($counts[$value])){ $correctcount=$counts[$value]; }else{ $correctcount=0; }
+						$correctpercent=round(($correctcount/$totalstudents)*100);
+						echo "<td class='center-align' style='color:#fff;'><b>$correctpercent%</b></td>";
+					}
+					
+					echo "<td></td>";
+					echo "<td></td>";
+					echo "</tr>";
+				
+					//District Mastery
+					echo "<tr style='background-color:".sitesettings("sitecolor").";'>";
+					echo "<td colspan='2' style='color:#fff;' class='center-align'><b>District Mastery</b></td>";
+					
+					foreach ($allquestionitemsArray as $value)
+					{
+						if (isset($questionscoreArray[$value]))
+						{
+							$correctcount=$questionscoreArray[$value];
+							$correctpercent=round(($correctcount/$totalassessedstudents)*100);
+							echo "<td class='center-align' style='color:#fff;'><b>$correctpercent%</b></td>";
+						}
+						else
+						{
+							echo "<td class='center-align' style='color:#fff;'><b>0%</b></td>";
+						}
+					}
+					
+					echo "<td></td>";
+					echo "<td></td>";
+					echo "</tr>";
+					
+				echo "</tfoot>";
+				
+			}
+			
 		}
 	
 ?>
