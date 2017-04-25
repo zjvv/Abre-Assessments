@@ -97,7 +97,8 @@
 					}
 				?>
 										
-				<th style='min-width:120px;'><div class='center-align'>Score</div></th>		
+				<th style='min-width:100px;'><div class='center-align'>Score</div></th>	
+				<th style='min-width:100px;'><div class='center-align'>Percentage</div></th>
 				<th style='max-width:30px;'></th>					
 			</tr>
 			</thead>
@@ -251,6 +252,18 @@
 		{
 			event.preventDefault();
 			var Question = $(this).data('question');
+			var QuestionTitle = $(this).data('questiontitle');
+			$("#questionresponse_title").html(QuestionTitle);
+			var QuestionScore = $(this).data('questionscore');
+			if(QuestionScore!=0)
+			{
+				questionverbage="<div class='card white-text' style='background-color:#4CAF50; padding:20px;'>The response was correct</div>";
+			}
+			else
+			{
+				questionverbage="<div class='card white-text' style='background-color:#F44336; padding:20px;'>The response was incorrect</div>";
+			}
+			$("#questionresponse_score").html(questionverbage);
 			var AssessmentID = $(this).data('assessmentid');
 			var User = $(this).data('user');
 			$("#questionholderresponse").hide();

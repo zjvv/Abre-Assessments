@@ -279,9 +279,10 @@
 	<div id="questionresponse" class="fullmodal modal modal-fixed-footer modal-mobile-full" style="width: 80%">
 		<form class="col s12" id="form-addlinktotopic" method="post" action="">
 		<div class="modal-content">
-			<h4>Question Response</h4>
+			<h4 id='questionresponse_title'></h4>
 			<a class="modal-close black-text" style='position:absolute; right:20px; top:25px;'><i class='material-icons'>clear</i></a>
 			<div id='questionholderresponse'></div>
+			<div id='questionresponse_score'></div>
     	</div>
 	</div>
 	

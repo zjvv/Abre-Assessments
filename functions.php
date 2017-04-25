@@ -200,6 +200,7 @@
 				if($completestatus==1)
 				{
 					$TimeDifference = (strtotime($End_Time) - strtotime($Start_Time))/60;
+					$TimeDifference = sprintf("%02d", $TimeDifference);
 					if($TimeDifference==1){ $TimeDifferenceText="$TimeDifference Minute"; }else{ $TimeDifferenceText="$TimeDifference Minutes"; }
 					echo "<td>";
 						if($End_Time=="In Progress"){ echo "<div id='status_$User' class='pointer'>In Progress</div>"; }else{ echo "<div id='status_$User' class='pointer'>Complete<br> <span style='font-size:11px;'>$TimeDifferenceText</span></div>"; }
@@ -230,12 +231,12 @@
 						if($Score==0)
 						{
 							$icon="<i class='material-icons' style='color:#B71C1C'>cancel</i>";
-							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#F44336'>$icon</td>"; 
+							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='0' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#F44336'>$icon</td>"; 
 						}
 						else
 						{
 							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; $totalcorrect++;
-							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#4CAF50'>$icon</td>";
+							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='1' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#4CAF50'>$icon</td>";
 						}			
 					}
 					else
@@ -247,8 +248,13 @@
 					
 				}
 							
-				//Find the Total correct for student
-				echo "<td class='center-align'>$totalcorrect/$questioncount</td>";
+				//Score
+				$totalcorrectdouble=sprintf("%02d", $totalcorrect);
+				echo "<td class='center-align'>$totalcorrectdouble/$questioncount</td>";
+				
+				//Percentage
+				$studentfinalpercentage=round(($totalcorrect/$questioncount)*100);
+				echo "<td class='center-align'>$studentfinalpercentage%</td>";
 				
 				if($owner==1 or superadmin())
 				{
