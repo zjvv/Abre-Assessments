@@ -42,7 +42,9 @@
     	$('.modal-createassessment').leanModal({
 	    	in_duration: 0,
 			out_duration: 0,
-	    	ready: function() { $("#assessment_title").focus(); }
+	    	ready: function() {
+		    	$("#assessment_title").focus();
+		    }
     	});
     	
   	});

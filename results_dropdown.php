@@ -31,6 +31,8 @@
 		$category=htmlspecialchars($_GET["category"], ENT_QUOTES);
 		$StaffId=GetStaffID($_SESSION['useremail']);
 		$CurrentSememester=GetCurrentSemester();
+		$emailencrypted=encrypt($_SESSION['useremail'],"");
+		$email=$_SESSION['useremail'];
 		
 		//If Course, Display all Courses
 		if($category=="course")
@@ -61,6 +63,47 @@
 				
 				echo "<option value='$GroupID'>$GroupName</option>";
 			}
+		}
+		
+		//If Group, Display all Groups
+		if($category=="teacher")
+		{
+			//Find what building the admin has access to
+
+				$query = "SELECT * FROM Abre_VendorLink_SIS_Staff where EmailList LIKE '%$email%' LIMIT 1";
+				$dbreturn = databasequery($query);
+				$usersfound=count($dbreturn);
+				foreach ($dbreturn as $value)
+				{	
+					$SchoolName=$value['SchoolName'];
+					
+					//Find all students in the building
+					$query2 = "SELECT * FROM Abre_VendorLink_SIS_Staff where SchoolName LIKE '%$SchoolName%' group by LocalId order by LastName";
+					$dbreturn2 = databasequery($query2);
+					foreach ($dbreturn2 as $value2)
+					{
+						$LocalId=$value2['LocalId'];
+						$LastName=$value2['LastName'];
+						$FirstName=$value2['FirstName'];
+						
+						echo "<option value='$LocalId'>$LastName, $FirstName</option>";
+					}
+						
+				}	
+				
+				if($usersfound==0)
+				{
+					$query2 = "SELECT * FROM Abre_VendorLink_SIS_Staff group by LocalId order by LastName";
+					$dbreturn2 = databasequery($query2);
+					foreach ($dbreturn2 as $value2)
+					{
+						$LocalId=$value2['LocalId'];
+						$LastName=$value2['LastName'];
+						$FirstName=$value2['FirstName'];
+							
+						echo "<option value='$LocalId'>$LastName, $FirstName</option>";
+					}	
+				}
 		}
 		
 	}

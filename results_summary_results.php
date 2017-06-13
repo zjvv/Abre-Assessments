@@ -62,13 +62,19 @@
 			$groupid=$_GET["groupid"];
 			$sql = "SELECT * FROM students_groups where ID='$groupid'";
 		}
-		if(!isset($course) && !isset($groupid))
+		if(isset($_GET["staffid"]))
+		{
+			$staffcode=$_GET["staffid"];
+			$sql = "SELECT * FROM Abre_StudentSchedules where StaffId='$staffcode' and (TermCode='$CurrentSememester' or TermCode='Year') group by StudentID order by LastName";
+		}
+		if(!isset($course) && !isset($groupid) && !isset($staffcode))
 		{
 			$sql = "SELECT * FROM assessments_status where Assessment_ID='$Assessment_ID'";
 		}
 		
 		$result = $db->query($sql);
 		$rowcount=mysqli_num_rows($result);
+		
 		if($rowcount!=0)
 		{
 			?>
@@ -169,8 +175,36 @@
 						}
 					}
 					
+					//View By Teacher
+					if(isset($staffcode))
+					{
+						$sql = "SELECT * FROM Abre_StudentSchedules where StaffId='$staffcode' and (TermCode='$CurrentSememester' or TermCode='Year') group by StudentID order by LastName";
+						$result = $db->query($sql);
+						$totalstudents=mysqli_num_rows($result);
+						$studentcounter=0;
+						$totalresultsbystudentarray = array();
+						while($row = $result->fetch_assoc())
+						{
+							$studentcounter++;
+							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
+							$ResultName=getStudentNameGivenStudentID($StudentID);
+							$User=getEmailGivenStudentID($StudentID);
+							
+							//Loop through each kid and create an array with user match with item they got correct
+							$sql = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and Score='1'";
+							$result2 = $db->query($sql);
+							while($row2 = $result2->fetch_assoc())
+							{
+								$ItemID=htmlspecialchars($row2["ItemID"], ENT_QUOTES);
+								array_push($totalresultsbystudentarray, $ItemID);
+							}
+							
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray);
+						}
+					}
+					
 					//View All
-					if(!isset($course) && !isset($groupid))
+					if(!isset($course) && !isset($groupid) && !isset($staffcode))
 					{												
 						$sql = "SELECT * FROM assessments_status where Assessment_ID='$Assessment_ID' order by User";
 						$result = $db->query($sql);

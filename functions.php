@@ -163,6 +163,25 @@
 			}
 		}
 		
+		//Admin Check
+		function AdminCheck($email){
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+			$email=encrypt($email, "");
+			$contract=encrypt('Administrator', "");
+			$sql = "SELECT *  FROM directory where email='$email' and contract='$contract'";
+			$result = $db->query($sql);
+			$count = $result->num_rows;
+			if($count>=1)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+			$db->close();
+		}
+		
 		//Show Results of Assessment
 		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray)
 		{

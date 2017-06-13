@@ -22,6 +22,7 @@
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php'); 
 	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
 	require_once('../../core/abre_functions.php');
+	require_once('functions.php');
 	require_once('permissions.php');
 	
 	if($pagerestrictions=="")
@@ -39,6 +40,7 @@
 				echo "<select class='browser-default' id='filter1'>";
 					echo "<option value='course'>View by Course</option>";
 					echo "<option value='group'>View by Group</option>";
+					if(AdminCheck($_SESSION['useremail']) or superadmin()){ echo "<option value='teacher'>View by Teacher</option>"; }
 					if($owner!=0 or superadmin()){ echo "<option value='all'>View All Results</option>"; }
 				echo "</select>";
 			echo "</div>";
@@ -76,9 +78,18 @@
 						mdlregister();
 					});
 				}
-				else
+				if(category=='group')
 				{
 					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&groupid='+FilterSelect, function()
+					{
+						$(".landingloadergrid").hide();
+						$(".resultsgrid").show();
+						mdlregister();
+					});
+				}
+				if(category=='teacher')
+				{
+					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&staffid='+FilterSelect, function()
 					{
 						$(".landingloadergrid").hide();
 						$(".resultsgrid").show();
