@@ -109,22 +109,22 @@
 					if($question_dok!=""){ $filter=$filter."+and+IA_DOK+eq+'$question_dok'"; }
 					if($question_language!=""){ $filter=$filter."+and+IA_Lang+eq+'$question_language'"; }
 					if($question_standard!=""){ $filter=$filter."+and+STD_Code+eq+'$question_standard'"; }
-					if($question_standard==""){ $filter=$filter."+and+(std_document+eq+'CC'+or+std_document+eq+'OH')"; }
+					if($question_standard=="" or $question_standard!=""){ $filter=$filter."+and+(std_document+eq+'CC'+or+std_document+eq+'OH')"; }
 					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$skip='."$skip".'&$filter='."$filter".'&$orderby='."IA_ItemId");
 				}
 				
 				if(isset($question_searchquery))
-				{
-					if (strpos($question_searchquery, 'C') !== false) {
-						$filter="ia_vendorid+eq+'$question_searchquery'&itembank=local";
-					}
-					else
-					{
-						//$filter="(pa_passagetitle+eq+'$question_searchquery'+or+ia_vendorid+eq+'$question_searchquery')+and+(std_document+eq+'CC'+or+std_document+eq+'OH')";
-						$filter="ia_vendorid+eq+'$question_searchquery'";
-					}
-					curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
-				}
+                {
+                    if (strpos($question_searchquery, 'C') !== false) {
+                        $filter="ia_vendorid+eq+'$question_searchquery'&itembank=local";
+                    }
+                    else
+                    {
+                        $filter="(pa_passagetitle+eq+'$question_searchquery'+or+ia_vendorid+eq+'$question_searchquery')+and+(std_document+eq+'CC'+or+std_document+eq+'OH')";
+
+                    }
+                    curl_setopt($ch, CURLOPT_URL, "https://api.certicasolutions.com/items?".'$filter='."$filter".'&$orderby='."IA_ItemId");
+                }
 				
 				curl_setopt($ch, CURLOPT_HTTPHEADER, array("Authorization: IC-TOKEN Credential=$token"));
 				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);

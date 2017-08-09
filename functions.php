@@ -275,7 +275,7 @@
 				$studentfinalpercentage=round(($totalcorrect/$questioncount)*100);
 				echo "<td class='center-align'>$studentfinalpercentage%</td>";
 				
-				if($owner==1 or superadmin())
+				if($owner==1 or superadmin() or AdminCheck($_SESSION['useremail']))
 				{
 					echo "<td class='center-align'><a href='modules/".basename(__DIR__)."/removestudentresult.php?assessmentid=".$Assessment_ID."&student=".$User."' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600 removeresult'><i class='material-icons'>delete</i></a></td>";
 				}
