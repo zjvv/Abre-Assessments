@@ -82,8 +82,11 @@
 							echo "<td width=100px>";		
 								echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Build</a>";	
 							echo "</td>";
-							echo "<td width=100px>";		
-								echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/results/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Results</a>";	
+							echo "<td width=100px>";	
+								if($Verified!=1)
+								{
+									echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/results/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Results</a>";
+								}	
 							echo "</td>";
 						echo "</tr>";
 					}
