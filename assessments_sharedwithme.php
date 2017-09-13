@@ -43,6 +43,7 @@
 						<th class='hide-on-med-and-down'>Level</th>
 						<th style='width:100px'></th>
 						<th style='width:100px'></th>
+						<th style='width:100px'></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -80,6 +81,9 @@
 							echo "</td>";
 							echo "<td width=100px>";		
 								echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Build</a>";	
+							echo "</td>";
+							echo "<td width=100px>";		
+								echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/results/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Results</a>";	
 							echo "</td>";
 						echo "</tr>";
 					}
