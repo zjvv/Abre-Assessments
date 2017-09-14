@@ -185,6 +185,7 @@
 		//Show Results of Assessment
 		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray)
 		{
+			
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 			
 			//See if student has completed
@@ -347,6 +348,7 @@
 					echo "</tr>";
 					
 				echo "</tfoot>";
+				
 				
 			}
 			

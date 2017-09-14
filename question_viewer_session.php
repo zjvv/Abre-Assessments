@@ -37,6 +37,7 @@
 		
 	echo "<div class='mdl-shadow--2dp' style='background-color:#fff; padding:20px 40px 40px 40px'>";
 		echo "<div class='row' style='padding:15px;'>";
+			echo $questionid;
 			echo "<div id='passage-content-$questionid'></div>";
 			echo "<div class='certicaquestion' id='content-element-$questionid' data-questionquestion='$questionid' style='margin-right:70px;'></div>";
 		echo "</div>";
@@ -101,6 +102,7 @@
 				//Handle the response
 				function formatResponseData(response)
 				{	
+					
 		            lastSubmitted = JSON.parse(response.scores[0].response);
 		            var value_score = response['scores'][0]['score'];
 		            var value_scoredOn = response['scores'][0]['scoredOn'];
@@ -108,8 +110,10 @@
 		            var value_itemResponse = response['scores'][0]['response'];
 		            var value_scoreGUID = response['scores'][0]['scoreGUID'];
 		            
+		            console.log(response);
+		            
 		            //Save the result
-		            $.post("modules/<?php echo basename(__DIR__); ?>/session_scoring.php", { assessmentid: <?php echo $assessmentid; ?>, score: value_score, scoredOn: value_scoredOn, itemId: value_itemId, itemResponse: value_itemResponse, scoreGUID: value_scoreGUID  });
+		            $.post("modules/<?php echo basename(__DIR__); ?>/session_scoring.php", { assessmentid: <?php echo $assessmentid; ?>, score: value_score, scoredOn: value_scoredOn, itemId: <?php echo $assessmentid; ?>, itemResponse: value_itemResponse, scoreGUID: value_scoreGUID  });
 		           
 		        }
 		        
