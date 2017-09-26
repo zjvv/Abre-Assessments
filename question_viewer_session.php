@@ -1,20 +1,19 @@
 <?php
 	
 	/*
-	* Copyright 2015 Hamilton City School District	
-	* 		
+	* Copyright (C) 2016-2017 Abre.io LLC
+	*
 	* This program is free software: you can redistribute it and/or modify
-    * it under the terms of the GNU General Public License as published by
-    * the Free Software Foundation, either version 3 of the License, or
-    * (at your option) any later version.
-	* 
+    * it under the terms of the Affero General Public License version 3
+    * as published by the Free Software Foundation.
+	*
     * This program is distributed in the hope that it will be useful,
     * but WITHOUT ANY WARRANTY; without even the implied warranty of
     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    * GNU General Public License for more details.
-	* 
-    * You should have received a copy of the GNU General Public License
-    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    * GNU Affero General Public License for more details.
+	*
+    * You should have received a copy of the Affero General Public License
+    * version 3 along with this program.  If not, see https://www.gnu.org/licenses/agpl-3.0.en.html.
     */
 	
 	//Required configuration files
@@ -37,7 +36,6 @@
 		
 	echo "<div class='mdl-shadow--2dp' style='background-color:#fff; padding:20px 40px 40px 40px'>";
 		echo "<div class='row' style='padding:15px;'>";
-			echo $questionid;
 			echo "<div id='passage-content-$questionid'></div>";
 			echo "<div class='certicaquestion' id='content-element-$questionid' data-questionquestion='$questionid' style='margin-right:70px;'></div>";
 		echo "</div>";
@@ -80,6 +78,7 @@
 		
 				//Display the Question Player
 				ItemConnect.content.get({
+					alwaysReturnLatestVersion: false,
 			        id: <?php echo $questionid; ?>,
 			        token: "<?php echo $token; ?>",
 			        onSuccess: function (data) {
@@ -113,7 +112,7 @@
 		            console.log(response);
 		            
 		            //Save the result
-		            $.post("modules/<?php echo basename(__DIR__); ?>/session_scoring.php", { assessmentid: <?php echo $assessmentid; ?>, score: value_score, scoredOn: value_scoredOn, itemId: <?php echo $assessmentid; ?>, itemResponse: value_itemResponse, scoreGUID: value_scoreGUID  });
+		            $.post("modules/<?php echo basename(__DIR__); ?>/session_scoring.php", { assessmentid: <?php echo $assessmentid; ?>, score: value_score, scoredOn: value_scoredOn, itemId: value_itemId, itemResponse: value_itemResponse, scoreGUID: value_scoreGUID  });
 		           
 		        }
 		        
