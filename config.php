@@ -28,7 +28,7 @@
 	$pageorder=4;
 	$pagetitle="Assessments";
 	$description="A tool that helps teachers identify and track student understanding.";
-	$version="1.3.2";
+	$version="1.3.3";
 	$repo="abreio/Abre-Assessments";
 	$pageicon="assessment";
 	$pagepath="assessments";
