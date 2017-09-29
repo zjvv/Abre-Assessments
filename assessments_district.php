@@ -71,6 +71,7 @@
 						//Check to see if Guided Learning Code Created
 						$sql2 = "SELECT * FROM `guide_links` WHERE `Data` LIKE '%$Student_Link%'";
 						$result2 = $db->query($sql2);
+						$GLCode="Code not yet available";
 						while($row2 = $result2->fetch_assoc())
 						{
 							$Board_ID=htmlspecialchars($row2["Board_ID"], ENT_QUOTES);
@@ -83,8 +84,6 @@
 								$GLCode=htmlspecialchars($row3["Code"], ENT_QUOTES);
 							}
 						}
-						
-						if(!isset($GLCode)){ $GLCode="Code not yet available"; }
 								
 						echo "<tr class='assessmentrow'>";
 							echo "<td>$Title</td>";
