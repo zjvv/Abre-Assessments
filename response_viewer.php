@@ -75,14 +75,15 @@
 				ItemConnect.content.get({
 			        id: <?php echo $questionid; ?>,
 			        token: "<?php echo $token; ?>",
+			        contentTypeFlags: 15,
 			        onSuccess: function (data) {
 			            $('#content-element-<?php echo $questionid ?>').html(data);
 			            $('#content-element-<?php echo $questionid ?>').player({
-			                useMathML: true,
-			                enablePassages: true,
-			                passageContainer: '#passage-content-<?php echo $questionid ?>',
-			                enableRubric: true,
-			                rubricContainer: '#rubric-content-<?php echo $questionid ?>'
+	                        useMathML: true,
+	                        enablePassages: true,
+	                        passageContainer: '#passage-content-<?php echo $questionid ?>',
+	                        enableRubric: true,
+	                        rubricContainer: '#rubric-content-<?php echo $questionid ?>'
 			            });
 			            //Hydrate Last Response from User
 			            if(!isEmpty(lastSubmittedresponse))

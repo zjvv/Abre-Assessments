@@ -40,6 +40,7 @@
 				    $('#titletext').text('Assessment Results');
 				    document.title = 'Assessment Results';
 					$('#content_holder').load('modules/".basename(__DIR__)."/results_summary.php?assessmentid='+assessmentid, function() { init_page(); back_button('#assessments'); });
+					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
 			    },
 				'assessments/results/summary/?:assessmentid': function(assessmentid)
 				{

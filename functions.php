@@ -240,7 +240,12 @@
 				$questioncounter=1;
 				while($rowquestions = $resultquestions->fetch_assoc())
 				{
-					$Bank_ID=htmlspecialchars($rowquestions["Bank_ID"], ENT_QUOTES);	
+					$Bank_ID=htmlspecialchars($rowquestions["Bank_ID"], ENT_QUOTES);
+					$PointsPossible=htmlspecialchars($rowquestions["Points"], ENT_QUOTES);
+					if($PointsPossible==""){ $PointsPossible=1; }	
+					
+					$totalpossibleassessmentpoints=$totalpossibleassessmentpoints+$PointsPossible;
+					
 					$allquestionitemsArray[$questioncounter] = $Bank_ID;	
 					
 					if (isset($StudentScoresArray[$Bank_ID]))
@@ -254,12 +259,12 @@
 						}
 						if($Score=="1")
 						{
-							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; $totalcorrect++;
+							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; $totalcorrect=$totalcorrect+$PointsPossible;
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='1' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#4CAF50'>$icon</td>";
 						}	
 						if($Score=="")
 						{
-							$icon="<i class='material-icons' style='color:#0D47A1'>check_circle</i>";
+							$icon="<i class='material-icons' style='color:#0D47A1'>grade</i>";
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
 						}		
 					}
@@ -274,10 +279,10 @@
 							
 				//Score
 				$totalcorrectdouble=sprintf("%02d", $totalcorrect);
-				echo "<td class='center-align'>$totalcorrectdouble/$questioncount</td>";
+				echo "<td class='center-align'>$totalcorrectdouble/$totalpossibleassessmentpoints</td>";
 				
 				//Percentage
-				$studentfinalpercentage=round(($totalcorrect/$questioncount)*100);
+				$studentfinalpercentage=round(($totalcorrectdouble/$totalpossibleassessmentpoints)*100);
 				echo "<td class='center-align'>$studentfinalpercentage%</td>";
 				
 				if($owner==1 or superadmin() or AdminCheck($_SESSION['useremail']))

@@ -167,7 +167,7 @@
 				$Standard_Text = str_replace("CCSS.Math.Content.","",$standard);
 				$Standard_Text = str_replace("CCSS.ELA-Literacy.","",$Standard_Text);
 				if($Standard_Text==""){ $Standard_Text="No Linked Standard"; }
-				if($Points==""){ $Points=0; }
+				if($Points==""){ $Points=1; }
 										
 				//Type
 				if($type=="MC"){ $type="Multiple Choice"; }
@@ -194,7 +194,7 @@
 					echo "<td bgcolor='$questioncolor' class='center-align'>$difficulty</td>";
 					if($Locked!=1 && $access==1)
 					{
-						echo "<td width='100px' class='center-align hide-on-small-only'><input class='questionpoints' id='$questionid' type='number' min='0' style='text-align:center; width:50px;' value='$Points'></td>";
+						echo "<td width='100px' class='center-align hide-on-small-only'><input class='questionpoints' id='$questionid' type='number' min='1' style='text-align:center; width:50px;' value='$Points'></td>";
 					}
 					else
 					{

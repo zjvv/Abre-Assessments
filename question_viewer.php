@@ -54,6 +54,7 @@
 				ItemConnect.content.get({
 			        id: <?php echo $questionid; ?>,
 			        token: "<?php echo $token; ?>",
+			        contentTypeFlags: 15,
 			        onSuccess: function (data) {
 			            $('#content-element-<?php echo $questionid ?>').html(data);
 			            $('#content-element-<?php echo $questionid ?>').player({
