@@ -81,7 +81,7 @@
 			                useMathML: true,
 			                enablePassages: true,
 			                passageContainer: '#passage-content-<?php echo $questionid ?>',
-			                enableRubric: false,
+			                enableRubric: true,
 			                rubricContainer: '#rubric-content-<?php echo $questionid ?>'
 			            });
 			            //Hydrate Last Response from User

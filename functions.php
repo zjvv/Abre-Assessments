@@ -247,16 +247,21 @@
 					{
 						$Score = $StudentScoresArray[$Bank_ID];
 						
-						if($Score==0)
+						if($Score=="0")
 						{
 							$icon="<i class='material-icons' style='color:#B71C1C'>cancel</i>";
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='0' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#F44336'>$icon</td>"; 
 						}
-						else
+						if($Score=="1")
 						{
 							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; $totalcorrect++;
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='1' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#4CAF50'>$icon</td>";
-						}			
+						}	
+						if($Score=="")
+						{
+							$icon="<i class='material-icons' style='color:#0D47A1'>check_circle</i>";
+							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
+						}		
 					}
 					else
 					{

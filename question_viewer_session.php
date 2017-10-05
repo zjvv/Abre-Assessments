@@ -112,7 +112,7 @@
 		            console.log(response);
 		            
 		            //Save the result
-		            $.post("modules/<?php echo basename(__DIR__); ?>/session_scoring.php", { assessmentid: <?php echo $assessmentid; ?>, score: value_score, scoredOn: value_scoredOn, itemId: value_itemId, itemResponse: value_itemResponse, scoreGUID: value_scoreGUID  });
+		            $.post("modules/<?php echo basename(__DIR__); ?>/session_scoring.php", { assessmentid: <?php echo $assessmentid; ?>, score: value_score, scoredOn: value_scoredOn, itemId: <?php echo $questionid; ?>, itemResponse: value_itemResponse, scoreGUID: value_scoreGUID  });
 		           
 		        }
 		        
