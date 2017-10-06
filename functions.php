@@ -237,11 +237,13 @@
 				$allquestionitemsArray = array();
 				$totalquestions=mysqli_num_rows($resultquestions);
 				$totalcorrect=0;
+				$totalcorrectrubric=0;
 				$questioncounter=1;
 				while($rowquestions = $resultquestions->fetch_assoc())
 				{
 					$Bank_ID=htmlspecialchars($rowquestions["Bank_ID"], ENT_QUOTES);
 					$PointsPossible=htmlspecialchars($rowquestions["Points"], ENT_QUOTES);
+					$QuestionType=htmlspecialchars($rowquestions["Type"], ENT_QUOTES);
 					if($PointsPossible==""){ $PointsPossible=1; }	
 					
 					$totalpossibleassessmentpoints=$totalpossibleassessmentpoints+$PointsPossible;
@@ -252,19 +254,35 @@
 					{
 						$Score = $StudentScoresArray[$Bank_ID];
 						
-						if($Score=="0")
+						if($Score=="0" && $QuestionType!="Open Response")
 						{
 							$icon="<i class='material-icons' style='color:#B71C1C'>cancel</i>";
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='0' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#F44336'>$icon</td>"; 
 						}
-						if($Score=="1")
+						if($Score=="1" && $QuestionType!="Open Response")
 						{
-							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; $totalcorrect=$totalcorrect+$PointsPossible;
+							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; 
+							$totalcorrect=$totalcorrect+$PointsPossible;
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='1' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#4CAF50'>$icon</td>";
 						}	
-						if($Score=="")
+						if($Score=="" && $QuestionType=="Open Response")
 						{
 							$icon="<i class='material-icons' style='color:#0D47A1'>grade</i>";
+							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
+						}
+						if($Score!="" && $QuestionType=="Open Response")
+						{
+							
+							//Find how many points student got
+							$sqlrubricpoints = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and ItemID='$Bank_ID'";
+							$resultquestionsrubric = $db->query($sqlrubricpoints);
+							while($rowquestions2 = $resultquestionsrubric->fetch_assoc())
+							{
+								$RubricScore=htmlspecialchars($rowquestions2["Score"], ENT_QUOTES);
+							}
+							
+							$icon="<i class='material-icons' style='color:#0D47A1'>grade</i>";
+							$totalcorrectrubric=$totalcorrectrubric+$RubricScore;
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
 						}		
 					}
@@ -276,14 +294,25 @@
 					$questioncounter++;
 					
 				}
+				
+				//Auto Points
+				$totalcorrectdouble=sprintf("%02d", $totalcorrect);
+				if($totalcorrectdouble!="00"){ $totalcorrectdouble = ltrim($totalcorrectdouble, '0'); }
+				if($totalcorrectdouble=="00"){ $totalcorrectdouble="0"; }
+				echo "<td class='center-align'>$totalcorrectdouble</td>";
+				
+				//Rubric Points
+				$Username=str_replace("@","",$User);
+				$Username=str_replace(".","",$Username);
+				echo "<td class='center-align' id='rubric-total-$Username'>$totalcorrectrubric</td>";
 							
 				//Score
-				$totalcorrectdouble=sprintf("%02d", $totalcorrect);
-				echo "<td class='center-align'>$totalcorrectdouble/$totalpossibleassessmentpoints</td>";
+				$rubricandtotalscored=$totalcorrectdouble+$totalcorrectrubric;
+				echo "<td class='center-align' id='score-total-$Username'>$rubricandtotalscored/$totalpossibleassessmentpoints</td>";
 				
 				//Percentage
-				$studentfinalpercentage=round(($totalcorrectdouble/$totalpossibleassessmentpoints)*100);
-				echo "<td class='center-align'>$studentfinalpercentage%</td>";
+				$studentfinalpercentage=round((($rubricandtotalscored)/$totalpossibleassessmentpoints)*100);
+				echo "<td class='center-align' id='percentage-total-$Username'>$studentfinalpercentage%</td>";
 				
 				if($owner==1 or superadmin() or AdminCheck($_SESSION['useremail']))
 				{
@@ -332,6 +361,9 @@
 					
 					echo "<td></td>";
 					echo "<td></td>";
+					echo "<td></td>";
+					echo "<td></td>";
+					echo "<td></td>";
 					echo "</tr>";
 				
 					//District Mastery
@@ -352,6 +384,9 @@
 						}
 					}
 					
+					echo "<td></td>";
+					echo "<td></td>";
+					echo "<td></td>";
 					echo "<td></td>";
 					echo "<td></td>";
 					echo "</tr>";

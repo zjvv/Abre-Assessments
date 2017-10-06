@@ -102,6 +102,8 @@
 					}
 				?>
 										
+				<th style='min-width:100px;'><div class='center-align'>Auto Points</div></th>
+				<th style='min-width:100px;'><div class='center-align'>Rubric Points</div></th>
 				<th style='min-width:100px;'><div class='center-align'>Score</div></th>	
 				<th style='min-width:100px;'><div class='center-align'>Percentage</div></th>
 				<th style='max-width:30px;'></th>					

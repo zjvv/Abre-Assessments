@@ -37,6 +37,34 @@
 			echo "<div id='passage-content-$questionid'></div>";
 			echo "<div class='certicaquestion' id='content-element-$questionid'></div>";
 			echo "<div id='rubric-content-$questionid'></div>";
+			
+			//Find the Type of Question
+			$sql = "SELECT * FROM assessments_questions where Assessment_ID='$assessmentid' and Bank_ID='$questionid'";
+			$result = $db->query($sql);
+			while($row = $result->fetch_assoc())
+			{
+				$Points=htmlspecialchars($row["Points"], ENT_QUOTES);
+				if($Points==""){ $Points="1"; }
+				$QuestionType=htmlspecialchars($row["Type"], ENT_QUOTES);
+				if($QuestionType=="Open Response")
+				{
+								
+					//Check to see if there is existing entered
+					$CurrentScore="";
+					$sql2 = "SELECT * FROM assessments_scores where Assessment_ID='$assessmentid' and ItemID='$questionid' and User='$user'";
+					$result2 = $db->query($sql2);
+					while($row2 = $result2->fetch_assoc())
+					{
+						$CurrentScore=htmlspecialchars($row2["Score"], ENT_QUOTES);
+						if($CurrentScore==""){ $CurrentScore="0"; }
+					}
+					
+					$Username=str_replace("@","",$user);
+					$Username=str_replace(".","",$Username);
+					echo "<div><b>Teacher Entered Score (Points Possible: $Points - Enter Points Based on Rubric):</b><input type='number' class='teacherrubricscore' data-itemid='$questionid' data-assessmentid='$assessmentid' data-user='$user' data-userclean='$Username' value='$CurrentScore' min='0'></div>";
+				}
+			}
+				
 		echo "</div>";
 		
 		?>
@@ -91,6 +119,24 @@
 			            	$('#content-element-<?php echo $questionid ?>').player('selection', lastSubmittedresponse);
 			            }
 					}
+				});
+				
+				//Update points
+				$( ".teacherrubricscore" ).change(function()
+				{			
+					//Save Points
+					var rubricquestionvalue = $(this).val();
+					var itemid = $(this).data("itemid");
+					var assessmentid = $(this).data("assessmentid");
+					var user = $(this).data("user");
+					var userclean = $(this).data("userclean");
+					$.post( "/modules/<?php echo basename(__DIR__); ?>/rubric_savepoints.php", { itemid: itemid, rubricquestionvalue: rubricquestionvalue, assessmentid: assessmentid, user: user })
+					.done(function( data ) {
+						$('#rubric-total-'+userclean).html(data.RubricPoints);
+						$('#score-total-'+userclean).html(data.Score);
+						$('#percentage-total-'+userclean).html(data.Percentage);
+					});
+					
 				});
 		
 			});
