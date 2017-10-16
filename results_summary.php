@@ -29,6 +29,7 @@
 		
 		$Assessment_ID=htmlspecialchars($_GET["assessmentid"], ENT_QUOTES);
 		
+		
 		//Check if user is the owner of the assessment
 		$query = "SELECT * FROM assessments where ID='$Assessment_ID' and Owner='".$_SESSION['useremail']."'";
 		$dbreturn = databasequery($query);
@@ -37,6 +38,7 @@
 		echo "<div class='row'>";
 			echo "<div class='col l6 s12'>";
 				echo "<select class='browser-default' id='filter1'>";
+					echo "<option value='' disabled selected>Choose a View</option>";
 					echo "<option value='course'>View by Course</option>";
 					echo "<option value='group'>View by Group</option>";
 					if(AdminCheck($_SESSION['useremail']) or superadmin()){ echo "<option value='teacher'>View by Teacher</option>"; }
@@ -58,6 +60,8 @@
 	
 	$(function() 
 	{
+		
+		$('select').material_select();
 		$(".landingloadergrid").hide();
 		$(".resultsgrid").hide();
 		$("#filter2").hide();
@@ -101,13 +105,6 @@
 				$(".landingloadergrid").hide();
 			}
 		}
-		
-		//Load Page
-		$("#filter2").show();
-		$("#filter2").load('modules/<?php echo basename(__DIR__); ?>/results_dropdown.php?category=course', function()
-		{ 
-			ReturnFilterValue();
-		});	
 		
     	//Filter 1 Change
     	$('#filter1').change(function()

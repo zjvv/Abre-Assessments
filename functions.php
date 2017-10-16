@@ -295,11 +295,13 @@
 					
 				}
 				
+				
 				//Auto Points
 				$totalcorrectdouble=sprintf("%02d", $totalcorrect);
 				if($totalcorrectdouble!="00"){ $totalcorrectdouble = ltrim($totalcorrectdouble, '0'); }
 				if($totalcorrectdouble=="00"){ $totalcorrectdouble="0"; }
 				echo "<td class='center-align'>$totalcorrectdouble</td>";
+				
 				
 				//Rubric Points
 				$Username=str_replace("@","",$User);
@@ -312,16 +314,9 @@
 				
 				//Percentage
 				$studentfinalpercentage=round((($rubricandtotalscored)/$totalpossibleassessmentpoints)*100);
-				echo "<td class='center-align' id='percentage-total-$Username'>$studentfinalpercentage%</td>";
+				echo "<td class='center-align' id='percentage-total-$Username'>$studentfinalpercentage%</td>";	
+
 				
-				if($owner==1 or superadmin() or AdminCheck($_SESSION['useremail']))
-				{
-					echo "<td class='center-align'><a href='modules/".basename(__DIR__)."/removestudentresult.php?assessmentid=".$Assessment_ID."&student=".$User."' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600 removeresult'><i class='material-icons'>delete</i></a></td>";
-				}
-				else
-				{
-					echo "<td class='center-align'></td>";
-				}	
 			echo "</tr>";
 			
 			if($totalstudents==$studentcounter)
@@ -343,10 +338,15 @@
 					$questionscoreArray[$ItemIDScore] = $ItemIDCount;
 				}
 				
+				
+				
+				
 				echo "</tbody>";
+				
 				echo "<tfoot>";
 				
 					//Class Mastery
+					/*
 					echo "<tr style='background-color:".sitesettings("sitecolor").";'>";
 					echo "<td colspan='2' style='color:#fff;' class='center-align'><b>Class Mastery</b></td>";
 					
@@ -365,6 +365,7 @@
 					echo "<td></td>";
 					echo "<td></td>";
 					echo "</tr>";
+					*/
 				
 					//District Mastery
 					echo "<tr style='background-color:".sitesettings("sitecolor").";'>";
@@ -395,6 +396,7 @@
 				
 				
 			}
+			
 			
 		}
 	

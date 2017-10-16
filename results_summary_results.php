@@ -50,6 +50,9 @@
 		$result = $db->query($sql);
 		$owner = $result->num_rows;
 		
+		//If Superadmin or Admin Make an Owner
+		if(superadmin() or AdminCheck($_SESSION['useremail'])){ $owner=1; }
+		
 		if(isset($_GET["course"]))
 		{ 
 			$course=$_GET["course"]; 
