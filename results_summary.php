@@ -29,15 +29,14 @@
 		
 		$Assessment_ID=htmlspecialchars($_GET["assessmentid"], ENT_QUOTES);
 		
-		
 		//Check if user is the owner of the assessment
 		$query = "SELECT * FROM assessments where ID='$Assessment_ID' and Owner='".$_SESSION['useremail']."'";
 		$dbreturn = databasequery($query);
 		$owner=count($dbreturn);
 		
 		echo "<div class='row'>";
-			echo "<div class='col l6 s12'>";
-				echo "<select class='browser-default' id='filter1'>";
+			echo "<div class='col l4 s12'>";
+				echo "<select id='filter1'>";
 					echo "<option value='' disabled selected>Choose a View</option>";
 					echo "<option value='course'>View by Course</option>";
 					echo "<option value='group'>View by Group</option>";
@@ -45,8 +44,11 @@
 					if($owner!=0 or superadmin()){ echo "<option value='all'>View All Results</option>"; }
 				echo "</select>";
 			echo "</div>";
-			echo "<div class='col l6 s12'>";
-				echo "<select class='browser-default' id='filter2'></select>";				
+			echo "<div class='col l4 s12'>";
+				echo "<select id='filter2'></select>";				
+			echo "</div>";
+			echo "<div class='col l4 s12'>";
+				echo "<select id='filter3'></select>";				
 			echo "</div>";
 		echo "</div>";
 		echo "<div class='row'><div class='col s12'><div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloadergrid' style='width:100%;'></div></div></div>";
@@ -62,84 +64,87 @@
 	{
 		
 		$('select').material_select();
+		
 		$(".landingloadergrid").hide();
 		$(".resultsgrid").hide();
-		$("#filter2").hide();
 		
-		function ReturnFilterValue()
+		function Loading()
 		{
-			var category = $('#filter1').val();		
-			if($('#filter2').val() != null) 
+			$(".landingloadergrid").show();
+			$(".resultsgrid").empty();
+		}
+		
+		function Ready()
+		{
+			$(".landingloadergrid").hide();
+			$(".resultsgrid").show();
+			$('select').material_select();
+			mdlregister();
+		}
+		
+		function UpdateResults(Filter1,Filter2,Filter3)
+		{
+			if(Filter1=="all")
 			{
-				var FilterSelect = $('#filter2').val();
-				if(category=='course')
+				$(".resultsgrid").load('modules/Abre-Assessments/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>', function(){ Ready(); });
+			}
+			else if(Filter1=="course")
+			{
+				if(Filter2==null)
 				{
-					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&course='+FilterSelect, function()
-					{
-						$(".landingloadergrid").hide();
-						$(".resultsgrid").show();
-						mdlregister();
-					});
+					$("#filter2").load('modules/<?php echo basename(__DIR__); ?>/results_dropdown.php?category=course', function(){ Ready(); });
 				}
-				if(category=='group')
+				else
 				{
-					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&groupid='+FilterSelect, function()
-					{
-						$(".landingloadergrid").hide();
-						$(".resultsgrid").show();
-						mdlregister();
-					});
-				}
-				if(category=='teacher')
+					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&course='+Filter2, function(){ Ready(); });
+				}			
+			}
+			else if(Filter1=="group")
+			{
+				if(Filter2==null)
 				{
-					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&staffid='+FilterSelect, function()
-					{
-						$(".landingloadergrid").hide();
-						$(".resultsgrid").show();
-						mdlregister();
-					});
+					$("#filter2").load('modules/<?php echo basename(__DIR__); ?>/results_dropdown.php?category=group', function(){ Ready(); });
 				}
+				else
+				{
+					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&groupid='+Filter2, function(){ Ready(); });
+				}			
+			}
+			else if(Filter1=="teacher")
+			{
+				if(Filter2==null)
+				{
+					$("#filter2").load('modules/<?php echo basename(__DIR__); ?>/results_dropdown.php?category=teacher', function(){ Ready(); });
+				}
+				else
+				{
+					if(Filter3==null)
+					{
+						$("#filter3").load('modules/<?php echo basename(__DIR__); ?>/results_dropdown.php?category=courseteacher&staffid='+Filter2, function(){ Ready(); });
+					}
+					else
+					{
+						$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&course='+Filter3+'&staffidpass='+Filter2, function(){ Ready(); });
+					}
+				}			
 			}
 			else
 			{
-				$(".landingloadergrid").hide();
+				Ready();
 			}
 		}
 		
-    	//Filter 1 Change
-    	$('#filter1').change(function()
+    	//Filter Change
+    	$('#filter1').change(function(){ $("#filter2").empty(); $("#filter3").empty(); });
+    	$('#filter2').change(function(){ $("#filter3").empty(); });
+    	$('#filter1,#filter2,#filter3').change(function()
     	{
-	    	var category = $(this).val();
-			$(".landingloadergrid").show();
-			$(".resultsgrid").hide();
-			
-			if(category!="all")
-			{
-				$("#filter2").show();
-				$("#filter2").load('modules/<?php echo basename(__DIR__); ?>/results_dropdown.php?category='+category, function()
-				{ 
-					ReturnFilterValue();
-				});				
-			}
-			else
-			{
-				$("#filter2").hide();
-				$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>', function()
-				{
-					$(".landingloadergrid").hide();
-					$(".resultsgrid").show();
-					mdlregister();
-				});
-			}
-
-		});	
-		
-    	//Filter 2 Change
-    	$('#filter2').change(function()
-    	{
-	    	$(".landingloadergrid").show();
-	    	ReturnFilterValue();
-		});	
+	    	var Filter1 = $('#filter1').val();
+	    	var Filter2 = $('#filter2').val();
+	    	var Filter3 = $('#filter3').val();
+			Loading();
+	    	UpdateResults(Filter1,Filter2,Filter3);
+		});
 			
 	});
 		

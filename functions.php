@@ -132,6 +132,7 @@
 		//Get StaffID Given Email
 		function GetStaffID($email){
 			$email = strtolower($email);
+			if($email=='crose@hcsdoh.org'){ $email='sbraun@hcsdoh.org'; }
 			$query = "SELECT StaffID FROM Abre_Staff where EMail1 LIKE '$email' LIMIT 1";
 			$dbreturn = databasequery($query);
 			foreach ($dbreturn as $value)
@@ -181,54 +182,85 @@
 			$db->close();
 		}
 		
-		//Show Results of Assessment
-		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray)
+		//Return all Results for Assessment
+		function GetCorrectResponsesforAssessment($Assessment_ID)
 		{
 			
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 			
-			//See if student has completed
-			$sqlcomplete = "SELECT * FROM assessments_status where Assessment_ID='$Assessment_ID' and User='$User'";
-			$resultcomplete = $db->query($sqlcomplete);
-			$completestatus=0;
-			while($rowcomplete = $resultcomplete->fetch_assoc())
-			{
-				$completestatus=1;
-				$Start_Time=htmlspecialchars($rowcomplete["Start_Time"], ENT_QUOTES);
-				$End_Time=htmlspecialchars($rowcomplete["End_Time"], ENT_QUOTES);	
-				$Start_Time=date("F j, Y, g:i A", strtotime($Start_Time));
-				if($End_Time=="0000-00-00 00:00:00"){ $End_Time="In Progress"; }else{ $End_Time=date("F j, Y, g:i A", strtotime($End_Time)); }
-			}
-			
 			//Check what questions the student got correct
-			$sqlquestionsanswer = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User'";
+			$sqlquestionsanswer = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID'";
 			$resultquestionsanswer = $db->query($sqlquestionsanswer);
 			$StudentScoresArray = array();
 			while($rowquestionsanswer = $resultquestionsanswer->fetch_assoc())
 			{
 				$StudentItemID = htmlspecialchars($rowquestionsanswer["ItemID"], ENT_QUOTES);
 				$StudentScore = htmlspecialchars($rowquestionsanswer["Score"], ENT_QUOTES);
-				$StudentScoresArray[$StudentItemID] = $StudentScore;
+				$StudentUser = htmlspecialchars($rowquestionsanswer["User"], ENT_QUOTES);
+				$StudentScoresArray[$StudentItemID][$StudentUser] = $StudentScore;
 			}
+			
+			return $StudentScoresArray;
+			
+		}
+		
+		//Return all Status for Assessment
+		function GetAssessmentStatus($Assessment_ID)
+		{
+			
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+			
+			$sqlcomplete = "SELECT * FROM assessments_status where Assessment_ID='$Assessment_ID'";
+			$resultcomplete = $db->query($sqlcomplete);
+			$completestatus=0;
+			$StudentStatusArray = array();
+			while($rowcomplete = $resultcomplete->fetch_assoc())
+			{
+				$completestatus=1;
+				$User=htmlspecialchars($rowcomplete["User"], ENT_QUOTES);
+				$Start_Time=htmlspecialchars($rowcomplete["Start_Time"], ENT_QUOTES);
+				$End_Time=htmlspecialchars($rowcomplete["End_Time"], ENT_QUOTES);	
+				$Start_Time=date("F j, Y, g:i A", strtotime($Start_Time));
+				if($End_Time=="0000-00-00 00:00:00"){ $End_Time="In Progress"; }else{ $End_Time=date("F j, Y, g:i A", strtotime($End_Time)); }
+				$StudentStatusArray[$User] = array('StartTime' => $Start_Time, 'EndTime' => $End_Time);
+			}
+			return $StudentStatusArray;
+			
+		}
+		
+		//Show Results of Assessment
+		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray)
+		{
+			
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 								
 			echo "<tr class='assessmentrow'>";
 				echo "<td>";
 					echo "<b>$ResultName</b>";
 				echo "</td>";
-								
-				if($completestatus==1)
-				{
-					$TimeDifference = (strtotime($End_Time) - strtotime($Start_Time))/60;
-					$TimeDifference = sprintf("%02d", $TimeDifference);
-					if($TimeDifference==1){ $TimeDifferenceText="$TimeDifference Minute"; }else{ $TimeDifferenceText="$TimeDifference Minutes"; }
-					echo "<td>";
-						if($End_Time=="In Progress"){ echo "<div id='status_$User' class='pointer'>In Progress</div>"; }else{ echo "<div id='status_$User' class='pointer'>Complete<br> <span style='font-size:11px;'>$TimeDifferenceText</span></div>"; }
-						echo "<div class='mdl-tooltip mdl-tooltip--large' for='status_$User'><b>Start:</b> $Start_Time<br><b>End:</b> $End_Time</div>";
-					echo "</td>";
+				
+				if (!empty($StudentStatusArray[$User]))
+				{				
+					$StudentStatusVerb=$StudentStatusArray[$User];
+					if($StudentStatusVerb['EndTime']!="In Progress"){
+						
+						$TimeDifference = (strtotime($StudentStatusVerb['EndTime']) - strtotime($StudentStatusVerb['StartTime']))/60;
+						$TimeDifference = sprintf("%02d", $TimeDifference);
+						if($TimeDifference==1){ $TimeDifferenceText="$TimeDifference Minute"; }else{ $TimeDifferenceText="$TimeDifference Minutes"; }
+						echo "<td>";
+							echo "<div id='status_$User' class='pointer'>Completed</div>";
+							echo "<div class='mdl-tooltip mdl-tooltip--large' for='status_$User'><b>Completed:<br>"; echo $StudentStatusVerb['EndTime']; echo "</b><br><br>Total Time:<br>$TimeDifferenceText</div>";
+						echo "</td>";
+					}else{ 
+						echo "<td>";
+							echo "<div id='status_$User' class='pointer'>In Progress</div>";
+							echo "<div class='mdl-tooltip mdl-tooltip--large' for='status_$User'><b>Start Time:<br>"; echo $StudentStatusVerb['StartTime']; echo "</b></div>";
+						echo "</td>";					
+					}
 				}
 				else
 				{
-					echo "<td>Not Completed</td>";	
+					echo "<td>Has Not Started</td>";
 				}
 								
 				//Loop through each question on assessment
@@ -239,6 +271,7 @@
 				$totalcorrect=0;
 				$totalcorrectrubric=0;
 				$questioncounter=1;
+				$totalpossibleassessmentpoints=NULL;
 				while($rowquestions = $resultquestions->fetch_assoc())
 				{
 					$Bank_ID=htmlspecialchars($rowquestions["Bank_ID"], ENT_QUOTES);
@@ -250,9 +283,9 @@
 					
 					$allquestionitemsArray[$questioncounter] = $Bank_ID;	
 					
-					if (isset($StudentScoresArray[$Bank_ID]))
+					if (isset($StudentScoresArray[$Bank_ID][$User]))
 					{
-						$Score = $StudentScoresArray[$Bank_ID];
+						$Score = $StudentScoresArray[$Bank_ID][$User];
 						
 						if($Score=="0" && $QuestionType!="Open Response")
 						{
@@ -315,6 +348,16 @@
 				//Percentage
 				$studentfinalpercentage=round((($rubricandtotalscored)/$totalpossibleassessmentpoints)*100);
 				echo "<td class='center-align' id='percentage-total-$Username'>$studentfinalpercentage%</td>";	
+				
+				//Delete Assessment Button
+				if($owner==1 or superadmin())
+				{
+					echo "<td class='center-align'><a href='modules/".basename(__DIR__)."/removestudentresult.php?assessmentid=".$Assessment_ID."&student=".$User."' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600 removeresult'><i class='material-icons'>delete</i></a></td>";
+				}
+				else
+				{
+					echo "<td class='center-align'></td>";
+				}
 
 				
 			echo "</tr>";

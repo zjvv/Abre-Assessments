@@ -28,6 +28,7 @@
 	{
 		
 		$category=htmlspecialchars($_GET["category"], ENT_QUOTES);
+		$StaffIDDropdown=htmlspecialchars($_GET["staffid"], ENT_QUOTES);
 		$StaffId=GetStaffID($_SESSION['useremail']);
 		$CurrentSememester=GetCurrentSemester();
 		$emailencrypted=encrypt($_SESSION['useremail'],"");
@@ -36,7 +37,26 @@
 		//If Course, Display all Courses
 		if($category=="course")
 		{
+			echo "<option value='' disabled selected>Choose a Course</option>";
 			$query = "SELECT * FROM Abre_StaffSchedules where StaffID='$StaffId' and (TermCode='$CurrentSememester' or TermCode='Year') order by Period";
+			$dbreturn = databasequery($query);
+			foreach ($dbreturn as $value)
+			{	
+				$CourseCode=$value['CourseCode'];
+				$SchoolCode=$value['SchoolCode'];
+				$SectionCode=$value['SectionCode'];
+				$CourseName=$value['CourseName'];
+				$Period=$value['Period'];
+				
+				echo "<option value='$CourseCode,$SectionCode'>$CourseName (Period: $Period)</option>";
+			}
+		}
+		
+		//If Course, Display all Courses
+		if($category=="courseteacher")
+		{
+			echo "<option value='' disabled selected>Choose a Course</option>";
+			$query = "SELECT * FROM Abre_StaffSchedules where StaffID='$StaffIDDropdown' and (TermCode='$CurrentSememester' or TermCode='Year') order by Period";
 			$dbreturn = databasequery($query);
 			foreach ($dbreturn as $value)
 			{	
@@ -53,6 +73,7 @@
 		//If Group, Display all Groups
 		if($category=="group")
 		{
+			echo "<option value='' disabled selected>Choose a Group</option>";
 			$query = "SELECT * FROM students_groups where StaffId='$StaffId'";
 			$dbreturn = databasequery($query);
 			foreach ($dbreturn as $value)
@@ -64,11 +85,11 @@
 			}
 		}
 		
-		//If Group, Display all Groups
+		//If Teacher, Display all Students for Teacher
 		if($category=="teacher")
 		{
 			//Find what building the admin has access to
-
+			echo "<option value='' disabled selected>Choose a Teacher</option>";
 				$query = "SELECT * FROM Abre_VendorLink_SIS_Staff where EmailList LIKE '%$email%' LIMIT 1";
 				$dbreturn = databasequery($query);
 				$usersfound=count($dbreturn);

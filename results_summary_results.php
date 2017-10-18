@@ -42,7 +42,7 @@
 		$Assessment_ID=htmlspecialchars($_GET["assessmentid"], ENT_QUOTES);
 		
 		//Look up StaffID and Semester
-		$StaffId=GetStaffID($_SESSION['useremail']);
+		if(isset($_GET['staffidpass'])){ $StaffId=$_GET['staffidpass']; }else{ $StaffId=GetStaffID($_SESSION['useremail']); }
 		$CurrentSememester=GetCurrentSemester();
 		
 		//Check if verified assessment
@@ -73,7 +73,6 @@
 		{
 			$sql = "SELECT * FROM assessments_status where Assessment_ID='$Assessment_ID'";
 		}
-		
 		$result = $db->query($sql);
 		$rowcount=mysqli_num_rows($result);
 		
@@ -138,20 +137,16 @@
 								$ResultName=getStudentNameGivenStudentID($StudentID);
 							}
 							
-							//Loop through each kid and create an array with user match with item they got correct
-							$sql = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and Score='1'";
-							$result2 = $db->query($sql);
-							while($row2 = $result2->fetch_assoc())
+							if($studentcounter==1)
 							{
-								$ItemID=htmlspecialchars($row2["ItemID"], ENT_QUOTES);
-								array_push($totalresultsbystudentarray, $ItemID);
-							}
-							
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray);
+								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
+								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
+							}							
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
 						}
 					}
 					
-					//View All Courses
+					//View By Courses
 					if(isset($course))
 					{
 						$sql = "SELECT * FROM Abre_StudentSchedules where CourseCode='$CourseCode' and SectionCode='$SectionCode' and StaffId='$StaffId' and (TermCode='$CurrentSememester' or TermCode='Year') group by StudentID order by LastName";
@@ -166,16 +161,12 @@
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
 							
-							//Loop through each kid and create an array with user match with item they got correct
-							$sql = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and Score='1'";
-							$result2 = $db->query($sql);
-							while($row2 = $result2->fetch_assoc())
+							if($studentcounter==1)
 							{
-								$ItemID=htmlspecialchars($row2["ItemID"], ENT_QUOTES);
-								array_push($totalresultsbystudentarray, $ItemID);
+								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
+								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
-							
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray);
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
 						}
 					}
 					
@@ -193,17 +184,13 @@
 							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
-							
-							//Loop through each kid and create an array with user match with item they got correct
-							$sql = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and Score='1'";
-							$result2 = $db->query($sql);
-							while($row2 = $result2->fetch_assoc())
+
+							if($studentcounter==1)
 							{
-								$ItemID=htmlspecialchars($row2["ItemID"], ENT_QUOTES);
-								array_push($totalresultsbystudentarray, $ItemID);
+								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
+								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
-							
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray);
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
 						}
 					}
 					
@@ -220,17 +207,13 @@
 							$studentcounter++;
 							$User=htmlspecialchars($row["User"], ENT_QUOTES);
 							$ResultName=getNameGivenEmail($User);		
-							
-							//Loop through each kid and create an array with user match with item they got correct
-							$sql = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and Score='1'";
-							$result2 = $db->query($sql);
-							while($row2 = $result2->fetch_assoc())
+
+							if($studentcounter==1)
 							{
-								$ItemID=htmlspecialchars($row2["ItemID"], ENT_QUOTES);
-								array_push($totalresultsbystudentarray, $ItemID);
-							}
-									
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray);
+								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
+								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
+							}									
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
 						}
 						
 					}
