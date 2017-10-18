@@ -136,6 +136,7 @@
 						$('#score-total-'+userclean).html(data.Score);
 						$('#percentage-total-'+userclean).html(data.Percentage);
 						$('#rubric-question-'+userclean+'-'+itemid).css('background-color', '#1565C0');
+						$('#rubric-question-'+userclean+'-'+itemid).html('<i class="material-icons" style="color:#0D47A1">star</i>');
 					});
 					
 				});

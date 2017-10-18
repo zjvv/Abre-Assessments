@@ -125,7 +125,7 @@
 				$FirstName=$row["FirstName"];
 				$LastName=$row["LastName"];
 			}
-			if(isset($FirstName) && isset($LastName)){ return "$FirstName $LastName"; }else{ return $StudentID; }
+			if(isset($FirstName) && isset($LastName)){ return "$LastName, $FirstName"; }else{ return $StudentID; }
 			
 		}
 		
@@ -302,12 +302,12 @@
 						}	
 						if($Score=="" && $QuestionType=="Open Response")
 						{
-							$icon="<i class='material-icons' style='color:#0D47A1'>grade</i>";
+							$icon="<i class='material-icons' style='color:#0D47A1'>star_border</i>";
 							echo "<td class='center-align pointer questionviewerreponse' id='rubric-question-$Username-$Bank_ID' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
 						}
 						if($Score!="" && $QuestionType=="Open Response")
 						{						
-							$icon="<i class='material-icons' style='color:#0D47A1'>grade</i>";
+							$icon="<i class='material-icons' style='color:#0D47A1'>star</i>";
 							$totalcorrectrubric=$totalcorrectrubric+$Score;
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#1565C0'>$icon</td>";
 						}	
