@@ -135,6 +135,7 @@
 						$('#rubric-total-'+userclean).html(data.RubricPoints);
 						$('#score-total-'+userclean).html(data.Score);
 						$('#percentage-total-'+userclean).html(data.Percentage);
+						$('#rubric-question-'+userclean+'-'+itemid).css('background-color', '#1565C0');
 					});
 					
 				});

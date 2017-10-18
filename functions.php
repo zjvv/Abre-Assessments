@@ -232,6 +232,9 @@
 		{
 			
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+			
+			$Username=str_replace("@","",$User);
+			$Username=str_replace(".","",$Username);
 								
 			echo "<tr class='assessmentrow'>";
 				echo "<td>";
@@ -300,23 +303,14 @@
 						if($Score=="" && $QuestionType=="Open Response")
 						{
 							$icon="<i class='material-icons' style='color:#0D47A1'>grade</i>";
-							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
+							echo "<td class='center-align pointer questionviewerreponse' id='rubric-question-$Username-$Bank_ID' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
 						}
 						if($Score!="" && $QuestionType=="Open Response")
-						{
-							
-							//Find how many points student got
-							$sqlrubricpoints = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' and User='$User' and ItemID='$Bank_ID'";
-							$resultquestionsrubric = $db->query($sqlrubricpoints);
-							while($rowquestions2 = $resultquestionsrubric->fetch_assoc())
-							{
-								$RubricScore=htmlspecialchars($rowquestions2["Score"], ENT_QUOTES);
-							}
-							
+						{						
 							$icon="<i class='material-icons' style='color:#0D47A1'>grade</i>";
-							$totalcorrectrubric=$totalcorrectrubric+$RubricScore;
-							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
-						}		
+							$totalcorrectrubric=$totalcorrectrubric+$Score;
+							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#1565C0'>$icon</td>";
+						}	
 					}
 					else
 					{
@@ -327,7 +321,6 @@
 					
 				}
 				
-				
 				//Auto Points
 				$totalcorrectdouble=sprintf("%02d", $totalcorrect);
 				if($totalcorrectdouble!="00"){ $totalcorrectdouble = ltrim($totalcorrectdouble, '0'); }
@@ -336,8 +329,6 @@
 				
 				
 				//Rubric Points
-				$Username=str_replace("@","",$User);
-				$Username=str_replace(".","",$Username);
 				echo "<td class='center-align' id='rubric-total-$Username'>$totalcorrectrubric</td>";
 							
 				//Score
