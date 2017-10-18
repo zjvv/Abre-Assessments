@@ -67,7 +67,7 @@
 		echo "</div>";
 		
 		echo "<div class='row' id='reloadbutton' style='margin-top:-40px; margin-left:5px;'>";
-				echo "<button class='modal-action waves-effect btn-flat white-text' id='reload' style='margin-left:5px; background-color:"; echo sitesettings("sitecolor"); echo "'>Reload</button>";
+				echo "<button class='modal-action waves-effect btn-flat white-text' id='reload' style='margin-left:5px; background-color:"; echo sitesettings("sitecolor"); echo "'>Refresh Results</button>";
 		echo "</div>";
 		
 		
