@@ -34,7 +34,21 @@
 		$dbreturn = databasequery($query);
 		$owner=count($dbreturn);
 		
-		echo "<div class='row'>";
+		//Assessment Lookup
+		$sql = "SELECT * FROM assessments where ID='$Assessment_ID'";
+		$result = $db->query($sql);
+		while($row = $result->fetch_assoc())
+		{
+			$AssessmentOwner=htmlspecialchars($row["Owner"], ENT_QUOTES);
+			$AssessmentTitle=htmlspecialchars($row["Title"], ENT_QUOTES);
+			if($_SESSION['useremail']==$AssessmentOwner){ $owner=1; }else{ $owner=0; }
+		}
+		
+		echo "<div class='row' style='margin-top:-10px;'>";
+			echo "<div class='col s12'><h4>$AssessmentTitle</h4></div>";
+		echo "</div>";
+		
+		echo "<div class='row' style='margin-top:-40px;'>";
 			echo "<div class='col l4 s12'>";
 				echo "<select id='filter1'>";
 					echo "<option value='' disabled selected>Choose a View</option>";
@@ -52,7 +66,7 @@
 			echo "</div>";
 		echo "</div>";
 		echo "<div class='row'><div class='col s12'><div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloadergrid' style='width:100%;'></div></div></div>";
-		echo "<div class='resultsgrid'></div>";
+		echo "<div class='row' style='margin-top:-40px;'><div class='resultsgrid'></div></div>";
 		
 	}
 

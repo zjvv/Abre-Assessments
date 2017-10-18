@@ -100,7 +100,8 @@
 						$Standard=htmlspecialchars($row["Standard"], ENT_QUOTES);
 						$Standard_Text = str_replace("CCSS.Math.Content.","",$Standard);
 						$Standard_Text = str_replace("CCSS.ELA-Literacy.","",$Standard_Text);
-						echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text</div></th>";
+						$Difficulty=htmlspecialchars($row["Difficulty"], ENT_QUOTES);
+						echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text<br><br>$Difficulty</div></th>";
 					}
 				?>
 										

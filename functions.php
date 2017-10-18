@@ -132,7 +132,6 @@
 		//Get StaffID Given Email
 		function GetStaffID($email){
 			$email = strtolower($email);
-			if($email=='crose@hcsdoh.org'){ $email='sbraun@hcsdoh.org'; }
 			$query = "SELECT StaffID FROM Abre_Staff where EMail1 LIKE '$email' LIMIT 1";
 			$dbreturn = databasequery($query);
 			foreach ($dbreturn as $value)
