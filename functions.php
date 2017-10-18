@@ -96,7 +96,7 @@
 				}
 			}
 			
-			if($firstname && $lastname){ return "$firstname $lastname"; }else{ return "$emaillookup"; }
+			if($firstname && $lastname){ return "$lastname, $firstname"; }else{ return "$emaillookup"; }
 			
 		}
 		

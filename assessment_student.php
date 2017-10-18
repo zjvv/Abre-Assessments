@@ -131,7 +131,7 @@
 					
 						//Dashboard Data
 						echo "<div id='overview' style='position:absolute; width: calc(100% - 305px); left:305px; top:0; bottom:0; right:0; overflow-y: scroll; padding:20px;'>";
-							//echo "<div class='row'>$Title</div>";
+							echo "<div class='row' style='margin-top:-20px;'><h5>$Title</h5></div>";
 							echo "<div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloader' style='width:100%;'></div>";
 							echo "<div class='dashboard'></div>";
 						echo "</div>";
@@ -216,18 +216,15 @@ if($FirstQuestion!=NULL)
 							$('.savebutton').show();
 						});
 						
-						//Hide save button
+						//Click save button
 						$(document).on("click", ".savebutton", function ()
 						{
+
 							var QuestionID = $(this).data('scorequestion');
 							var NextQuestion = $(this).data('nextquestion');
 							var Question_Number = $(this).data('questionnumber');
 							var QuestionName = '#questionicon-'+QuestionID;
-							$(QuestionName).html( "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>" );						
-							CompleteCheck();			
-							$(this).hide();
-							
-							var TotalQuestionCount=<?php echo $questioncount; ?>
+							var TotalQuestionCount=<?php echo $questioncount; ?>;
 							
 							if(Question_Number<TotalQuestionCount)
 							{
@@ -235,18 +232,43 @@ if($FirstQuestion!=NULL)
 								$(".dashboard").fadeTo(0,0);
 								$(".landingloader").show();
 								Question_Number_Value=Question_Number+1;
-								$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+NextQuestion+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number_Value, function()
-								{				
+								$.get('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+NextQuestion+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number_Value)					
+								.done(function(response)
+								{
+									$(QuestionName).html( "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>" );
 									$(".landingloader").hide();
+									$(this).hide();
+									$(".dashboard").html(response);
 									$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
 									$(".dashboard").fadeTo(0,1);
 									var questionbuttondiv = '#questionbutton-'+Question_Number_Value;
 									$(".question, #overviewpage").css("background-color", "");
 									$(".question, #overviewpage").css("color", "#fff");
 									$(questionbuttondiv).css("background-color", "#000");
-									$(questionbuttondiv).css("color", "#fff");
-								});
+									$(questionbuttondiv).css("color", "#fff");		
+									CompleteCheck();	
+								})
+								.fail(function()
+								{
+									$(".landingloader").hide();
+									$(".dashboard").fadeTo(0,1);							
+	  							});
 								
+							}
+							else
+							{
+								Question_Number_Value=Question_Number;
+								$.get('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+QuestionID+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number_Value)					
+								.done(function(response)
+								{
+									$(QuestionName).html( "<i class='material-icons questioncomplete' style='font-size:44px; color:#fff;'>radio_button_checked</i>" );
+									CompleteCheck();
+								})
+								.fail(function()
+								{
+									$(".landingloader").hide();
+									$(".dashboard").fadeTo(0,1);						
+	  							});
 							}
 							
 						});
@@ -262,14 +284,25 @@ if($FirstQuestion!=NULL)
 							$(this).css("color", "#fff");
 							var Bank_ID= $(this).data('bankid');
 							var Question_Number= $(this).data('questionnumber');
-							CompleteCheck();
 							
-							$(".dashboard").load('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+Bank_ID+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number, function()
-							{				
+							$.get('modules/<?php echo basename(__DIR__); ?>/question_viewer_session.php?id='+Bank_ID+'&assessmentid='+<?php echo $Assessment_ID; ?>+'&questionarray='+QuestionArray+'&questionnumber='+Question_Number)					
+							.done(function(response)
+							{
 								$(".landingloader").hide();
+								$(".dashboard").html(response);
 								$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
 								$(".dashboard").fadeTo(0,1);
-							});
+							})
+							.fail(function()
+							{
+								$(".landingloader").hide();
+								$(".dashboard").html("<div class='card white-text' style='background-color:#F44336; padding:20px;'>Unable to connect to the Internet</div>");
+								$('.mdl-layout__content, .dashboard').animate({scrollTop:0}, 0);
+								$(".dashboard").fadeTo(0,1);							
+  							})
+  							
+  							CompleteCheck();
+  							
 						});
 						
 					<?php } ?>

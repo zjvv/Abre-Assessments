@@ -59,14 +59,20 @@
 				echo "</select>";
 			echo "</div>";
 			echo "<div class='col l4 s12'>";
-				echo "<select id='filter2'></select>";				
+				echo "<select id='filter2'></select>";
 			echo "</div>";
 			echo "<div class='col l4 s12'>";
 				echo "<select id='filter3'></select>";				
 			echo "</div>";
 		echo "</div>";
+		
+		echo "<div class='row' id='reloadbutton' style='margin-top:-40px; margin-left:5px;'>";
+				echo "<button class='modal-action waves-effect btn-flat white-text' id='reload' style='margin-left:5px; background-color:"; echo sitesettings("sitecolor"); echo "'>Reload</button>";
+		echo "</div>";
+		
+		
 		echo "<div class='row'><div class='col s12'><div id='p2' class='mdl-progress mdl-js-progress mdl-progress__indeterminate landingloadergrid' style='width:100%;'></div></div></div>";
-		echo "<div class='row' style='margin-top:-40px;'><div class='resultsgrid'></div></div>";
+		echo "<div class='row' style='margin-top:-20px;'><div class='resultsgrid'></div></div>";
 		
 	}
 
@@ -81,6 +87,7 @@
 		
 		$(".landingloadergrid").hide();
 		$(".resultsgrid").hide();
+		$("#reloadbutton").hide();
 		
 		function Loading()
 		{
@@ -153,12 +160,23 @@
     	$('#filter2').change(function(){ $("#filter3").empty(); });
     	$('#filter1,#filter2,#filter3').change(function()
     	{
+	    	$("#reloadbutton").show();
 	    	var Filter1 = $('#filter1').val();
 	    	var Filter2 = $('#filter2').val();
 	    	var Filter3 = $('#filter3').val();
 			Loading();
 	    	UpdateResults(Filter1,Filter2,Filter3);
 		});
+		
+		//Reload Button
+		$("#reload").unbind().click(function(){
+			var Filter1 = $('#filter1').val();
+	    	var Filter2 = $('#filter2').val();
+	    	var Filter3 = $('#filter3').val();
+			Loading();
+			UpdateResults(Filter1,Filter2,Filter3);
+		});
+
 			
 	});
 		

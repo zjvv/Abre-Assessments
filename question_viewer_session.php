@@ -41,6 +41,7 @@
 		echo "</div>";
 		echo "<div class='row' style='padding:0 15px 0 15px'>";
 			echo "<span id='btn-score-$questionid' data-scorequestion='$questionid' data-nextquestion='$gotoquestion' data-questionnumber='$questionnumber' class='waves-effect btn-flat savebutton white-text' style='display:none; background-color:"; echo sitesettings("sitecolor"); echo "'>Save</span>";
+			echo "<div class='alertmessage'></div>";
 		echo "</div>";
 	echo "</div>";
 		
@@ -101,15 +102,13 @@
 				//Handle the response
 				function formatResponseData(response)
 				{	
-					
+					$(".alertmessage").hide();
 		            lastSubmitted = JSON.parse(response.scores[0].response);
 		            var value_score = response['scores'][0]['score'];
 		            var value_scoredOn = response['scores'][0]['scoredOn'];
 		            var value_itemId = response['scores'][0]['iA_ItemId'];
 		            var value_itemResponse = response['scores'][0]['response'];
 		            var value_scoreGUID = response['scores'][0]['scoreGUID'];
-		            
-		            console.log(response);
 		            
 		            //Save the result
 		            $.post("modules/<?php echo basename(__DIR__); ?>/session_scoring.php", { assessmentid: <?php echo $assessmentid; ?>, score: value_score, scoredOn: value_scoredOn, itemId: <?php echo $questionid; ?>, itemResponse: value_itemResponse, scoreGUID: value_scoreGUID  });
@@ -119,7 +118,8 @@
 		        //Error Handle
 		        function handleError(ex)
 		        {
-					alert("Whoops...did not save. Try again.");
+			        $(".alertmessage").show();
+					$(".alertmessage").html( "<div class='card white-text' style='background-color:#F44336; padding:20px;'>Your response was not saved. Please try again.</div>" );
 		        }
 
 				//Score the Question
