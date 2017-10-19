@@ -126,6 +126,21 @@
 				}
 		}
 		
+		//If Building, Display all Buildings
+		if($category=="building")
+		{
+			echo "<option value='' disabled selected>Choose a Building</option>";
+			$query = "SELECT SchoolName, SchoolCode FROM Abre_Students group by SchoolName order by SchoolName";
+			$dbreturn = databasequery($query);
+			foreach ($dbreturn as $value)
+			{	
+				$SchoolName=$value['SchoolName'];
+				$SchoolCode=$value['SchoolCode'];
+				
+				echo "<option value='$SchoolCode'>$SchoolName</option>";
+			}
+		}
+		
 	}
 
 ?>

@@ -82,6 +82,15 @@
 			<div class='mdl-shadow--4dp'>
 			<div class='page' style='padding:30px;'>
 			<div id='searchresults'>	
+				
+			<?php	
+		
+				echo "<div class='row' id='reloadbutton' style='margin-left:-5px;'>";
+						echo "<button class='modal-action waves-effect btn-flat white-text' id='reload' style='margin-left:5px; background-color:"; echo sitesettings("sitecolor"); echo "'>Refresh Results</button>";
+				echo "</div>";
+			
+			?>
+				
 			<div class='row'><div class='tableholder'>
 			<table id='myTable' class='tablesorter bordered thintable'>
 			<thead>
