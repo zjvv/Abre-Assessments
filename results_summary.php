@@ -157,7 +157,7 @@
 				}
 				else
 				{
-					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results.php?assessmentid=<?php echo $Assessment_ID; ?>&course='+Filter2, function(){ Ready(); });
+					$(".resultsgrid").load('modules/<?php echo basename(__DIR__); ?>/results_summary_results_building.php?assessmentid=<?php echo $Assessment_ID; ?>&building='+Filter2, function(){ Ready(); });
 				}			
 			}
 			else

@@ -20,6 +20,7 @@
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+	require_once('functions.php');
 	require_once('permissions.php');
 	
 	//Variables
@@ -28,7 +29,7 @@
 		
 	mysqli_query($db, "UPDATE assessments_status set End_Time='$currenttime' where Assessment_ID='$AssessmentID' and User='".$_SESSION['useremail']."'") or die (mysqli_error($db));
 	
-	//Give message
-	//echo "The assessment has been saved.";
+	//Save final assessment result
+	AssessmentResultsScore($AssessmentID, $_SESSION['useremail']);
 	
 ?>

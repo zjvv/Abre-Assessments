@@ -56,7 +56,7 @@
 					while($row2 = $result2->fetch_assoc())
 					{
 						$CurrentScore=htmlspecialchars($row2["Score"], ENT_QUOTES);
-						if($CurrentScore==""){ $CurrentScore="0"; }
+						if($CurrentScore==""){ $CurrentScore=""; }
 					}
 					
 					$Username=str_replace("@","",$user);

@@ -404,6 +404,90 @@
 		}
 		$db->close();
 		
+		//Check for Assessments_Results table
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT * FROM assessments_results"))
+		{
+			$sql = "CREATE TABLE `assessments_results` (`ID` int(11) NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+			$sql .= "ALTER TABLE `assessments_results` ADD PRIMARY KEY (`ID`);";
+			$sql .= "ALTER TABLE `assessments_results` MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;";	
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Assessment_ID field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Assessment_ID FROM assessments_results"))
+		{
+			$sql = "ALTER TABLE `assessments_results` ADD `Assessment_ID` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for User field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT User FROM assessments_results"))
+		{
+			$sql = "ALTER TABLE `assessments_results` ADD `User` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Student_ID field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Student_ID FROM assessments_results"))
+		{
+			$sql = "ALTER TABLE `assessments_results` ADD `Student_ID` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Score field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Score FROM assessments_results"))
+		{
+			$sql = "ALTER TABLE `assessments_results` ADD `Score` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Possible_Points field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Possible_Points FROM assessments_results"))
+		{
+			$sql = "ALTER TABLE `assessments_results` ADD `Possible_Points` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for IEP field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT IEP FROM assessments_results"))
+		{
+			$sql = "ALTER TABLE `assessments_results` ADD `IEP` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for ELL field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT ELL FROM assessments_results"))
+		{
+			$sql = "ALTER TABLE `assessments_results` ADD `ELL` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+		
+		//Check for Gifted field
+		require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		if(!$db->query("SELECT Gifted FROM assessments_results"))
+		{
+			$sql = "ALTER TABLE `assessments_results` ADD `Gifted` text NOT NULL;";
+			$db->multi_query($sql);
+		}
+		$db->close();
+
+		
 		//Write the Setup File
 		$myfile = fopen("$portal_path_root/modules/Abre-Assessments/setup.txt", "w");
 		fwrite($myfile, '');

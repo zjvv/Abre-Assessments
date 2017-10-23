@@ -38,12 +38,12 @@
 		$("#createassessmenttooltip").unbind().click(function(event)
 		{
 			event.preventDefault();
-			var ID = $(this).data('assessmentid');
+			var AssessmentID = $(this).data('assessmentid');
 
   			var notification = document.querySelector('.mdl-js-snackbar');
 			var data = { message: 'Are you sure you want to turn in this assessment?', actionHandler: function(event) {
 				
-				$.post( "/modules/<?php echo basename(__DIR__); ?>/assessment_student_end.php", { AssessmentID: ID })
+				$.post( "/modules/<?php echo basename(__DIR__); ?>/assessment_student_end.php", { AssessmentID: AssessmentID })
 				.done(function( data ) {
 					location.reload();
   				});

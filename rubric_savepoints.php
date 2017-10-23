@@ -21,6 +21,7 @@
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
 	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+	require_once('functions.php');
 	require_once('permissions.php');
 	
 	if($pagerestrictions=="")
@@ -78,6 +79,8 @@
 		//Find Percentage
 		$studentfinalpercentage=round(($TotalPointsEarned/$TotalPossiblePoints)*100);
 		
+		//Save final assessment result
+		AssessmentResultsScore($assessmentid, $user);
 		
 		header('Content-Type: application/json');
 		echo json_encode(array('RubricPoints' => $RubricPoints, 'Score' => "$TotalPointsEarned/$TotalPossiblePoints", 'Percentage' => "$studentfinalpercentage%"));

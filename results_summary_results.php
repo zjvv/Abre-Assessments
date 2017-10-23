@@ -113,7 +113,10 @@
 						echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text<br><br>$Difficulty</div></th>";
 					}
 				?>
-										
+
+				<th style='min-width:50px;'><div class='center-align'>IEP</div></th>
+				<th style='min-width:50px;'><div class='center-align'>ELL</div></th>
+				<th style='min-width:50px;'><div class='center-align'>Gifted</div></th>									
 				<th style='min-width:100px;'><div class='center-align'>Auto Points</div></th>
 				<th style='min-width:100px;'><div class='center-align'>Rubric Points</div></th>
 				<th style='min-width:100px;'><div class='center-align'>Score</div></th>	
@@ -144,6 +147,9 @@
 							else
 							{
 								$StudentID=htmlspecialchars($row["Student_ID"], ENT_QUOTES);
+								$IEP=htmlspecialchars($row["StudentIEPStatus"], ENT_QUOTES);
+								$ELL=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
+								$Gifted=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 								$ResultName=getStudentNameGivenStudentID($StudentID);
 							}
 							
@@ -152,7 +158,7 @@
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}							
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
 						}
 					}
 					
@@ -168,6 +174,9 @@
 						{
 							$studentcounter++;
 							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
+							$IEP=htmlspecialchars($row["StudentIEPStatus"], ENT_QUOTES);
+							$ELL=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
+							$Gifted=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
 							
@@ -176,7 +185,7 @@
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
 						}
 					}
 					
@@ -192,6 +201,9 @@
 						{
 							$studentcounter++;
 							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
+							$IEP=htmlspecialchars($row["StudentIEPStatus"], ENT_QUOTES);
+							$ELL=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
+							$Gifted=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
 
@@ -200,7 +212,7 @@
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
 						}
 					}
 					

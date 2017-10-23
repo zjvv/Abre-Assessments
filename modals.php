@@ -306,6 +306,16 @@
 		</div>
 	</div>
 	
+	<!-- Teacher Details View -->
+	<div id="teacherdetails" class="fullmodal modal modal-fixed-footer modal-mobile-full" style="width: 95%">
+		<div class="col s12 modal-content">
+			<a class="modal-close black-text" style='position:absolute; right:20px; top:25px;'><i class='material-icons'>clear</i></a>
+			<h4>Assessment Details</h4>
+			<div id="teacherdetailsloader"><div id="p2" class="mdl-progress mdl-js-progress mdl-progress__indeterminate" style="width:100%;"></div></div>
+			<div id='teacherdetailsfilldiv'></div>
+    	</div>
+	</div>
+	
 <?php
 	}	
 ?>

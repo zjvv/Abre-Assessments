@@ -100,6 +100,99 @@
 			
 		}
 		
+		//Final Score the Assessment
+		function AssessmentResultsScore($Assessment_ID,$User)
+		{
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+			
+			//Look up possible points on assessment
+			$sqlposs = "SELECT Points FROM `assessments_questions` where Assessment_ID='$Assessment_ID'";
+			$resultposs = $db->query($sqlposs);
+			$Possible_Points=0;
+			while($rowposs = $resultposs->fetch_assoc())
+			{
+				$Points=htmlspecialchars($rowposs["Points"], ENT_QUOTES);
+				if($Points==""){ $Points=1; }
+				$Possible_Points=$Possible_Points+$Points;
+			}
+			
+			//Loop through student scores of assessment and calculate
+			$sql2 = "SELECT assessments_scores.Score, assessments_questions.Points, assessments_questions.Type FROM `assessments_scores` LEFT JOIN assessments_questions on assessments_scores.ItemID=assessments_questions.Bank_ID where assessments_scores.Assessment_ID='$Assessment_ID' and assessments_questions.Assessment_ID='$Assessment_ID' and assessments_scores.User='$User'";		
+			$result2 = $db->query($sql2);
+			$PointsEarned=0;
+			while($row2 = $result2->fetch_assoc())
+			{
+				$PointsPossibleQuestion=htmlspecialchars($row2["Points"], ENT_QUOTES);
+				$EarnedPointsQuestion=htmlspecialchars($row2["Score"], ENT_QUOTES);
+				$QuestionType=htmlspecialchars($row2["Type"], ENT_QUOTES);
+				if($PointsPossibleQuestion==""){ $PointsPossibleQuestion=1; }
+				if($EarnedPointsQuestion==""){ $EarnedPointsQuestion=0; }	
+				if($QuestionType=="Open Response")
+				{
+					$PointsEarned=$PointsEarned+$EarnedPointsQuestion;
+				}
+				else
+				{
+					$PointsEarned=$PointsEarned+($EarnedPointsQuestion*$PointsPossibleQuestion);
+				}			
+			}
+				
+				//Look up studentid given email
+				$StudentID="";
+				$IEP="";
+				$ELL="";
+				$Gifted="";
+				$sql3 = "SELECT * FROM `Abre_AD` where Email='$User'";
+				$result3 = $db->query($sql3);
+				while($row3 = $result3->fetch_assoc())
+				{
+					$StudentID=htmlspecialchars($row3["StudentID"], ENT_QUOTES);
+					
+					//Look up student Information
+					$sql4 = "SELECT * FROM `Abre_Students` where StudentId='$StudentID'";
+					$result4 = $db->query($sql4);
+					while($row4 = $result4->fetch_assoc())
+					{
+						$IEP=htmlspecialchars($row4["IEP"], ENT_QUOTES);
+						$ELL=htmlspecialchars($row4["ELL"], ENT_QUOTES);
+						$Gifted=htmlspecialchars($row4["Gifted"], ENT_QUOTES);
+					}	
+					
+				}
+				
+				//Add Record to Database if it doesn't already exist
+					$querystring="SELECT * FROM assessments_results where User='$User' and Assessment_ID='$Assessment_ID'";
+					$querystringresult = $db->query($querystring);
+					$rowcount=mysqli_num_rows($querystringresult);
+					if($rowcount!=1)
+					{
+						$stmt = $db->stmt_init();
+						$sql = "INSERT INTO assessments_results (Assessment_ID, User, Student_ID, Score, Possible_Points, IEP, ELL, Gifted) VALUES ('$Assessment_ID', '$User', '$StudentID', '$PointsEarned', '$Possible_Points', '$IEP', '$ELL', '$Gifted');";
+						$stmt->prepare($sql);
+						$stmt->execute();
+						$stmt->close();
+					}
+					else
+					{
+						mysqli_query($db, "UPDATE assessments_results set Student_ID='$StudentID', Score='$PointsEarned', Possible_Points='$Possible_Points', IEP='$IEP', ELL='$ELL', Gifted='$Gifted' where Assessment_ID='$Assessment_ID' and Student_ID='$StudentID'") or die (mysqli_error($db));
+					}	
+		}
+		
+		//Get Staff Name Given StaffID
+		function getStaffNameGivenStaffID($StaffID)
+		{
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+			$sql = "SELECT * FROM Abre_Staff where StaffID='$StaffID' LIMIT 1";
+			$result = $db->query($sql);
+			while($row = $result->fetch_assoc())
+			{
+				$FirstName=$row["FirstName"];
+				$LastName=$row["LastName"];
+			}
+			if($FirstName && $LastName){ return "$FirstName $LastName"; }else{ return "$StaffID"; }
+			
+		}
+		
 		//Get Email Given StudentID
 		function getEmailGivenStudentID($StudentID)
 		{
@@ -227,8 +320,62 @@
 			
 		}
 		
+		//Get Email Given StudentID
+		function getTeacherRoster($StaffID)
+		{
+			
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+			$Students=array();
+			$CurrentSemester=GetCurrentSemester();
+			$sql = "SELECT StudentID, FirstName, LastName FROM Abre_StudentSchedules where StaffId='$StaffID' and (TermCode='$CurrentSemester' or TermCode='Year') group by StudentID order by LastName";
+			$result = $db->query($sql);
+			while($row = $result->fetch_assoc())
+			{
+				$StudentID=$row["StudentID"];
+				$FirstName=$row["FirstName"];
+				$LastName=$row["LastName"];
+				$Students[] = array("StudentID" => $StudentID, "FirstName" => $FirstName, "LastName" => $LastName);
+			}
+			return $Students;
+
+		}
+		
+		//Get Email Given StudentID
+		function getTeacherRosterScoreBreakdown($StaffID,$AssessmentID)
+		{
+			
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+			$Students=array();
+			$CurrentSemester=GetCurrentSemester();
+			$sql = "SELECT StudentID, FirstName, LastName FROM Abre_StudentSchedules where StaffId='$StaffID' and (TermCode='$CurrentSemester' or TermCode='Year') group by StudentID order by LastName";
+			$result = $db->query($sql);
+			while($row = $result->fetch_assoc())
+			{
+				$StudentID=$row["StudentID"];
+				$FirstName=$row["FirstName"];
+				$LastName=$row["LastName"];
+				
+				//Find how they did on assessment
+				$sql2 = "SELECT * FROM assessments_results where Student_ID='$StudentID' and Assessment_ID='$AssessmentID'";
+				$result2 = $db->query($sql2);
+				while($row2 = $result2->fetch_assoc())
+				{
+					$IEP=$row2["IEP"];
+					$ELL=$row2["ELL"];
+					$Gifted=$row2["Gifted"];
+					$Score=$row2["Score"];
+					$Possible_Points=$row2["Possible_Points"];
+					
+					$Students[] = array("StudentID" => $StudentID, "FirstName" => $FirstName, "LastName" => $LastName, "IEP" => $IEP, "ELL" => $ELL, "Gifted" => $Gifted, "Score" => $Score, "PossiblePoints" => $Possible_Points);
+				}
+				
+			}
+			return $Students;
+
+		}
+		
 		//Show Results of Assessment
-		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray)
+		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray,$resultbutton)
 		{
 			
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
@@ -237,9 +384,7 @@
 			$Username=str_replace(".","",$Username);
 								
 			echo "<tr class='assessmentrow'>";
-				echo "<td>";
-					echo "<b>$ResultName</b>";
-				echo "</td>";
+				echo "<td><b>$ResultName</b></td>";
 				
 				if (!empty($StudentStatusArray[$User]))
 				{				
@@ -321,12 +466,16 @@
 					
 				}
 				
+				//IEP,ELL,Gifted
+				echo "<td class='center-align'><b>$IEP</b></td>";
+				echo "<td class='center-align'><b>$ELL</b></td>";
+				echo "<td class='center-align'><b>$Gifted</b></td>";
+				
 				//Auto Points
 				$totalcorrectdouble=sprintf("%02d", $totalcorrect);
 				if($totalcorrectdouble!="00"){ $totalcorrectdouble = ltrim($totalcorrectdouble, '0'); }
 				if($totalcorrectdouble=="00"){ $totalcorrectdouble="0"; }
-				echo "<td class='center-align'>$totalcorrectdouble</td>";
-				
+				echo "<td class='center-align'>$totalcorrectdouble</td>";				
 				
 				//Rubric Points
 				echo "<td class='center-align' id='rubric-total-$Username'>$totalcorrectrubric</td>";
