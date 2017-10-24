@@ -340,7 +340,7 @@
 
 		}
 		
-		//Get Email Given StudentID
+		//Get all scores by teacher
 		function getTeacherRosterScoreBreakdown($StaffID,$AssessmentID)
 		{
 			
@@ -369,6 +369,29 @@
 					$Students[] = array("StudentID" => $StudentID, "FirstName" => $FirstName, "LastName" => $LastName, "IEP" => $IEP, "ELL" => $ELL, "Gifted" => $Gifted, "Score" => $Score, "PossiblePoints" => $Possible_Points);
 				}
 				
+			}
+			return $Students;
+
+		}
+		
+		//Get all Scores by Assessment
+		function getAllScoresByAssessment($AssessmentID)
+		{
+			
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+			$Students=array();
+			$sql = "SELECT * FROM assessments_results where Assessment_ID='$AssessmentID'";
+			$result = $db->query($sql);
+			while($row = $result->fetch_assoc())
+			{
+				$StudentID=$row["Student_ID"];
+				$IEP=$row["IEP"];
+				$ELL=$row["ELL"];
+				$Gifted=$row["Gifted"];
+				$Score=$row["Score"];
+				$Possible_Points=$row["Possible_Points"];
+					
+				$Students[] = array("StudentID" => $StudentID, "IEP" => $IEP, "ELL" => $ELL, "Gifted" => $Gifted, "Score" => $Score, "PossiblePoints" => $Possible_Points);				
 			}
 			return $Students;
 
