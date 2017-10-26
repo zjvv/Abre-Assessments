@@ -68,7 +68,7 @@
 			<div class='page' style='padding:30px;'>
 			<div id='searchresults'>	
 			<div class='row'><div class='tableholder'>
-			<table id='myTable' class='tablesorter bordered thintable'>
+			<table id='myTableteacherview' class='tablesorter bordered thintable'>
 			<thead>
 			<tr class='pointer'>
 				<th><div style='width:180px;'>Student</div></th>
@@ -117,8 +117,8 @@
 							$studentcounter++;
 							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
 							$IEP=htmlspecialchars($row["StudentIEPStatus"], ENT_QUOTES);
-							$ELL=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
-							$Gifted=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
+							$Gifted=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
+							$ELL=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
 
@@ -151,8 +151,8 @@
 	//Responsive fixed table header
 	$(function()
 	{
-		$("#myTable").tableHeadFixer({ 'head' : true, 'left' : 1, 'foot' : true });
-		$("#myTable").tablesorter({ sortList: [[1,0]] });
+		$("#myTableteacherview").tableHeadFixer({ 'head' : true, 'left' : 1, 'foot' : true });
+		$("#myTableteacherview").tablesorter({ sortList: [[1,0]] });
 		
 		//Check Window Width
 		tableContainer();

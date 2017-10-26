@@ -398,7 +398,7 @@
 		}
 		
 		//Show Results of Assessment
-		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray,$resultbutton)
+		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray)
 		{
 			
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
@@ -490,6 +490,9 @@
 				}
 				
 				//IEP,ELL,Gifted
+				if($IEP==""){ $IEP="N"; }
+				if($ELL==""){ $ELL="N"; }
+				if($Gifted==""){ $Gifted="N"; }
 				echo "<td class='center-align'><b>$IEP</b></td>";
 				echo "<td class='center-align'><b>$ELL</b></td>";
 				echo "<td class='center-align'><b>$Gifted</b></td>";

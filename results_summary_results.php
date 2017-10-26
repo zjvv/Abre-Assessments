@@ -148,8 +148,8 @@
 							{
 								$StudentID=htmlspecialchars($row["Student_ID"], ENT_QUOTES);
 								$IEP=htmlspecialchars($row["StudentIEPStatus"], ENT_QUOTES);
-								$ELL=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
-								$Gifted=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
+								$Gifted=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
+								$ELL=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 								$ResultName=getStudentNameGivenStudentID($StudentID);
 							}
 							
@@ -175,8 +175,8 @@
 							$studentcounter++;
 							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
 							$IEP=htmlspecialchars($row["StudentIEPStatus"], ENT_QUOTES);
-							$ELL=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
-							$Gifted=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
+							$Gifted=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
+							$ELL=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
 							
@@ -202,8 +202,8 @@
 							$studentcounter++;
 							$StudentID=htmlspecialchars($row["StudentID"], ENT_QUOTES);
 							$IEP=htmlspecialchars($row["StudentIEPStatus"], ENT_QUOTES);
-							$ELL=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
-							$Gifted=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
+							$Gifted=htmlspecialchars($row["StudentGiftedStatus"], ENT_QUOTES);
+							$ELL=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
 
@@ -219,7 +219,7 @@
 					//View All
 					if(!isset($course) && !isset($groupid) && !isset($staffcode))
 					{												
-						$sql = "SELECT * FROM assessments_status where Assessment_ID='$Assessment_ID' order by User";
+						$sql = "SELECT * FROM assessments_results where Assessment_ID='$Assessment_ID' order by User";
 						$result = $db->query($sql);
 						$totalstudents=mysqli_num_rows($result);
 						$studentcounter=0;
@@ -228,6 +228,9 @@
 						{
 							$studentcounter++;
 							$User=htmlspecialchars($row["User"], ENT_QUOTES);
+							$IEP=htmlspecialchars($row["IEP"], ENT_QUOTES);
+							$ELL=htmlspecialchars($row["ELL"], ENT_QUOTES);
+							$Gifted=htmlspecialchars($row["Gifted"], ENT_QUOTES);
 							$ResultName=getNameGivenEmail($User);		
 
 							if($studentcounter==1)
@@ -235,7 +238,7 @@
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}									
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
 						}
 						
 					}
@@ -245,6 +248,9 @@
 			echo "</div>";
 			echo "</div>";
 			echo "</div>";
+			
+			include "download_button.php";
+			
 		}
 		else
 		{
