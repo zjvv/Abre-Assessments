@@ -90,6 +90,7 @@
 						$Bank_ID=htmlspecialchars($row["Bank_ID"], ENT_QUOTES);
 						$Type=htmlspecialchars($row["Type"], ENT_QUOTES);
 						$QuestionDetails[$Bank_ID] = $Type;
+						
 						echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text<br><br>$Difficulty</div></th>";
 					}
 				?>

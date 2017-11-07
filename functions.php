@@ -571,9 +571,12 @@
 								foreach ($StudentsInClass as $Email)
 								{
 									if(isset($StudentScoresArray[$Bank_ID][$Email])){ $StudentsWhoAnswered++; }
-									$AnswersCorrect=$AnswersCorrect+$StudentScoresArray[$Bank_ID][$Email];
+
+									if(isset($StudentScoresArray[$Bank_ID][$Email])){
+										$AnswersCorrect=$AnswersCorrect+$StudentScoresArray[$Bank_ID][$Email];
+									}
 								}							
-								$correctpercent=round(($AnswersCorrect/$totalstudents)*100);
+								$correctpercent=round(($AnswersCorrect/$StudentsWhoAnswered)*100);
 								echo "<td class='center-align' style='color:#fff;'><b>$correctpercent%</b></td>";
 							}
 							else
