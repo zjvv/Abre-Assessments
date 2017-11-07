@@ -79,6 +79,7 @@
 					$sqlheader = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID'";
 					$resultheader = $db->query($sqlheader);
 					$questioncount=0;
+					$QuestionDetails = array();
 					while($row = $resultheader->fetch_assoc())
 					{
 						$questioncount++;
@@ -86,6 +87,9 @@
 						$Standard_Text = str_replace("CCSS.Math.Content.","",$Standard);
 						$Standard_Text = str_replace("CCSS.ELA-Literacy.","",$Standard_Text);
 						$Difficulty=htmlspecialchars($row["Difficulty"], ENT_QUOTES);
+						$Bank_ID=htmlspecialchars($row["Bank_ID"], ENT_QUOTES);
+						$Type=htmlspecialchars($row["Type"], ENT_QUOTES);
+						$QuestionDetails[$Bank_ID] = $Type;
 						echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text<br><br>$Difficulty</div></th>";
 					}
 				?>
@@ -111,6 +115,7 @@
 						$result = $db->query($sql);
 						$totalstudents=mysqli_num_rows($result);
 						$studentcounter=0;
+						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
 						while($row = $result->fetch_assoc())
 						{
@@ -121,13 +126,14 @@
 							$ELL=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
+							array_push($StudentsInClass,$User);
 
 							if($studentcounter==1)
 							{
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray);
+							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails);
 						}
 					}
 

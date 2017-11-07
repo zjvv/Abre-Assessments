@@ -398,7 +398,7 @@
 		}
 		
 		//Show Results of Assessment
-		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray)
+		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails)
 		{
 			
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
@@ -554,45 +554,73 @@
 				echo "<tfoot>";
 				
 					//Class Mastery
-					/*
-					echo "<tr style='background-color:".sitesettings("sitecolor").";'>";
-					echo "<td colspan='2' style='color:#fff;' class='center-align'><b>Class Mastery</b></td>";
-					
-
-					foreach ($allquestionitemsArray as $value)
-					{
-						$counts = array_count_values($correctarray);
-						if (isset($counts[$value])){ $correctcount=$counts[$value]; }else{ $correctcount=0; }
-						$correctpercent=round(($correctcount/$totalstudents)*100);
-						echo "<td class='center-align' style='color:#fff;'><b>$correctpercent%</b></td>";
+					if(!empty($StudentsInClass)){
+						
+						echo "<tr style='background-color:".sitesettings("sitecolor").";'>";
+						echo "<td colspan='2' style='color:#fff;' class='center-align'><b>Class Mastery</b></td>";	
+	
+						foreach ($allquestionitemsArray as $Bank_ID)
+						{
+							
+							$QuestionType=$QuestionDetails[$Bank_ID];
+							$AnswersCorrect=0;
+							
+							//Find out how many students got question correct
+							if($QuestionType!="Open Response"){
+								$StudentsWhoAnswered=0;
+								foreach ($StudentsInClass as $Email)
+								{
+									if(isset($StudentScoresArray[$Bank_ID][$Email])){ $StudentsWhoAnswered++; }
+									$AnswersCorrect=$AnswersCorrect+$StudentScoresArray[$Bank_ID][$Email];
+								}							
+								$correctpercent=round(($AnswersCorrect/$totalstudents)*100);
+								echo "<td class='center-align' style='color:#fff;'><b>$correctpercent%</b></td>";
+							}
+							else
+							{
+								echo "<td class='center-align' style='color:#fff;'><b>NA</b></td>";
+							}
+						}
+						
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "<td></td>";
+						echo "</tr>";
 					}
-					
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "<td></td>";
-					echo "</tr>";
-					*/
 				
 					//District Mastery
 					echo "<tr style='background-color:".sitesettings("sitecolor").";'>";
 					echo "<td colspan='2' style='color:#fff;' class='center-align'><b>District Mastery</b></td>";
 					
-					foreach ($allquestionitemsArray as $value)
+					foreach ($allquestionitemsArray as $Bank_ID)
 					{
-						if (isset($questionscoreArray[$value]))
-						{
-							$correctcount=$questionscoreArray[$value];
-							$correctpercent=round(($correctcount/$totalassessedstudents)*100);
-							echo "<td class='center-align' style='color:#fff;'><b>$correctpercent%</b></td>";
+						$QuestionType=$QuestionDetails[$Bank_ID];
+						
+						if($QuestionType!="Open Response"){
+							if (isset($questionscoreArray[$Bank_ID]))
+							{
+								$correctcount=$questionscoreArray[$Bank_ID];
+								$correctpercent=round(($correctcount/$totalassessedstudents)*100);
+								echo "<td class='center-align' style='color:#fff;'><b>$correctpercent%</b></td>";
+							}
+							else
+							{
+								echo "<td class='center-align' style='color:#fff;'><b>0%</b></td>";
+							}
 						}
 						else
 						{
-							echo "<td class='center-align' style='color:#fff;'><b>0%</b></td>";
+							echo "<td class='center-align' style='color:#fff;'><b>NA</b></td>";
 						}
+						
 					}
 					
+					echo "<td></td>";
+					echo "<td></td>";
 					echo "<td></td>";
 					echo "<td></td>";
 					echo "<td></td>";
