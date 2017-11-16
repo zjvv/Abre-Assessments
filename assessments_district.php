@@ -35,9 +35,10 @@
 			echo "<div class='mdl-shadow--2dp' style='background-color:#fff; padding:20px 40px 40px 40px'>";
 			echo "<div class='row' style='padding:15px;'>";
 		?>
-			<table id='myTable' class='tablesorter bordered'>
+			<table id='myTable' class='tablesorter bordered highlight'>
 				<thead>
 					<tr class='pointer'>
+						<th></th>
 						<th>Name</th>
 						<th class='hide-on-med-and-down'>Level</th>
 						<th style='width:100px'></th>
@@ -63,6 +64,7 @@
 						$Owner=htmlspecialchars($row["Owner"], ENT_QUOTES);
 						$Editors=htmlspecialchars($row["Editors"], ENT_QUOTES);
 						$Session_ID=htmlspecialchars($row["Session_ID"], ENT_QUOTES);
+						$firstCharacter = $Title[0];
 									
 						if (strpos($Editors, $_SESSION['useremail']) !== false) { $SharedEditable=1; }else{ $SharedEditable=0; }
 									
@@ -86,11 +88,22 @@
 						}
 								
 						echo "<tr class='assessmentrow'>";
+						
+							//Icon
+							echo "<td width='50px'><div style='padding:5px; text-align:center; background-color:"; echo sitesettings("sitecolor"); echo "; color:#fff; width:30px; height:30px; border-radius: 15px;'>$firstCharacter</div></td>";
+						
+							//Title
 							echo "<td>$Title</td>";
+							
+							//Level
 							echo "<td class='hide-on-med-and-down'>$Level</td>";
+							
+							//Give
 							echo "<td width=100px>";		
 								echo "<a class='waves-effect waves-light btn modal-giveassessment' href='#giveassessment' data-givetitle='Guided Learning Code' data-givelink='$GLCode' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Give</a>";	
 							echo "</td>";
+							
+							//Results
 							echo "<td width=100px>";		
 								echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/results/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Results</a>";	
 							echo "</td>";

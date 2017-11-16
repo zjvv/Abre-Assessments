@@ -35,14 +35,14 @@
 			echo "<div class='mdl-shadow--2dp' style='background-color:#fff; padding:20px 40px 40px 40px'>";
 			echo "<div class='row' style='padding:15px;'>";
 		?>
-			<table id='myTable' class='tablesorter bordered'>
+			<table id='myTable' class='tablesorter bordered highlight'>
 				<thead>
 					<tr class='pointer'>
+						<th></th>
 						<th>Name</th>
+						<th class='hide-on-med-and-down'>Subject</th>
 						<th class='hide-on-med-and-down'>Level</th>
-						<th style='width:100px'></th>
-						<th style='width:100px'></th>
-						<th style='width:100px'></th>
+						<th style='width:35px'></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -64,26 +64,50 @@
 						$Owner=htmlspecialchars($row["Owner"], ENT_QUOTES);
 						$Editors=htmlspecialchars($row["Editors"], ENT_QUOTES);
 						$Session_ID=htmlspecialchars($row["Session_ID"], ENT_QUOTES);
+						$firstCharacter = $Title[0];
 									
 						if (strpos($Editors, $_SESSION['useremail']) !== false) { $SharedEditable=1; }else{ $SharedEditable=0; }
 									
 						$Student_Link="$portal_root/?url=assessments/session/$Assessment_ID/$Session_ID";
 								
 						echo "<tr class='assessmentrow'>";
+						
+							//Icon
+							echo "<td width='50px'><div style='padding:5px; text-align:center; background-color:"; echo sitesettings("sitecolor"); echo "; color:#fff; width:30px; height:30px; border-radius: 15px;'>$firstCharacter</div></td>";
+						
+							//Title
 							echo "<td>$Title</td>";
+							
+							//Subject
+							echo "<td class='hide-on-med-and-down'>$Subject</td>";
+							
+							//Level
 							echo "<td class='hide-on-med-and-down'>$Level</td>";
-							echo "<td width=100px>";
-								if($Verified==0 or superadmin())
-								{
-									echo "<a class='waves-effect waves-light btn duplicateassessment' href='#' data-assessmentid='$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Copy</a>";	
-								}
+							
+							//More Button
+							echo "<td width=30px>";
+								echo "<div class='morebutton' style='position:absolute; margin-top:-15px;'>";
+									echo "<button id='demo-menu-bottom-left-$Assessment_ID' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600'><i class='material-icons'>more_vert</i></button>";
+									echo "<ul class='mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect' for='demo-menu-bottom-left-$Assessment_ID'>";
+									
+										if($Verified==0)
+										{
+											echo "<li class='mdl-menu__item modal-giveassessment' href='#giveassessment' data-givetitle='Student Link' data-givegctitle='$Title' data-givelink='$Student_Link' class='mdl-color-text--black' style='font-weight:400'>Give</a></li>";
+										}
+											
+										echo "<li class='mdl-menu__item mdl-menu__item--full-bleed-divider clicklink'><a href='#assessments/results/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Results</a></li>";
+										
+										echo "<li class='mdl-menu__item clicklink'><a href='#assessments/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Build</a></li>";
+										
+										if($Verified==0 or superadmin())
+										{
+											echo "<li class='mdl-menu__item duplicateassessment' data-assessmentid='$Assessment_ID'>Make a Copy</a></li>";
+										}
+
+									echo "</ul>";
+								echo "</div>";
 							echo "</td>";
-							echo "<td width=100px>";		
-								echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Build</a>";	
-							echo "</td>";
-							echo "<td width=100px>";		
-								echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/results/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Results</a>";	
-							echo "</td>";
+							
 						echo "</tr>";
 					}
 				echo "</tbody>";

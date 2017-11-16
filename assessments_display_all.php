@@ -38,7 +38,7 @@
 					echo "<div style='width:220px; color:#fff;'><h6 class='truncate'>My Assessments</h6></div>";
 				echo "</div>";
 				
-				//My Assessments			
+				//Shared Assessments			
 				echo "<div class='location pointer' style='padding:2px 30px 2px 30px;' data-location='assessments_sharedwithme'>";
 					echo "<div style='float:left; padding:23px 20px 0 0;'>";	
 						echo "<i class='material-icons' style='color:#fff;'>people</i>";		
