@@ -24,7 +24,7 @@
 
 	<div class='fixed-action-btn buttonpin'>
 		<?php
-		echo "<a class='modal-addquestion btn-floating btn-large waves-effect waves-light' style='background-color:".sitesettings("sitecolor")."' id='addquestion' data-assessmentid='$Assessment_ID' href='#assessmentquestion'><i class='large material-icons'>add</i></a>";
+		echo "<a class='modal-addquestion btn-floating btn-large waves-effect waves-light' style='background-color:".getSiteColor()."' id='addquestion' data-assessmentid='$Assessment_ID' href='#assessmentquestion'><i class='large material-icons'>add</i></a>";
 		echo "<div class='mdl-tooltip mdl-tooltip--left' for='addquestion'>Add Question</div>";
 		?>
 	</div>

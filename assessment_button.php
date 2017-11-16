@@ -26,7 +26,7 @@
 	
 	?>
 			<div class='fixed-action-btn buttonpin'>
-				<a class='modal-createassessment btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="createassessmenttooltip" data-grade='blank' data-subject='blank' data-position='left' data-title='' data-grade='blank' data-subject='blank' href='#createassessment'><i class='large material-icons'>add</i></a>
+				<a class='modal-createassessment btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo getSiteColor(); ?>' id="createassessmenttooltip" data-grade='blank' data-subject='blank' data-position='left' data-title='' data-grade='blank' data-subject='blank' href='#createassessment'><i class='large material-icons'>add</i></a>
 				<div class="mdl-tooltip mdl-tooltip--left" for="createassessmenttooltip">Create Assessment</div>
 			</div>
 	<?php

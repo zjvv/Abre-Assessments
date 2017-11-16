@@ -28,7 +28,7 @@
 		echo "<div style='position: absolute; top:0; bottom:0; left:0; right:0; overflow-y: hidden;'>";
 							
 			//List Questions
-			echo "<div id='assessmentquestions' style='position: absolute; top:0; bottom:0; width:300px; overflow-y: scroll; background-color:"; echo sitesettings("sitecolor"); echo ";'>";	
+			echo "<div id='assessmentquestions' style='position: absolute; top:0; bottom:0; width:300px; overflow-y: scroll; background-color:"; echo getSiteColor(); echo ";'>";	
 				
 				//My Assessments			
 				echo "<div class='location pointer' style='padding:2px 30px 2px 30px;' data-location='assessments_myassessments'>";

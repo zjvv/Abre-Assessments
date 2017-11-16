@@ -24,7 +24,7 @@
 ?>
 	
 	<div class='fixed-action-btn buttonpin assessmentsubmitbutton'>
-		<a class='btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo sitesettings("sitecolor"); ?>' id="createassessmenttooltip" href='#' data-assessmentid='<?php echo $Assessment_ID; ?>'><i class='large material-icons'>check</i></a>
+		<a class='btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo getSiteColor(); ?>' id="createassessmenttooltip" href='#' data-assessmentid='<?php echo $Assessment_ID; ?>'><i class='large material-icons'>check</i></a>
 		<div class="mdl-tooltip mdl-tooltip--left" for="createassessmenttooltip">Turn In</div>
 	</div>
 	

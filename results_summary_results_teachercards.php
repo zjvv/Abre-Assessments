@@ -102,7 +102,7 @@
 					echo "</div>";
 					echo "<hr>";
 					echo "<div style='padding:15px 25px 20px 25px;'>";
-						echo "<span><a class='waves-effect waves-light btn modal-teacherdetails detailsmodal' data-teachercode='$TeacherCode' href='#teacherdetails' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Details</a></span>";	
+						echo "<span><a class='waves-effect waves-light btn modal-teacherdetails detailsmodal' data-teachercode='$TeacherCode' href='#teacherdetails' style='background-color:"; echo getSiteColor(); echo "'>Details</a></span>";	
 					echo "</div>";
 				echo "</div>";
 				echo "</div>";

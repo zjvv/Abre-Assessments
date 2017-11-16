@@ -37,7 +37,7 @@
 			echo "<div id='rubric-content-$questionid'></div>";
 		echo "</div>";
 		
-		echo "<div class='row' style='padding:0 15px 0 15px'><span id='btn-score-$questionid' class='modal-close waves-effect btn-flat white-text' style='background-color: "; echo sitesettings("sitecolor"); echo "'>Score Question</span></div>";
+		echo "<div class='row' style='padding:0 15px 0 15px'><span id='btn-score-$questionid' class='modal-close waves-effect btn-flat white-text' style='background-color: "; echo getSiteColor(); echo "'>Score Question</span></div>";
 		echo "<div class='row' style='padding:0 15px 0 15px'><div id='pnl-score-$questionid'></div></div>";
 		
 		?>

@@ -75,7 +75,7 @@
 
 						echo "<li style='position:relative' id='item-$questionid' class='topicholder'>";
 							echo "<div class='collapsible-header unit' data-bankid='$Bank_ID'>";
-					    		echo "<i class='material-icons' style='font-size: 36px; color:".sitesettings("sitecolor")."'>fiber_manual_record</i>";
+					    		echo "<i class='material-icons' style='font-size: 36px; color:".getSiteColor()."'>fiber_manual_record</i>";
 
 								echo "<span style='position:absolute; right:0; z-index:1000; cursor:move;' class='mdl-color-text--grey-700";
 									if($Locked!=1 && $access==1){ echo " handle"; }

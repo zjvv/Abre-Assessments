@@ -92,7 +92,7 @@
 					echo "<div style='position: absolute; top:0; bottom:0; left:0; right:0; overflow-y: hidden;'>";
 								
 						//List Questions
-						echo "<div id='assessmentquestions' style='position: absolute; top:0; bottom:0; width:300px; overflow-y: scroll; background-color:"; echo sitesettings("sitecolor"); echo ";'>";	
+						echo "<div id='assessmentquestions' style='position: absolute; top:0; bottom:0; width:300px; overflow-y: scroll; background-color:"; echo getSiteColor(); echo ";'>";	
 							$query = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
 							$dbreturn = databasequery($query);
 							$totalquestionsonsession=count($dbreturn);

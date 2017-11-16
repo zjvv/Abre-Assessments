@@ -26,7 +26,7 @@
 	
 	?>
 			<div class='fixed-action-btn buttonpin'>
-				<a class='btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo sitesettings("sitecolor"); ?>' id='downloaddata' href='#'><i class='large material-icons'>file_download</i></a>
+				<a class='btn-floating btn-large waves-effect waves-light' style='background-color: <?php echo getSiteColor(); ?>' id='downloaddata' href='#'><i class='large material-icons'>file_download</i></a>
 				<div class="mdl-tooltip mdl-tooltip--left" for="downloaddata">Download Data</div>
 			</div>
 	<?php

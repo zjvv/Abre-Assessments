@@ -24,7 +24,7 @@
 ?>
 
     <div class="col s12">
-		<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
+		<ul class="tabs_2" style='background-color: <?php echo getSiteColor(); ?>'>
 			<li class="tab col s3 tab_1 supportmenu pointer" data="#assessments"><a href="#assessments" class='mdl-color-text--white'>My Assessments</a></li>
 			<li class="tab col s3 tab_3 supportmenu pointer" data="#assessments/public"><a href="#assessments/public" class='mdl-color-text--white'>Public</a></li>
 		</ul>

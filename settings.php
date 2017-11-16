@@ -56,14 +56,14 @@
 					//Save Button
 					echo "<div class='row'>";
 						echo "<div class='col s12'><div class='col s12'>";
-							echo "<button type='submit' class='modal-action waves-effect btn-flat white-text' style='background-color: ".sitesettings("sitecolor")."'>Save Changes</button>";	
+							echo "<button type='submit' class='modal-action waves-effect btn-flat white-text' style='background-color: ".getSiteColor()."'>Save Changes</button>";	
 						echo "</div></div>";
 					echo "</div>";
 					
 					//Help Video
 					echo "<div class='row'>";
 						echo "<div class='col s12'><div class='col s12'>";
-							echo "Not connected to Certica? Check out the demo video <a href='https://vimeo.com/212144253' target='_blank' style='color: ".sitesettings("sitecolor")."'>here</a>.";	
+							echo "Not connected to Certica? Check out the demo video <a href='https://vimeo.com/212144253' target='_blank' style='color: ".getSiteColor()."'>here</a>.";	
 						echo "</div></div>";
 					echo "</div>";
 					

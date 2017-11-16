@@ -84,22 +84,22 @@
 		
 		//District Overall
 		echo "<div class='row'>";	
-			echo "<div class='col m3 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
+			echo "<div class='col m3 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo getSiteColor(); echo "'>";
 				echo "<span class='center-align truncate' style='font-size:70px; line-height:80px;'>$DistrictIEPAverage</span>";
 				echo "<span class='center-align truncate'>District IEP Average<br>($TotalIEPStudents $IEPVerb)</span>";
 			echo "</div></div>";
 				
-			echo "<div class='col m3 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
+			echo "<div class='col m3 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo getSiteColor(); echo "'>";
 				echo "<span class='center-align truncate' style='font-size:70px; line-height:80px;'>$DistrictELLAverage</span>";
 				echo "<span class='center-align truncate'>District ELL Average<br>($TotalELLStudents $ELLVerb)</span>";
 			echo "</div></div>";
 				
-			echo "<div class='col m3 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
+			echo "<div class='col m3 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo getSiteColor(); echo "'>";
 				echo "<span class='center-align truncate' style='font-size:70px; line-height:80px;'>$DistrictGiftedAverage</span>";
 				echo "<span class='center-align truncate'>District Gifted Average<br>($TotalGiftedStudents $GiftedVerb)</span>";
 			echo "</div></div>";
 				
-			echo "<div class='col m3 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo sitesettings("sitecolor"); echo "'>";
+			echo "<div class='col m3 s12'><div class='mdl-card mdl-shadow--2dp' style='width:100%; color:#fff; padding-top:45px; background-color:"; echo getSiteColor(); echo "'>";
 				echo "<span class='center-align truncate' style='font-size:70px; line-height:80px;'>$DistrictOverallAverage</span>";
 				echo "<span class='center-align truncate'>District Overall Average<br>($CompleteCount $OverallVerb)</span>";
 			echo "</div></div>";	

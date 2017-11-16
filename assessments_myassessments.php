@@ -75,7 +75,7 @@
 						echo "<tr class='assessmentrow'>";
 						
 							//Icon
-							echo "<td width='50px'><div style='padding:5px; text-align:center; background-color:"; echo sitesettings("sitecolor"); echo "; color:#fff; width:30px; height:30px; border-radius: 15px;'>$firstCharacter</div></td>";
+							echo "<td width='50px'><div style='padding:5px; text-align:center; background-color:"; echo getSiteColor(); echo "; color:#fff; width:30px; height:30px; border-radius: 15px;'>$firstCharacter</div></td>";
 						
 							//Title
 							echo "<td>$Title</td>";

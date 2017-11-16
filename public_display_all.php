@@ -68,7 +68,7 @@
 										echo "<td>";
 											if($Verified==1)
 											{
-												echo "<i class='material-icons pointer' id='verified_$Assessment_ID' style='color:".sitesettings("sitecolor")."'>verified_user</i>";
+												echo "<i class='material-icons pointer' id='verified_$Assessment_ID' style='color:".getSiteColor()."'>verified_user</i>";
 												echo "<div class='mdl-tooltip mdl-tooltip--bottom mdl-tooltip--large' data-mdl-for='verified_$Assessment_ID'>District Created Assessment</div>";
 											}
 										echo "</td>";

@@ -26,7 +26,7 @@
 ?>
 	
     <div class="col s12">
-		<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
+		<ul class="tabs_2" style='background-color: <?php echo getSiteColor(); ?>'>
 			<li class="tab col s3 tab_1 supportmenu pointer" data="#assessments/results/<?php echo $Assessment_ID; ?>"><a href="#assessments/results/<?php echo $Assessment_ID; ?>" class='mdl-color-text--white'>Summary</a></li>
 			<!--<li class="tab col s3 tab_2 supportmenu pointer" data="#assessments/results/summary/<?php echo $Assessment_ID; ?>"><a href="#assessments/results/summary/<?php echo $Assessment_ID; ?>" class='mdl-color-text--white'>Analysis</a></li>-->
 		</ul>

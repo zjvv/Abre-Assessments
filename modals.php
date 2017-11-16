@@ -109,8 +109,8 @@
 			<input type="hidden" name="assessment_id" id="assessment_id">
     	</div>
 	    <div class="modal-footer">
-			<button type="submit" class="modal-action waves-effect btn-flat white-text" style='margin-left:5px; background-color: <?php echo sitesettings("sitecolor"); ?>'>Save</button>
-			<a class="modal-close waves-effect btn-flat white-text" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>Cancel</a>
+			<button type="submit" class="modal-action waves-effect btn-flat white-text" style='margin-left:5px; background-color: <?php echo getSiteColor(); ?>'>Save</button>
+			<a class="modal-close waves-effect btn-flat white-text" style='background-color: <?php echo getSiteColor(); ?>'>Cancel</a>
 		</div>
 		</form>
 	</div>
@@ -124,7 +124,7 @@
 			
 			<!--Tabs-->
 			<div class="row">
-			<ul class="tabs" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
+			<ul class="tabs" style='background-color: <?php echo getSiteColor(); ?>'>
 		    	<li class="tab col s3"><a class="active" href="#filter">Filter</a></li>
 		        <li class="tab col s3"><a href="#search">Search</a></li>
 		    </ul>
@@ -239,7 +239,7 @@
 			<input type="hidden" name="AssessmentID" id="AssessmentID">
     	</div>
 	    <div class="modal-footer">
-		    <a class="modal-close waves-effect btn-flat white-text" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>Close</a>
+		    <a class="modal-close waves-effect btn-flat white-text" style='background-color: <?php echo getSiteColor(); ?>'>Close</a>
 		</div>
 		</form>
 	</div>
@@ -252,12 +252,12 @@
 			<a class="modal-close black-text" style='position:absolute; right:20px; top:25px;'><i class='material-icons'>clear</i></a>
 
 				<div class='row' id='previewmeta'>
-					<div class='col l2 m4 s6'><span class='grey-text'>ID</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_questionid'></div></div>
-					<div class='col l2 m4 s6'><span class='grey-text'>Subject</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_subject'></div></div>
-					<div class='col l2 m4 s6'><span class='grey-text'>Type</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_questiontype'></div></div>
-					<div class='col l2 m4 s6'><span class='grey-text'>Grade</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_grade'></div></div>
-					<div class='col l2 m4 s6'><span class='grey-text'>Difficulty</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_difficulty'></div></div>
-					<div class='col l2 m4 s6'><span class='grey-text'>Blooms</span><div style='margin-top:5px; color: <?php echo sitesettings("sitecolor"); ?>' id='preview_blooms'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>ID</span><div style='margin-top:5px; color: <?php echo getSiteColor(); ?>' id='preview_questionid'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Subject</span><div style='margin-top:5px; color: <?php echo getSiteColor(); ?>' id='preview_subject'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Type</span><div style='margin-top:5px; color: <?php echo getSiteColor(); ?>' id='preview_questiontype'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Grade</span><div style='margin-top:5px; color: <?php echo getSiteColor(); ?>' id='preview_grade'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Difficulty</span><div style='margin-top:5px; color: <?php echo getSiteColor(); ?>' id='preview_difficulty'></div></div>
+					<div class='col l2 m4 s6'><span class='grey-text'>Blooms</span><div style='margin-top:5px; color: <?php echo getSiteColor(); ?>' id='preview_blooms'></div></div>
 				</div>
 				<hr>
 				<div id='questionholder'></div>
@@ -269,8 +269,8 @@
 				<input type="hidden" name="StandardCode" id="StandardCode">
     	</div>
 	    <div class="modal-footer">
-		    <a class="modal-close waves-effect btn-flat white-text" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>Close</a>
-		    <a class="modal-close waves-effect btn-flat white-text addquestiontoassessmentpreview" style='margin-right:5px; background-color: <?php echo sitesettings("sitecolor"); ?>'>Add</a>
+		    <a class="modal-close waves-effect btn-flat white-text" style='background-color: <?php echo getSiteColor(); ?>'>Close</a>
+		    <a class="modal-close waves-effect btn-flat white-text addquestiontoassessmentpreview" style='margin-right:5px; background-color: <?php echo getSiteColor(); ?>'>Add</a>
 		</div>
 		</form>
 	</div>
@@ -302,7 +302,7 @@
 			
     	</div>
 	    <div class="modal-footer">
-		    <a class="modal-close waves-effect btn-flat white-text" style='margin-right:5px; background-color: <?php echo sitesettings("sitecolor"); ?>'>Close</a>
+		    <a class="modal-close waves-effect btn-flat white-text" style='margin-right:5px; background-color: <?php echo getSiteColor(); ?>'>Close</a>
 		</div>
 	</div>
 	

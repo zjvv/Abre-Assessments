@@ -40,7 +40,7 @@
 			echo "<div class='certicaquestion' id='content-element-$questionid' data-questionquestion='$questionid' style='margin-right:70px;'></div>";
 		echo "</div>";
 		echo "<div class='row' style='padding:0 15px 0 15px'>";
-			echo "<span id='btn-score-$questionid' data-scorequestion='$questionid' data-nextquestion='$gotoquestion' data-questionnumber='$questionnumber' class='waves-effect btn-flat savebutton white-text' style='display:none; background-color:"; echo sitesettings("sitecolor"); echo "'>Save</span>";
+			echo "<span id='btn-score-$questionid' data-scorequestion='$questionid' data-nextquestion='$gotoquestion' data-questionnumber='$questionnumber' class='waves-effect btn-flat savebutton white-text' style='display:none; background-color:"; echo getSiteColor(); echo "'>Save</span>";
 			echo "<div class='alertmessage'></div>";
 		echo "</div>";
 	echo "</div>";

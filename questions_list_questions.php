@@ -189,15 +189,15 @@
 			    	
 					echo "<table style='width:100%;'>";
 					
-						echo "<tr class='attachwrapper'><td style='border:1px solid #e1e1e1; width:70px; background-color:".sitesettings("sitecolor")."''><i class='material-icons' style='padding:18px; margin:0; color:#fff; font-size: 24px; line-height:0;'>$icon</i></td><td style='background-color:#F5F5F5; border-left:1px solid #e1e1e1; border-top:1px solid #e1e1e1; border-bottom:1px solid #e1e1e1; padding:10px;'>";
+						echo "<tr class='attachwrapper'><td style='border:1px solid #e1e1e1; width:70px; background-color:".getSiteColor()."''><i class='material-icons' style='padding:18px; margin:0; color:#fff; font-size: 24px; line-height:0;'>$icon</i></td><td style='background-color:#F5F5F5; border-left:1px solid #e1e1e1; border-top:1px solid #e1e1e1; border-bottom:1px solid #e1e1e1; padding:10px;'>";
 							echo "<p class='mdl-color-text--black' style='font-weight:500;'>$subject Question - $vendor_id</p>";
 							echo "<div class='chip'>$grade</div><div class='chip'>$type</div><div class='chip'>$difficulty</div><div class='chip'>$blooms</div><div class='chip'>$standardcode</div><div class='chip'>$language</div>";
 							
 							
-							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-vendor='$vendor_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-type='$type' data-standard='$standardcode' data-addbutton='$addbutton' class='previewquestion' style='color: ".sitesettings("sitecolor")."'><i class='material-icons'>visibility</i></a></td>";
+							echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-question='$question_id' data-vendor='$vendor_id' data-assessment='$assessment_id' data-subject='$subject' data-grade='$grade' data-blooms='$blooms' data-difficulty='$difficulty' data-type='$type' data-standard='$standardcode' data-addbutton='$addbutton' class='previewquestion' style='color: ".getSiteColor()."'><i class='material-icons'>visibility</i></a></td>";
 							
 							if($assessmentcount==0){
-								echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-link='/modules/".basename(__DIR__)."/question_add_process.php?assessmentid=$assessment_id&questionid=$question_id&vendorid=$vendor_id&type=$type&difficulty=$difficulty&standard=$standardcode' style='color: ".sitesettings("sitecolor")."' class='addquestiontoassessment' id='questionplus-$question_id'><i class='material-icons'>add_circle</i></a></td>";
+								echo "</td><td style='background-color:#F5F5F5; border:1px solid #e1e1e1; padding:12px 10px 10px 22px; width:70px;'><a href='#' data-link='/modules/".basename(__DIR__)."/question_add_process.php?assessmentid=$assessment_id&questionid=$question_id&vendorid=$vendor_id&type=$type&difficulty=$difficulty&standard=$standardcode' style='color: ".getSiteColor()."' class='addquestiontoassessment' id='questionplus-$question_id'><i class='material-icons'>add_circle</i></a></td>";
 							}
 							else
 							{
@@ -230,7 +230,7 @@
 					    for ($x = $pagingstart; $x <= $pagingend; $x++) {
 							if($pagenumber==$x)
 							{
-								echo "<li class='active pagebutton' style='background-color: ".sitesettings("sitecolor").";' data-page='$x'><a href='#'>$x</a></li>";
+								echo "<li class='active pagebutton' style='background-color: ".getSiteColor().";' data-page='$x'><a href='#'>$x</a></li>";
 							}
 							else
 							{

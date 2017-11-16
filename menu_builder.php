@@ -27,7 +27,7 @@
 ?>
 
     <div class="col s12">
-		<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
+		<ul class="tabs_2" style='background-color: <?php echo getSiteColor(); ?>'>
 			<li class="tab col s3 tab_2 supportmenu pointer" <?php echo "data='#assessments/$id'"; ?>>
 				<?php echo "<a href='#assessments/$id' class='mdl-color-text--white'>Overview</a>"; ?>
 			</li>
