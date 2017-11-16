@@ -40,8 +40,9 @@
 					<tr class='pointer'>
 						<th></th>
 						<th>Name</th>
+						<th class='hide-on-med-and-down'>Subject</th>
 						<th class='hide-on-med-and-down'>Owner</th>
-						<th style='width:100px'></th>
+						<th style='width:35px'></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -79,13 +80,25 @@
 							//Title
 							echo "<td>$Title</td>";
 							
+							//Title
+							echo "<td class='hide-on-med-and-down'>$Subject</td>";
+							
 							//Owner
 							echo "<td class='hide-on-med-and-down'>$OwnerName</td>";
 							
-							//Copy
-							echo "<td width=100px>";		
-								echo "<a class='waves-effect waves-light btn duplicateassessment' href='#' data-assessmentid='$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Copy</a>";	
+							//More Button
+							echo "<td width=30px>";
+								echo "<div class='morebutton' style='position:absolute; margin-top:-15px;'>";
+									echo "<button id='demo-menu-bottom-left-$Assessment_ID' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600'><i class='material-icons'>more_vert</i></button>";
+									echo "<ul class='mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect' for='demo-menu-bottom-left-$Assessment_ID'>";
+									
+										echo "<li class='mdl-menu__item duplicateassessment' data-assessmentid='$Assessment_ID'>Make a Copy</a></li>";
+
+									echo "</ul>";
+								echo "</div>";
 							echo "</td>";
+							
+							
 						echo "</tr>";
 					}
 				echo "</tbody>";

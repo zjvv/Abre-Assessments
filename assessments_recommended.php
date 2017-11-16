@@ -56,8 +56,7 @@
 						<th></th>
 						<th>Name</th>
 						<th class='hide-on-med-and-down'>Level</th>
-						<th style='width:100px'></th>
-						<th style='width:100px'></th>
+						<th style='width:35px'></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -114,15 +113,19 @@
 							//Level
 							echo "<td class='hide-on-med-and-down'>$Level</td>";
 							
-							//Give
-							echo "<td width=100px>";		
-								echo "<a class='waves-effect waves-light btn modal-giveassessment' href='#giveassessment' data-givetitle='Guided Learning Code' data-givelink='$GLCode' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Give</a>";	
+							//More Button
+							echo "<td width=30px>";
+								echo "<div class='morebutton' style='position:absolute; margin-top:-15px;'>";
+									echo "<button id='demo-menu-bottom-left-$Assessment_ID' class='mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect mdl-color-text--grey-600'><i class='material-icons'>more_vert</i></button>";
+									echo "<ul class='mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect' for='demo-menu-bottom-left-$Assessment_ID'>";
+
+										echo "<li class='mdl-menu__item modal-giveassessment' href='#giveassessment' data-givetitle='Student Link' data-givegctitle='$Title' data-givelink='$Student_Link' class='mdl-color-text--black' style='font-weight:400'>Give</a></li>";
+											
+										echo "<li class='mdl-menu__item mdl-menu__item--full-bleed-divider clicklink'><a href='#assessments/results/$Assessment_ID' class='mdl-color-text--black' style='font-weight:400'>Results</a></li>";
+									echo "</ul>";
+								echo "</div>";
 							echo "</td>";
 							
-							//Results
-							echo "<td width=100px>";		
-								echo "<a class='waves-effect waves-light btn clicklink' href='#assessments/results/$Assessment_ID' style='background-color:"; echo sitesettings("sitecolor"); echo "'>Results</a>";	
-							echo "</td>";
 						echo "</tr>";
 					}
 				echo "</tbody>";
