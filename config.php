@@ -34,6 +34,6 @@
 	$pagepath="assessments";
 	require_once('permissions.php');
 	
-	echo "<link rel='stylesheet' type='text/css' href='/modules/".basename(__DIR__)."/css/style_0.0.1.css'>";
+	echo "<link rel='stylesheet' type='text/css' href='/modules/".basename(__DIR__)."/css/style_0.0.2.css'>";
 	
 ?>
