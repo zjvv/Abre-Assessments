@@ -126,7 +126,8 @@
 				<th style='min-width:100px;'><div class='center-align'>Rubric Points</div></th>
 				<th style='min-width:100px;'><div class='center-align'>Score</div></th>	
 				<th style='min-width:100px;'><div class='center-align'>Percentage</div></th>
-				<th style='max-width:30px;'></th>					
+				<th style='max-width:30px;'></th>	
+				<th style='max-width:30px;'></th>				
 			</tr>
 			</thead>
 			<tbody>
@@ -291,11 +292,27 @@
 			$(".tableholder").css("max-height", height);
 		}
 		
-		//Remove Student Result
+		//Delete Student Result
 		$( ".removeresult" ).unbind().click(function()
 		{
 			event.preventDefault();
 			var result = confirm("Delete this student assessment?");
+			if (result) {
+				$(this).closest("tr").hide();
+				var address = $(this).attr("href");
+				$.ajax({
+					type: 'POST',
+					url: address,
+					data: '',
+				})	
+			}
+		});
+		
+		//Open Up Assessment for Student
+		$( ".refreshresult" ).unbind().click(function()
+		{
+			event.preventDefault();
+			var result = confirm("Open student assessment?");
 			if (result) {
 				$(this).closest("tr").hide();
 				var address = $(this).attr("href");
