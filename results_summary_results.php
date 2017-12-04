@@ -178,6 +178,7 @@
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
+						$ExportArray = array();
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -190,7 +191,7 @@
 							array_push($StudentsInClass,$User);
 							
 							if($studentcounter==1)
-							{
+							{								
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
@@ -219,7 +220,8 @@
 							array_push($StudentsInClass,$User);
 							
 							if($studentcounter==1)
-							{
+							{								
+								
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
@@ -261,7 +263,7 @@
 			echo "</div>";
 			echo "</div>";
 			
-			//include "download_button.php";
+			include "download_button.php";
 			
 		}
 		else

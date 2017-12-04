@@ -179,6 +179,21 @@
 		}
 		
 		//Get Staff Name Given StaffID
+		function exportResultsToCSV()
+		{
+			require(dirname(__FILE__) . '/../../configuration.php');
+			if (!file_exists("../../../$portal_private_root/Abre-Assessments/Exports")){ 
+				mkdir("../../../$portal_private_root/Abre-Assessments/Exports", 0777, true);
+			}							
+			$UserEmail=$_SESSION['useremail'];
+			$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
+			$CSVExportArray= array();
+			array_push($CSVExportArray,'Column 1', 'Column 2', 'Column 3', 'Column 4', 'Column 5');
+			fputcsv($CSVExportFile, $CSVExportArray);
+			fclose($CSVExportFile);
+		}
+		
+		//Get Staff Name Given StaffID
 		function getStaffNameGivenStaffID($StaffID)
 		{
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
@@ -401,6 +416,7 @@
 		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails)
 		{
 			
+			require(dirname(__FILE__) . '/../../configuration.php');	
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 			
 			$Username=str_replace("@","",$User);
@@ -531,6 +547,9 @@
 			
 			if($totalstudents==$studentcounter)
 			{
+				
+				//Export CSV
+				exportResultsToCSV();
 				
 				//How many district students took assessment
 				$sqlquestions = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' group by User";
