@@ -37,7 +37,7 @@
 		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		    header('Pragma: public');
 		    header('Content-Length: ' . filesize($file));
-		    ob_clean();
+		    if(ob_get_length() > 0){ ob_end_clean(); }
 		    flush();
 		    readfile($file);
 		    exit;
