@@ -178,15 +178,29 @@
 	    	UpdateResults(Filter1,Filter2,Filter3);
 		});
 		
-		//Reload Button
-		$(document).off().on("click", "#reload", function ()
+		function ReloadAction(Filter1,Filter2,Filter3)
 		{
 			var Filter1 = $('#filter1').val();
 	    	var Filter2 = $('#filter2').val();
 	    	var Filter3 = $('#filter3').val();
 			Loading();
-			UpdateResults(Filter1,Filter2,Filter3);
+			UpdateResults(Filter1,Filter2,Filter3);		
+			return true;	
+		}
+		
+		//Reload Button
+		$(document).off().on("click", "#reload", function ()
+		{
+			ReloadAction();
 		});
+		
+		//Download CSV Button
+		$(document).off().on("click", "#downloaddata", function (event)
+		{
+			event.preventDefault();
+			ReloadAction();
+			window.location.href = "/modules/Abre-Assessments/downloaddata.php";
+		});	
 
 			
 	});
