@@ -187,6 +187,7 @@
 		if(!$db->query("SELECT Assessment_ID FROM assessments_questions"))
 		{
 			$sql = "ALTER TABLE `assessments_questions` ADD `Assessment_ID` text NOT NULL;";
+			//$sql .= "ALTER TABLE `assessments_questions` ADD FOREIGN KEY (`Assessment_ID`) REFERENCES assessments(`ID`);";
 			$db->multi_query($sql);
 		}
 		$db->close();
@@ -299,6 +300,7 @@
 		if(!$db->query("SELECT Assessment_ID FROM assessments_scores"))
 		{
 			$sql = "ALTER TABLE `assessments_scores` ADD `Assessment_ID` text NOT NULL;";
+			//$sql .= "ALTER TABLE `assessments_scores` ADD FOREIGN KEY (`Assessment_ID`) REFERENCES assessments(`ID`);";
 			$db->multi_query($sql);
 		}
 		$db->close();
@@ -373,6 +375,7 @@
 		if(!$db->query("SELECT Assessment_ID FROM assessments_status"))
 		{
 			$sql = "ALTER TABLE `assessments_status` ADD `Assessment_ID` text NOT NULL;";
+			//$sql .= "ALTER TABLE `assessments_status` ADD FOREIGN KEY (`Assessment_ID`) REFERENCES assessments(`ID`);";
 			$db->multi_query($sql);
 		}
 		$db->close();
@@ -420,6 +423,7 @@
 		if(!$db->query("SELECT Assessment_ID FROM assessments_results"))
 		{
 			$sql = "ALTER TABLE `assessments_results` ADD `Assessment_ID` text NOT NULL;";
+			//$sql .= "ALTER TABLE `assessments_results` ADD FOREIGN KEY (`Assessment_ID`) REFERENCES assessments(`ID`);";
 			$db->multi_query($sql);
 		}
 		$db->close();

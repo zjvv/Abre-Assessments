@@ -17,6 +17,7 @@
     */
 	
 	//Required configuration files
+	require(dirname(__FILE__) . '/../../configuration.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
 	require_once('permissions.php');
@@ -24,19 +25,23 @@
 	if($pagerestrictions=="")
 	{
 	
-		echo "<div class='fixed-action-btn buttonpin'>";
-			echo "<a class='btn-floating btn-large waves-effect waves-light' style='background-color:"; echo getSiteColor(); echo "' id='downloaddata' href='/modules/Abre-Assessments/downloaddata.php'><i class='large material-icons'>file_download</i></a>";
-			echo "<div class='mdl-tooltip mdl-tooltip--left' for='downloaddata'>Download Data</div>";
-		echo "</div>";
+		$UserEmail=$_SESSION['useremail'];
+		$file = "../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv";
+		
+		if (file_exists($file)) {
+		    header('Content-Description: File Transfer');
+		    header('Content-Type: application/octet-stream');
+		    header('Content-Disposition: attachment; filename=AssessmentDataExport.csv');
+		    header('Content-Transfer-Encoding: binary');
+		    header('Expires: 0');
+		    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+		    header('Pragma: public');
+		    header('Content-Length: ' . filesize($file));
+		    ob_clean();
+		    flush();
+		    readfile($file);
+		    exit;
+		}
 
 	}
 	?>
-
-<script>
-	
-	$(function()
-	{
-    	
-  	});
-  	
-</script>

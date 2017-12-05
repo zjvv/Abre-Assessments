@@ -27,15 +27,6 @@
 	
 		$assessmentid=mysqli_real_escape_string($db, $_GET["assessmentid"]);
 		
-		//Delete Assessment
-		$stmt = $db->stmt_init();
-		$sql = "Delete from assessments where ID='$assessmentid'";
-		$stmt->prepare($sql);
-		$stmt->execute();
-		$stmt->store_result();
-		$num_rows = $stmt->num_rows;
-		$stmt->close();
-		
 		//Delete questions in assessment
 		$stmt = $db->stmt_init();
 		$sql = "Delete from assessments_questions where Assessment_ID='$assessmentid'";
@@ -57,6 +48,15 @@
 		//Delete scores of assessment
 		$stmt = $db->stmt_init();
 		$sql = "Delete from assessments_scores where Assessment_ID='$assessmentid'";
+		$stmt->prepare($sql);
+		$stmt->execute();
+		$stmt->store_result();
+		$num_rows = $stmt->num_rows;
+		$stmt->close();
+		
+		//Delete Assessment
+		$stmt = $db->stmt_init();
+		$sql = "Delete from assessments where ID='$assessmentid'";
 		$stmt->prepare($sql);
 		$stmt->execute();
 		$stmt->store_result();

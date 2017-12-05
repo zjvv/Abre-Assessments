@@ -134,7 +134,7 @@
 								
 				<?php
 					
-					//View All Groups
+					//View By Groups
 					if(isset($groupid))
 					{
 						$sql = "SELECT * FROM students_groups_students LEFT JOIN Abre_AD ON students_groups_students.Student_ID=Abre_AD.StudentID where students_groups_students.Group_ID='$groupid'";
@@ -143,6 +143,13 @@
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
+						
+						//CSV Export Prepare
+						$CSVExportArray= array();
+						CSVExport();
+						$UserEmail=$_SESSION['useremail'];
+						$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
+						
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -164,9 +171,15 @@
 							{
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
-							}							
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails);
+							}	
+								
+							$CSVExportArrayreturn = ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray);
+							fputcsv($CSVExportFile, $CSVExportArrayreturn);
 						}
+						
+						//Close CSV Export
+						fclose($CSVExportFile);
+						
 					}
 					
 					//View By Courses
@@ -178,7 +191,13 @@
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
-						$ExportArray = array();
+						
+						//CSV Export Prepare
+						$CSVExportArray= array();
+						CSVExport();
+						$UserEmail=$_SESSION['useremail'];
+						$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
+						
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -195,8 +214,13 @@
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails);
+							$CSVExportArrayreturn = ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray);
+							fputcsv($CSVExportFile, $CSVExportArrayreturn);
 						}
+						
+						//Close CSV Export
+						fclose($CSVExportFile);
+						
 					}
 					
 					//View By Teacher
@@ -208,6 +232,13 @@
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
+						
+						//CSV Export Prepare
+						$CSVExportArray= array();
+						CSVExport();
+						$UserEmail=$_SESSION['useremail'];
+						$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
+						
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -225,8 +256,13 @@
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails);
+							$CSVExportArrayreturn = ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray);
+							fputcsv($CSVExportFile, $CSVExportArrayreturn);
 						}
+						
+						//Close CSV Export
+						fclose($CSVExportFile);
+						
 					}
 					
 					//View All
@@ -238,6 +274,13 @@
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
+						
+						//CSV Export Prepare
+						$CSVExportArray= array();
+						CSVExport();
+						$UserEmail=$_SESSION['useremail'];
+						$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
+						
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -245,15 +288,19 @@
 							$IEP=htmlspecialchars($row["IEP"], ENT_QUOTES);
 							$ELL=htmlspecialchars($row["ELL"], ENT_QUOTES);
 							$Gifted=htmlspecialchars($row["Gifted"], ENT_QUOTES);
-							$ResultName=getNameGivenEmail($User);		
+							$ResultName=getNameGivenEmail($User);
 
 							if($studentcounter==1)
 							{
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}									
-							ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails);
+							$CSVExportArrayreturn = ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray);
+							fputcsv($CSVExportFile, $CSVExportArrayreturn);
 						}
+						
+						//Close CSV Export
+						fclose($CSVExportFile);
 						
 					}
 

@@ -178,7 +178,8 @@
 					}	
 		}
 		
-		//Get Staff Name Given StaffID
+		//Prepare CSV File
+		/*
 		function exportResultsToCSV()
 		{
 			require(dirname(__FILE__) . '/../../configuration.php');
@@ -191,6 +192,16 @@
 			array_push($CSVExportArray,'Column 1', 'Column 2', 'Column 3', 'Column 4', 'Column 5');
 			fputcsv($CSVExportFile, $CSVExportArray);
 			fclose($CSVExportFile);
+		}
+		*/
+		
+		//Start CSV Export
+		function CSVExport()
+		{
+			require(dirname(__FILE__) . '/../../configuration.php');
+			if (!file_exists("../../../$portal_private_root/Abre-Assessments/Exports")){ 
+				mkdir("../../../$portal_private_root/Abre-Assessments/Exports", 0777, true);
+			}
 		}
 		
 		//Get Staff Name Given StaffID
@@ -413,7 +424,7 @@
 		}
 		
 		//Show Results of Assessment
-		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails)
+		function ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$correctarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray)
 		{
 			
 			require(dirname(__FILE__) . '/../../configuration.php');	
@@ -424,6 +435,9 @@
 								
 			echo "<tr class='assessmentrow'>";
 				echo "<td><b>$ResultName</b></td>";
+				
+				//CSV Student
+				array_push($CSVExportArray,$ResultName);
 				
 				if (!empty($StudentStatusArray[$User]))
 				{				
@@ -437,16 +451,28 @@
 							echo "<div id='status_$User' class='pointer'>Completed</div>";
 							echo "<div class='mdl-tooltip mdl-tooltip--large' for='status_$User'><b>Completed:<br>"; echo $StudentStatusVerb['EndTime']; echo "</b><br><br>Total Time:<br>$TimeDifferenceText</div>";
 						echo "</td>";
+						
+						//CSV Status
+						array_push($CSVExportArray,"Completed");
+						
 					}else{ 
 						echo "<td>";
 							echo "<div id='status_$User' class='pointer'>In Progress</div>";
 							echo "<div class='mdl-tooltip mdl-tooltip--large' for='status_$User'><b>Start Time:<br>"; echo $StudentStatusVerb['StartTime']; echo "</b></div>";
-						echo "</td>";					
+						echo "</td>";	
+						
+						//CSV Status
+						array_push($CSVExportArray,"In Progress");
+										
 					}
+					
 				}
 				else
 				{
 					echo "<td>Has Not Started</td>";
+					
+					//CSV Status
+					array_push($CSVExportArray,"Has Not Started");
 				}
 								
 				//Loop through each question on assessment
@@ -477,28 +503,46 @@
 						{
 							$icon="<i class='material-icons' style='color:#B71C1C'>cancel</i>";
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='0' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#F44336'>$icon</td>"; 
+						
+							//Export to CSV
+							array_push($CSVExportArray,$Score);
 						}
 						if($Score=="1" && $QuestionType!="Open Response")
 						{
 							$icon="<i class='material-icons' style='color:#1B5E20'>check_circle</i>"; 
 							$totalcorrect=$totalcorrect+$PointsPossible;
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='1' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#4CAF50'>$icon</td>";
+						
+							//Export to CSV
+							array_push($CSVExportArray,$Score);				
 						}	
 						if($Score=="" && $QuestionType=="Open Response")
 						{
 							$icon="<i class='material-icons' style='color:#0D47A1'>star_border</i>";
 							echo "<td class='center-align pointer questionviewerreponse' id='rubric-question-$Username-$Bank_ID' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#2196F3'>$icon</td>";
+							
+							//Export to CSV
+							array_push($CSVExportArray,"0");
 						}
 						if($Score!="" && $QuestionType=="Open Response")
 						{						
 							$icon="<i class='material-icons' style='color:#0D47A1'>star</i>";
 							$totalcorrectrubric=$totalcorrectrubric+$Score;
 							echo "<td class='center-align pointer questionviewerreponse' data-question='$Bank_ID' data-questiontitle='$ResultName - Question $questioncounter' data-questionscore='t' data-assessmentid='$Assessment_ID' data-user='$User' style='background-color:#1565C0'>$icon</td>";
+						
+							//Export to CSV
+							array_push($CSVExportArray,$Score);
 						}	
+						
+						
 					}
 					else
 					{
 						echo "<td class='center-align' style='background-color:#FFC107'><i class='material-icons' style='color:#FF6F00;'>remove_circle</i></td>";
+						
+						//Export to CSV
+						array_push($CSVExportArray,"0");
+						
 					}
 					
 					$questioncounter++;
@@ -510,25 +554,40 @@
 				if($ELL==""){ $ELL="N"; }
 				if($Gifted==""){ $Gifted="N"; }
 				echo "<td class='center-align'><b>$IEP</b></td>";
+				
+				//Export to CSV
+				array_push($CSVExportArray,$IEP);
+				
 				echo "<td class='center-align'><b>$ELL</b></td>";
+				
+				//Export to CSV
+				array_push($CSVExportArray,$ELL);
+				
 				echo "<td class='center-align'><b>$Gifted</b></td>";
+				
+				//Export to CSV
+				array_push($CSVExportArray,$Gifted);
 				
 				//Auto Points
 				$totalcorrectdouble=sprintf("%02d", $totalcorrect);
 				if($totalcorrectdouble!="00"){ $totalcorrectdouble = ltrim($totalcorrectdouble, '0'); }
 				if($totalcorrectdouble=="00"){ $totalcorrectdouble="0"; }
-				echo "<td class='center-align'>$totalcorrectdouble</td>";				
+				echo "<td class='center-align'>$totalcorrectdouble</td>";
+				array_push($CSVExportArray,$totalcorrectdouble);				
 				
 				//Rubric Points
 				echo "<td class='center-align' id='rubric-total-$Username'>$totalcorrectrubric</td>";
+				array_push($CSVExportArray,$totalcorrectrubric);	
 							
 				//Score
 				$rubricandtotalscored=$totalcorrectdouble+$totalcorrectrubric;
 				echo "<td class='center-align' id='score-total-$Username'>$rubricandtotalscored/$totalpossibleassessmentpoints</td>";
+				array_push($CSVExportArray,"$rubricandtotalscored/$totalpossibleassessmentpoints");
 				
 				//Percentage
 				$studentfinalpercentage=round((($rubricandtotalscored)/$totalpossibleassessmentpoints)*100);
 				echo "<td class='center-align' id='percentage-total-$Username'>$studentfinalpercentage%</td>";	
+				array_push($CSVExportArray,"$studentfinalpercentage");
 				
 				//Delete Assessment Button
 				if($owner==1 or superadmin())
@@ -545,11 +604,10 @@
 				
 			echo "</tr>";
 			
+			return $CSVExportArray;
+			
 			if($totalstudents==$studentcounter)
 			{
-				
-				//Export CSV
-				exportResultsToCSV();
 				
 				//How many district students took assessment
 				$sqlquestions = "SELECT * FROM assessments_scores where Assessment_ID='$Assessment_ID' group by User";
