@@ -25,7 +25,7 @@
 	{
 	
 		echo "<div class='fixed-action-btn buttonpin'>";
-			echo "<a class='btn-floating btn-large waves-effect waves-light' style='background-color:"; echo getSiteColor(); echo "' id='downloaddata' href='/modules/Abre-Assessments/downloaddata.php'><i class='large material-icons'>file_download</i></a>";
+			echo "<a class='btn-floating btn-large waves-effect waves-light' style='background-color:"; echo getSiteColor(); echo "' id='downloaddata' href='#'><i class='large material-icons'>file_download</i></a>";
 			echo "<div class='mdl-tooltip mdl-tooltip--left' for='downloaddata'>Download Data</div>";
 		echo "</div>";
 
