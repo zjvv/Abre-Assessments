@@ -31,6 +31,8 @@
 				    document.title = 'Assessments';
 					$('#content_holder').load('modules/".basename(__DIR__)."/assessments_display_all.php', function() { init_page(); });
 					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
+					ga('set', 'page', '/#assessments');
+					ga('send', 'pageview');
 			    },
 			    'assessments/results/?:assessmentid': function(assessmentid)
 				{
@@ -41,6 +43,8 @@
 				    document.title = 'Assessment Results';
 					$('#content_holder').load('modules/".basename(__DIR__)."/results_summary.php?assessmentid='+assessmentid, function() { init_page(); back_button('#assessments'); });
 					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
+					ga('set', 'page', '/#assessments/results');
+					ga('send', 'pageview');
 			    },
 				'assessments/results/summary/?:assessmentid': function(assessmentid)
 				{
@@ -50,6 +54,8 @@
 				    $('#titletext').text('Assessments');
 				    document.title = 'Assessment Results';
 					$('#content_holder').load('modules/".basename(__DIR__)."/results_resultssummary.php?assessmentid='+assessmentid, function() { init_page(); back_button('#assessments'); });
+					ga('set', 'page', '/#assessments/results/summary');
+					ga('send', 'pageview');
 			    },
 				'assessments/settings': function(name)
 				{
@@ -62,6 +68,8 @@
 						init_page();
 						back_button('#assessments');
 					});
+					ga('set', 'page', '/#assessments/settings');
+					ga('send', 'pageview');
 			    },
 			    'assessments/?:name': function(name)
 			    {
@@ -75,6 +83,8 @@
 						back_button('#assessments');
 					});
 					$('#modal_holder').load('modules/".basename(__DIR__)."/modals.php');
+					ga('set', 'page', '/#assessments');
+					ga('send', 'pageview');
 			    },";
 		}	 
  
@@ -84,7 +94,6 @@
 				    $('#navigation_top').hide();
 				    $('#content_holder').hide();
 				    $('.mdl-layout__header').hide();
-			
 				    $('#loader').show();
 				    $('#titletext').text('Student Assessment');
 				    document.title = 'Student Assessment';
@@ -92,5 +101,7 @@
 						init_page();
 						$('.mdl-layout__header').hide();
 					});
+					ga('set', 'page', '/#assessments/session');
+					ga('send', 'pageview');
 			    },";
 ?>
