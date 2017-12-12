@@ -630,11 +630,11 @@
 
 				echo "<tfoot>";
 
-					//Class Mastery
+					//Class Average
 					if(!empty($StudentsInClass)){
 
 						echo "<tr style='background-color:".getSiteColor().";'>";
-						echo "<td colspan='2' style='color:#fff;' class='center-align'><b>Class Mastery</b></td>";
+						echo "<td colspan='2' style='color:#fff;' class='center-align'><b>Class Average</b></td>";
 
 						foreach ($allquestionitemsArray as $Bank_ID)
 						{
@@ -672,9 +672,9 @@
 						echo "</tr>";
 					}
 
-					//District Mastery
+					//District Average
 					echo "<tr style='background-color:".getSiteColor().";'>";
-					echo "<td colspan='2' style='color:#fff;' class='center-align'><b>District Mastery</b></td>";
+					echo "<td colspan='2' style='color:#fff;' class='center-align'><b>District Average</b></td>";
 
 					foreach ($allquestionitemsArray as $Bank_ID)
 					{
