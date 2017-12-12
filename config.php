@@ -28,7 +28,7 @@
 	$pageorder=4;
 	$pagetitle="Assessments";
 	$description="Create & deliver standards-aligned assessments";
-	$version="1.4.0";
+	$version="1.4.1";
 	$repo="abreio/Abre-Assessments";
 	$pageicon="assessment";
 	$pagepath="assessments";
