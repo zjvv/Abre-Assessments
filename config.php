@@ -1,5 +1,5 @@
 <?php
-	
+
 	/*
 	* Copyright (C) 2016-2017 Abre.io LLC
 	*
@@ -15,25 +15,25 @@
     * You should have received a copy of the Affero General Public License
     * version 3 along with this program.  If not, see https://www.gnu.org/licenses/agpl-3.0.en.html.
     */
-	
+
 	//Required configuration files
-	require_once(dirname(__FILE__) . '/../../core/abre_verification.php'); 
-	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
-	
+	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
+	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+
 	//Check for installation
 	if(superadmin()){ require('installer.php'); }
-	
+
 	$pageview=1;
 	$drawerhidden=1;
 	$pageorder=4;
 	$pagetitle="Assessments";
 	$description="Create & deliver standards-aligned assessments";
-	$version="1.3.9";
+	$version="1.4.0";
 	$repo="abreio/Abre-Assessments";
 	$pageicon="assessment";
 	$pagepath="assessments";
 	require_once('permissions.php');
-	
+
 	echo "<link rel='stylesheet' type='text/css' href='/modules/".basename(__DIR__)."/css/style_0.0.2.css'>";
-	
+
 ?>

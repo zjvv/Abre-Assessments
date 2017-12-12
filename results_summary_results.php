@@ -1,5 +1,5 @@
 <?php
-	
+
 	/*
 	* Copyright (C) 2016-2017 Abre.io LLC
 	*
@@ -15,48 +15,48 @@
     * You should have received a copy of the Affero General Public License
     * version 3 along with this program.  If not, see https://www.gnu.org/licenses/agpl-3.0.en.html.
     */
-	
+
 	//Required configuration files
-	require(dirname(__FILE__) . '/../../configuration.php'); 
-	require_once(dirname(__FILE__) . '/../../core/abre_verification.php'); 
-	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+	require(dirname(__FILE__) . '/../../configuration.php');
+	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
+	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 	require_once('../../core/abre_functions.php');
 	require_once('functions.php');
 	require_once('permissions.php');
-	
+
 	if($pagerestrictions=="")
 	{
-		
+
 		$token=getCerticaToken();
-		
+
 		?>
 		<script src='https://cdn.certicasolutions.com/sdk/js/sdk.itemconnect.min.js?x-ic-credential=<?php echo $token; ?>'></script>
 		<script src='https://cdn.certicasolutions.com/player/js/player.itemconnect.min.js'></script>
-		<link rel="stylesheet" href='https://cdn.certicasolutions.com/player/css/player.itemconnect.min.css'>	
+		<link rel="stylesheet" href='https://cdn.certicasolutions.com/player/css/player.itemconnect.min.css'>
 		<?php
-		
+
 		//Include Fixed Table JS
 		?><script src='modules/<?php echo basename(__DIR__); ?>/js/tableHeadFixer.js'></script><?php
-		
+
 		//Get Passed Variables
 		$Assessment_ID=htmlspecialchars($_GET["assessmentid"], ENT_QUOTES);
-		
+
 		//Look up StaffID and Semester
 		if(isset($_GET['staffidpass'])){ $StaffId=$_GET['staffidpass']; }else{ $StaffId=GetStaffID($_SESSION['useremail']); }
 		$CurrentSememester=GetCurrentSemester();
-		
+
 		//Check if verified assessment
 		$sql = "SELECT * FROM assessments where ID='$Assessment_ID' and Owner='".$_SESSION['useremail']."'";
 		$result = $db->query($sql);
 		$owner = $result->num_rows;
-		
+
 		//If Superadmin or Admin Make an Owner
 		if(superadmin() or AdminCheck($_SESSION['useremail'])){ $owner=1; }
-		
+
 		if(isset($_GET["course"]))
-		{ 
-			$course=$_GET["course"]; 
-			list($CourseCode, $SectionCode) = explode(",",$course); 
+		{
+			$course=$_GET["course"];
+			list($CourseCode, $SectionCode) = explode(",",$course);
 			$sql = "SELECT * FROM Abre_StudentSchedules where CourseCode='$CourseCode' and SectionCode='$SectionCode' and StaffId='$StaffId' and (TermCode='$CurrentSememester' or TermCode='Year') group by StudentID order by LastName";
 		}
 		if(isset($_GET["groupid"]))
@@ -75,31 +75,31 @@
 		}
 		$result = $db->query($sql);
 		$rowcount=mysqli_num_rows($result);
-		
+
 		if($rowcount!=0)
 		{
 			?>
 			<div class='mdl-shadow--4dp'>
 			<div class='page' style='padding:30px;'>
-			<div id='searchresults'>	
-				
-			<?php	
-		
+			<div id='searchresults'>
+
+			<?php
+
 				echo "<div class='row' id='reloadbutton' style='margin-left:-5px;'>";
 						echo "<button class='modal-action waves-effect btn-flat white-text' id='reload' style='margin-left:5px; background-color:"; echo getSiteColor(); echo "'>Refresh Results</button>";
 				echo "</div>";
-			
+
 			?>
-				
+
 			<div class='row'><div class='tableholder'>
 			<table id='myTable' class='tablesorter bordered thintable'>
 			<thead>
 			<tr class='pointer'>
 				<th><div style='width:180px;'>Student</div></th>
 				<th><div style='width:140px;'>Status</div></th>
-										
+
 				<?php
-					
+
 					$sqlheader = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
 					$resultheader = $db->query($sqlheader);
 					$questioncount=0;
@@ -114,26 +114,26 @@
 						$Bank_ID=htmlspecialchars($row["Bank_ID"], ENT_QUOTES);
 						$Type=htmlspecialchars($row["Type"], ENT_QUOTES);
 						$QuestionDetails[$Bank_ID] = $Type;
-						
+
 						echo "<th style='min-width:60px;'><div class='center-align' id='standard_$questioncount'>$questioncount</div><div class='mdl-tooltip mdl-tooltip--large' for='standard_$questioncount'>$Standard_Text<br><br>$Difficulty</div></th>";
 					}
 				?>
 
 				<th style='min-width:50px;'><div class='center-align'>IEP</div></th>
 				<th style='min-width:50px;'><div class='center-align'>ELL</div></th>
-				<th style='min-width:50px;'><div class='center-align'>Gifted</div></th>									
+				<th style='min-width:50px;'><div class='center-align'>Gifted</div></th>
 				<th style='min-width:100px;'><div class='center-align'>Auto Points</div></th>
 				<th style='min-width:100px;'><div class='center-align'>Rubric Points</div></th>
-				<th style='min-width:100px;'><div class='center-align'>Score</div></th>	
+				<th style='min-width:100px;'><div class='center-align'>Score</div></th>
 				<th style='min-width:100px;'><div class='center-align'>Percentage</div></th>
-				<th style='max-width:30px;'></th>	
-				<th style='max-width:30px;'></th>				
+				<th style='max-width:30px;'></th>
+				<th style='max-width:30px;'></th>
 			</tr>
 			</thead>
 			<tbody>
-								
+
 				<?php
-					
+
 					//View By Groups
 					if(isset($groupid))
 					{
@@ -143,13 +143,25 @@
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
-						
+
 						//CSV Export Prepare
 						$CSVExportArray= array();
 						CSVExport();
 						$UserEmail=$_SESSION['useremail'];
 						$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
-						
+
+						$CSVHeaderArray = array();
+						array_push($CSVHeaderArray, "Student", "Status");
+						$sqlquestions = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
+						$resultquestions = $db->query($sqlquestions);
+						$questionNumber = 1;
+						while($rowquestions = $resultquestions->fetch_assoc()){
+							array_push($CSVHeaderArray, "Question ".$questionNumber);
+							$questionNumber++;
+						}
+						array_push($CSVHeaderArray, "IEP", "ELL", "Gifted", "Auto Points", "Rubric Points", "Score", "Percentage");
+						fputcsv($CSVExportFile, $CSVHeaderArray);
+
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -166,22 +178,22 @@
 								$ELL=htmlspecialchars($row["StudentELLStatus"], ENT_QUOTES);
 								$ResultName=getStudentNameGivenStudentID($StudentID);
 							}
-							
+
 							if($studentcounter==1)
 							{
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
-							}	
-								
+							}
+
 							$CSVExportArrayreturn = ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray);
 							fputcsv($CSVExportFile, $CSVExportArrayreturn);
 						}
-						
+
 						//Close CSV Export
 						fclose($CSVExportFile);
-						
+
 					}
-					
+
 					//View By Courses
 					if(isset($course))
 					{
@@ -191,13 +203,25 @@
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
-						
+
 						//CSV Export Prepare
 						$CSVExportArray= array();
 						CSVExport();
 						$UserEmail=$_SESSION['useremail'];
 						$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
-						
+
+						$CSVHeaderArray = array();
+						array_push($CSVHeaderArray, "Student", "Status");
+						$sqlquestions = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
+						$resultquestions = $db->query($sqlquestions);
+						$questionNumber = 1;
+						while($rowquestions = $resultquestions->fetch_assoc()){
+							array_push($CSVHeaderArray, "Question ".$questionNumber);
+							$questionNumber++;
+						}
+						array_push($CSVHeaderArray, "IEP", "ELL", "Gifted", "Auto Points", "Rubric Points", "Score", "Percentage");
+						fputcsv($CSVExportFile, $CSVHeaderArray);
+
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -208,21 +232,21 @@
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
 							array_push($StudentsInClass,$User);
-							
+
 							if($studentcounter==1)
-							{								
+							{
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
 							$CSVExportArrayreturn = ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray);
 							fputcsv($CSVExportFile, $CSVExportArrayreturn);
 						}
-						
+
 						//Close CSV Export
 						fclose($CSVExportFile);
-						
+
 					}
-					
+
 					//View By Teacher
 					if(isset($staffcode))
 					{
@@ -232,13 +256,25 @@
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
-						
+
 						//CSV Export Prepare
 						$CSVExportArray= array();
 						CSVExport();
 						$UserEmail=$_SESSION['useremail'];
 						$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
-						
+
+						$CSVHeaderArray = array();
+						array_push($CSVHeaderArray, "Student", "Status");
+						$sqlquestions = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
+						$resultquestions = $db->query($sqlquestions);
+						$questionNumber = 1;
+						while($rowquestions = $resultquestions->fetch_assoc()){
+							array_push($CSVHeaderArray, "Question ".$questionNumber);
+							$questionNumber++;
+						}
+						array_push($CSVHeaderArray, "IEP", "ELL", "Gifted", "Auto Points", "Rubric Points", "Score", "Percentage");
+						fputcsv($CSVExportFile, $CSVHeaderArray);
+
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -249,38 +285,50 @@
 							$ResultName=getStudentNameGivenStudentID($StudentID);
 							$User=getEmailGivenStudentID($StudentID);
 							array_push($StudentsInClass,$User);
-							
+
 							if($studentcounter==1)
-							{								
-								
+							{
+
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
 							}
 							$CSVExportArrayreturn = ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray);
 							fputcsv($CSVExportFile, $CSVExportArrayreturn);
 						}
-						
+
 						//Close CSV Export
 						fclose($CSVExportFile);
-						
+
 					}
-					
+
 					//View All
 					if(!isset($course) && !isset($groupid) && !isset($staffcode))
-					{												
+					{
 						$sql = "SELECT * FROM assessments_results where Assessment_ID='$Assessment_ID' order by User";
 						$result = $db->query($sql);
 						$totalstudents=mysqli_num_rows($result);
 						$studentcounter=0;
 						$StudentsInClass = array();
 						$totalresultsbystudentarray = array();
-						
+
 						//CSV Export Prepare
 						$CSVExportArray= array();
 						CSVExport();
 						$UserEmail=$_SESSION['useremail'];
 						$CSVExportFile = fopen(dirname(__FILE__) . "../../../../$portal_private_root/Abre-Assessments/Exports/$UserEmail.csv", 'w');
-						
+
+						$CSVHeaderArray = array();
+						array_push($CSVHeaderArray, "Student", "Status");
+						$sqlquestions = "SELECT * FROM assessments_questions where Assessment_ID='$Assessment_ID' order by Question_Order";
+						$resultquestions = $db->query($sqlquestions);
+						$questionNumber = 1;
+						while($rowquestions = $resultquestions->fetch_assoc()){
+							array_push($CSVHeaderArray, "Question ".$questionNumber);
+							$questionNumber++;
+						}
+						array_push($CSVHeaderArray, "IEP", "ELL", "Gifted", "Auto Points", "Rubric Points", "Score", "Percentage");
+						fputcsv($CSVExportFile, $CSVHeaderArray);
+
 						while($row = $result->fetch_assoc())
 						{
 							$studentcounter++;
@@ -294,14 +342,14 @@
 							{
 								$StudentScoresArray = GetCorrectResponsesforAssessment($Assessment_ID);
 								$StudentStatusArray = GetAssessmentStatus($Assessment_ID);
-							}									
+							}
 							$CSVExportArrayreturn = ShowAssessmentResults($Assessment_ID,$User,$ResultName,$IEP,$ELL,$Gifted,$questioncount,$owner,$totalstudents,$studentcounter,$totalresultsbystudentarray,$StudentScoresArray,$StudentStatusArray,$StudentsInClass,$QuestionDetails,$CSVExportArray);
 							fputcsv($CSVExportFile, $CSVExportArrayreturn);
 						}
-						
+
 						//Close CSV Export
 						fclose($CSVExportFile);
-						
+
 					}
 
 			echo "</table>";
@@ -309,27 +357,27 @@
 			echo "</div>";
 			echo "</div>";
 			echo "</div>";
-			
+
 			include "download_button.php";
-			
+
 		}
 		else
 		{
 			echo "<div class='row center-align'><div class='col s12'><h6>There are no results for this assessment</h6></div></div>";
 		}
-		
+
 	}
 
 ?>
-		
+
 <script>
-			
+
 	//Responsive fixed table header
 	$(function()
 	{
 		$("#myTable").tableHeadFixer({ 'head' : true, 'left' : 1, 'foot' : true });
 		$("#myTable").tablesorter({ sortList: [[0,0]] });
-		
+
 		//Check Window Width
 		tableContainer();
 		$(window).resize(function(){ tableContainer(); });
@@ -340,7 +388,7 @@
 			height=height+'px';
 			$(".tableholder").css("max-height", height);
 		}
-		
+
 		//Delete Student Result
 		$( ".removeresult" ).unbind().click(function()
 		{
@@ -353,10 +401,10 @@
 					type: 'POST',
 					url: address,
 					data: '',
-				})	
+				})
 			}
 		});
-		
+
 		//Open Up Assessment for Student
 		$( ".refreshresult" ).unbind().click(function()
 		{
@@ -369,10 +417,10 @@
 					type: 'POST',
 					url: address,
 					data: '',
-				})	
+				})
 			}
 		});
-		
+
 		//Question Viewer
 		$(".questionviewerreponse").unbind().click(function()
 		{
@@ -397,19 +445,19 @@
 			var AssessmentID = $(this).data('assessmentid');
 			var User = $(this).data('user');
 			$("#questionholderresponse").hide();
-			
+
 			$(".modal-content #questionholderresponse").load( "modules/<?php echo basename(__DIR__); ?>/response_viewer.php?id="+Question+"&assessmentid="+AssessmentID+"&user="+User, function(){
 				$("#questionholderresponse").show();
 			});
-						
+
 			$('#questionresponse').openModal({
 				in_duration: 0,
 				out_duration: 0,
 			});
 		});
-		
-					
+
+
 	});
-	
-				
+
+
 </script>
